@@ -10,7 +10,7 @@ const NotificationsProvider = ({ children }) => {
   const [notificationId, setNotificationId] = useState('');
   // const [calendarName, setCalendarName] = useState('');
 
-  const userUid = firebase.auth().currentUser.uid;
+  const userUid = firebase.auth().currentUser?.uid;
   const firestore = firebase.firestore();
 
   useEffect(() => {
