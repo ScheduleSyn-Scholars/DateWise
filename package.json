@@ -1,7 +1,59 @@
 {
+  "name": "bear-track",
+  "version": "0.1.0",
+  "private": true,
   "dependencies": {
-    "chromedriver": "^119.0.1",
-    "geckodriver": "^4.2.1",
-    "selenium-webdriver": "^4.15.0"
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "antd": "^5.11.0",
+    "firebase": "^10.5.0",
+    "react": "^18.2.0",
+    "react-avatar": "^5.0.3",
+    "react-big-calendar": "^1.8.5",
+    "react-calendar": "^4.6.1",
+    "react-datepicker": "^4.23.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.18.0",
+    "react-scripts": "^5.0.1",
+    "react-spinners": "^0.13.8",
+    "selenium-webdriver": "^4.15.0",
+    "web-vitals": "^2.1.4",
+    "webdriver-manager": "^12.1.9"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.23.3",
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@babel/plugin-syntax-jsx": "^7.23.3",
+    "@babel/preset-env": "^7.23.3",
+    "@babel/preset-react": "^7.23.3",
+    "babel-cli": "^6.26.0",
+    "babel-jest": "^29.7.0",
+    "babel-preset-react": "^6.24.1",
+    "jest": "^27.5.1"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }
