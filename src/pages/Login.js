@@ -1,18 +1,9 @@
 import React, { useState } from 'react';
 import './Login.css';
 import './Registration.css'
-import Form from './Registration'
 import firebase from '../config/firebase';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import { Link } from 'react-router-dom';
-
-const App = () => {
-  return (
-    <>
-    <Form />
-    </>
-  )
-}
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -39,7 +30,6 @@ const Login = () => {
   return (
     <div className="login-container">
       <div className="login-left">
-        {/* Insert your image here */}
         <img src="/BearLogo.png" alt="Your Image" />
         <h2>Login</h2>
         <form>

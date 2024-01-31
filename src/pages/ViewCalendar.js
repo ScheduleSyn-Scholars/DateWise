@@ -31,7 +31,7 @@ const ViewCalendar = () => {
         fetchTeamAvailabilityOnCommonDays(teamAvailabilityData);
       }
     };
-  
+
     fetchData();
   }, [calendarId, user]);
 
@@ -69,14 +69,14 @@ const ViewCalendar = () => {
         .collection('calendars')
         .doc(calendarId)
         .collection('availability');
-  
+
       const teamAvailabilitySnapshot = await teamAvailabilityRef.get();
       const teamAvailabilityData = teamAvailabilitySnapshot.docs
         .map((doc) => ({ uid: doc.id, ...doc.data() }))
         .filter((teamMember) => teamMember.selectedDays && teamMember.selectedDays.length > 0);
-  
+
       setTeamAvailability(teamAvailabilityData);
-  
+
       return teamAvailabilityData; // Add this line
     } catch (error) {
       console.error('Error fetching team availability:', error);
@@ -87,13 +87,13 @@ const ViewCalendar = () => {
   const fetchTeamAvailabilityOnCommonDays = async (commonDays) => {
     try {
       const teamAvailabilityData = await fetchTeamAvailability(calendarId);
-  
+
       // Filter the team availability data to include only common days
       const teamAvailabilityOnCommonDays = teamAvailabilityData.map((teamMember) => ({
         uid: teamMember.uid,
         times: commonDays.reduce((acc, day) => ({ ...acc, [day]: teamMember.times[day] || [] }), {}),
       }));
-  
+
       console.log('Team Availability On Common Days:', teamAvailabilityOnCommonDays);
       return teamAvailabilityOnCommonDays;
     } catch (error) {
@@ -110,61 +110,59 @@ const ViewCalendar = () => {
       console.error('Error in handleShowBestTime:', error);
     }
   };
-  
+
   const findBestTimeToMeet = async () => {
     // Find common days among all users
     console.log('Inside findBestTimeToMeet');
     const commonDays = findCommonDays();
-  
+
     if (commonDays.length === 0) {
       setBestTime(null);
       return;
     }
-  
+
     // Find overlapping time slots on common days
     const overlappingTimes = await findOverlappingTimes(commonDays);
-  
+
     // Determine the best time to meet
     const bestTime = processOverlappingTimes(overlappingTimes);
-  
+
     // Set the best time to meet in the state
     setBestTime(bestTime);
   };
 
   const compareTimeSlots = (commonDays, teamAvailabilityData) => {
     console.log('Raw Team Availability Data:', teamAvailabilityData);
-  
+
     // Ensure teamAvailabilityData is an array
     const teamAvailabilityArray = Array.isArray(teamAvailabilityData)
       ? teamAvailabilityData
       : Object.values(teamAvailabilityData);
-  
+
     console.log('Team Availability Array:', teamAvailabilityArray);
-  
+
     // Compare time slots for each common day
     const overlappingTimes = commonDays.reduce((acc, day) => {
       const currentUserTimes = availability.times[day] || [];
       const teamMemberTimes = teamAvailabilityArray.reduce((times, teamMember) => {
         return times.concat(teamMember.times[day] || []);
       }, []);
-  
+
       // Find overlapping times for each team member
       const overlappingTimesForDay = teamMemberTimes.filter((teamTime) =>
         currentUserTimes.some((userTime) => areTimeSlotsOverlapping(userTime, teamTime))
       );
-  
+
       // Set day explicitly
       acc[day] = overlappingTimesForDay;
-  
+
       return acc;
     }, {});
-  
+
     console.log('Overlapping Times:', overlappingTimes);
-  
+
     return overlappingTimes;
   };
-  
-  
 
   const findCommonDays = () => {
     // Extract selected days of the current user
@@ -181,9 +179,9 @@ const ViewCalendar = () => {
 
   const findOverlappingTimes = async (commonDays) => {
     const teamAvailabilityOnCommonDays = await fetchTeamAvailabilityOnCommonDays(commonDays);
-  
+
     const overlappingTimes = compareTimeSlots(commonDays, teamAvailabilityOnCommonDays);
-  
+
     console.log('Overlapping Times:', overlappingTimes);
     return overlappingTimes;
   };
@@ -197,16 +195,15 @@ const ViewCalendar = () => {
     return start1 < end2 && end1 > start2;
   };
 
- 
   const processOverlappingTimes = (overlappingTimes) => {
     // Process overlapping times to find the best time to meet
     // This includes finding the latest start time and earliest end time for each day
-  
+
     console.log('Before loop - overlappingTimes:', overlappingTimes);
-  
+
     const bestTime = Object.entries(overlappingTimes).reduce((acc, [day, times]) => {
       console.log('Inside loop - day:', day, 'times:', times);
-  
+
       if (!acc.day || times.length > acc.times.length) {
         acc.day = day;
         acc.times = times;
@@ -214,7 +211,7 @@ const ViewCalendar = () => {
         // If the same number of overlapping slots, consider the latest start time
         const latestStartTime = Math.max(...times.map((time) => parseInt(time.start, 10)));
         const currentLatestStartTime = Math.max(...acc.times.map((time) => parseInt(time.start, 10)));
-  
+
         if (latestStartTime > currentLatestStartTime) {
           acc.day = day;
           acc.times = times;
@@ -222,21 +219,20 @@ const ViewCalendar = () => {
       }
       return acc;
     }, { day: null, times: [] });
-  
+
     // Find the latest start time and earliest end time
     const latestStartTime = Math.max(...bestTime.times.map((time) => parseInt(time.start, 10)));
     const earliestEndTime = Math.min(...bestTime.times.map((time) => parseInt(time.end, 10)));
-  
+
     // Set the overall start and end times
     bestTime.start = latestStartTime;
     bestTime.end = earliestEndTime;
-  
+
     console.log('After loop - bestTime:', bestTime);
-  
+
     return bestTime;
   };
 
-  
   const updateAvailability = async () => {
     try {
       const availabilityRef = firestore
@@ -245,7 +241,7 @@ const ViewCalendar = () => {
         .collection('availability')
         .doc(user.uid);
 
-  
+
       // Update selectedDays based on times object
       const updatedAvailability = {
         ...availability,
@@ -253,17 +249,17 @@ const ViewCalendar = () => {
       };
 
       await availabilityRef.set({ ...updatedAvailability }, { merge: true });
-      
+
       console.log('availRef" ', updatedAvailability);
       console.log(calendarId);
       await availabilityRef.update({ ...updatedAvailability });
       console.log("Adding availability for: ", user.uid);
       console.log('Availability updated successfully!');
-  
+
       // Fetch team availability
       const teamAvailabilityData = await fetchTeamAvailability(calendarId);
-  
-  
+
+
       // Reset showBestTime state
       setShowBestTime(false);
 
@@ -272,24 +268,23 @@ const ViewCalendar = () => {
       setTimeout(() => {
         setShowSavedPopup(false);
       }, 2000);
-  
+
     } catch (error) {
       console.error('Error updating availability:', error);
     }
   };
 
-
   const createEvent = async (eventData) => {
     try {
       const eventsRef = firestore
-      .collection('calendars')
-      .doc(calendarId)
-      .collection('events');
+        .collection('calendars')
+        .doc(calendarId)
+        .collection('events');
 
       await eventsRef.add(eventData);
 
       console.log('Event created successfully!');
-    }catch (error) {
+    } catch (error) {
       console.error('Error creating event:', error);
     }
   }
@@ -319,61 +314,61 @@ const ViewCalendar = () => {
   return (
     <div className="page">
       <div className="pageTitle">{calendarName}</div>
-     
-<div className="meeting-section">
-<div className="avform">
-<AvailabilityForm
-          className="avform"
-          availability={availability}
-          onAvailabilityChange={handleAvailabilityChange}
-        />
-        <button className="saveButton2" type="button" onClick={() => updateAvailability()}>
-          Save
-        </button>
-        <button
-          className="showBestTimeButton"
-          type="button"
-          onClick={handleShowBestTime}
-        >
-          Show Best Time
-        </button>
 
-        {bestTime && (
-  <div classname = 'bestRec'>
-    <p>Best Time to Meet:</p>
-    <p>Day: {bestTime.day}</p>
-    <p>Time:{bestTime.start !== undefined ? convertTo12HourFormat(bestTime.start) : ''}
-            {bestTime.start !== undefined && bestTime.end !== undefined ? '-' : ''}
-            {bestTime.end !== undefined ? convertTo12HourFormat(bestTime.end) : ''}
-          </p>
-        </div>
-      )}
-        {showSavedPopup && (
-        <div className="savedPopup">
-          <p>Availability saved!</p>
-        </div>
-      )}
+      <div className="meeting-section">
+        <div className="avform">
+          <AvailabilityForm
+            className="avform"
+            availability={availability}
+            onAvailabilityChange={handleAvailabilityChange}
+          />
+          <button className="saveButton2" type="button" onClick={() => updateAvailability()}>
+            Save
+          </button>
+          <button
+            className="showBestTimeButton"
+            type="button"
+            onClick={handleShowBestTime}
+          >
+            Show Best Time
+          </button>
+
+          {bestTime && (
+            <div classname='bestRec'>
+              <p>Best Time to Meet:</p>
+              <p>Day: {bestTime.day}</p>
+              <p>Time:{bestTime.start !== undefined ? convertTo12HourFormat(bestTime.start) : ''}
+                {bestTime.start !== undefined && bestTime.end !== undefined ? '-' : ''}
+                {bestTime.end !== undefined ? convertTo12HourFormat(bestTime.end) : ''}
+              </p>
+            </div>
+          )}
+          {showSavedPopup && (
+            <div className="savedPopup">
+              <p>Availability saved!</p>
+            </div>
+          )}
         </div>
 
-<div className="datepicker">
-<DatePicker
-classname="datepicker"
-selected={selectedDateTime}
-onChange={(date) => setSelectedDateTime(date)}
-inline
-showTimeSelect
-dateFormat="Pp"
- />
-</div>
-<div className="SubmitEvent">
-<button type="button" onClick={handleCreateEvent}>
-  Submit Event
-</button>
-</div>        
-        <Link to = "/HomePage"> <button className='homepagebtn'>Homepage</button>  </Link>
+        <div className="datepicker">
+          <DatePicker
+            classname="datepicker"
+            selected={selectedDateTime}
+            onChange={(date) => setSelectedDateTime(date)}
+            inline
+            showTimeSelect
+            dateFormat="Pp"
+          />
+        </div>
+        <div className="SubmitEvent">
+          <button type="button" onClick={handleCreateEvent}>
+            Submit Event
+          </button>
+        </div>
+        <Link to="/HomePage"> <button className='homepagebtn'>Homepage</button>  </Link>
 
       </div>
-    </div>    
+    </div>
   );
 };
 
