@@ -10,7 +10,6 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
-  var uid;
   // Get the navigate function
   const navigate = useNavigate();
 
@@ -18,7 +17,6 @@ const Login = () => {
     try {
       await firebase.auth().signInWithEmailAndPassword(email, password);
       setSuccessMessage('Sign-in successful!');
-      uid = firebase.auth().currentUser.uid;
 
       // Use navigate to redirect to the homepage
       navigate('/homepage');
@@ -30,7 +28,7 @@ const Login = () => {
   return (
     <div className="login-container">
       <div className="login-left">
-        <img src="/BearLogo.png" alt="Your Image" />
+        <img src="/BearLogo.png" alt="Bear Logo" />
         <h2>Login</h2>
         <form>
           <label htmlFor="email">Email:</label>
