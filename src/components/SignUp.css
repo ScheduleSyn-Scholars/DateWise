@@ -3,9 +3,9 @@
     display: flex;
     height: 100vh;
     background-color: transparent; /* Remove background color */
-  }
-  
-  .signup-left {
+}
+
+.signup-left {
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -13,45 +13,49 @@
     justify-content: center;
     padding: 20px;
     background-color: #ffffff;
-    clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%); /* Create a diagonal split */
-  }
-  
-  .signup-left h2 {
+    clip-path: polygon(
+        0 0,
+        100% 0,
+        100% 100%,
+        0% 100%
+    ); /* Create a diagonal split */
+}
+
+.signup-left h2 {
     color: #007d6e; /* Green text color for the title */
-  }
-  
-  .signup-left form {
+}
+
+.signup-left form {
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 100%;
     max-width: 300px;
-  }
-  
-  .signup-left label {
+}
+
+.signup-left label {
     margin-bottom: 8px;
-  }
-  
-  .signup-left input {
+}
+
+.signup-left input {
     width: 100%;
     padding: 10px;
     margin-bottom: 20px;
     border: 1px solid #ccc;
-  }
-  
-  .signup-left button {
+}
+
+.signup-left button {
     background-color: #007d6e;
     color: #ffffff;
     padding: 10px;
     border: none;
     cursor: pointer;
-  }
-  
-  .signup-right {
+}
+
+.signup-right {
     flex: 1.5;
     background-image: url('../../public/LoginBackDrop.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-  }
-  
+}

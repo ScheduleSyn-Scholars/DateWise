@@ -9,72 +9,71 @@
     background-color: #f8f8f8;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border: 2px solid #228B22;
-  }
-  
-  .form-title {
-    color: #228B22;
+    border: 2px solid #228b22;
+}
+
+.form-title {
+    color: #228b22;
     font-size: 24px;
     margin-bottom: 20px;
-  }
-  
-  .form label {
+}
+
+.form label {
     display: flex;
     align-items: center;
     margin-bottom: 10px;
     font-size: 16px;
     font-weight: bold;
-  }
-  
-  .form input[type="checkbox"] {
+}
+
+.form input[type='checkbox'] {
     margin-right: 10px;
     width: 15px;
     height: 15px;
-  }
-  
-  .form .day-container {
+}
+
+.form .day-container {
     display: flex;
     align-items: baseline;
-  }
-  
-  .time-container {
+}
+
+.time-container {
     display: flex;
     flex-direction: column;
-  }
-  
-  .time-slot {
+}
+
+.time-slot {
     display: flex;
     align-items: center;
     margin-bottom: 10px;
-  }
-  
-  .additional-times {
+}
+
+.additional-times {
     margin-top: 10px;
     display: flex;
     flex-direction: column; /* Make sure the additional times are in a column */
-  }
-  
-  .additional-times .time-slot {
+}
+
+.additional-times .time-slot {
     margin-top: 5px;
-  }
-  
-  .form label input[type="time"] {
+}
+
+.form label input[type='time'] {
     height: 40px;
     width: 150%;
     margin-left: 1vw;
     margin-right: 1vw;
+}
 
-  }
-  
-  .time-input{
+.time-input {
     width: 125px;
-  }
-  
-  .day-lab {
+}
+
+.day-lab {
     width: 75px;
-  }
-  
-  .form button {
+}
+
+.form button {
     background-color: #f8f8f8;
     color: #747474;
     border: none;
@@ -82,21 +81,21 @@
     padding: 8px 12px;
     margin-bottom: 10px;
     cursor: pointer;
-  }
-  
-  .form button:hover {
+}
+
+.form button:hover {
     background-color: #85ab86;
     border-radius: 10px;
-  }
-  
-  .add-time-button {
+}
+
+.add-time-button {
     margin-left: auto; /* This will push the button to the right */
     font-weight: bold;
-  }
-  .form button{
+}
+.form button {
     margin-right: 1.5vw;
-  }
+}
 
-  .remove-time-button {
+.remove-time-button {
     margin-left: -1vw; /* This will push the button to the right */
-  }
+}

@@ -1,225 +1,220 @@
 /* App.css */
 
 .App {
-  width: 1600px;
-  justify-content: space-between;
-  box-shadow: 3px 4px 4px rgba(0,0,0,0.25);
+    width: 1600px;
+    justify-content: space-between;
+    box-shadow: 3px 4px 4px rgba(0, 0, 0, 0.25);
 }
 
-.image-upload-container{
-  padding: 2.6rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-right:20vh;
-
+.image-upload-container {
+    padding: 2.6rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 20vh;
 }
 
-.box-decoration{
-  padding: 5px;
-  width:500px;
-  margin-left: 15%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+.box-decoration {
+    padding: 5px;
+    width: 500px;
+    margin-left: 15%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
-.image-upload-label{
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-bottom: 1rem;
-  cursor: pointer;
+.image-upload-label {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    cursor: pointer;
 }
-.image-upload-input{
-  display: none;
+.image-upload-input {
+    display: none;
 }
-.image-upload-button{
-  background-color: #0E724C;
-  text-align: center; 
-  color: white; 
-  font-size: 20px; 
-  font-family: 'Times New Roman', Times, serif; 
-  font-weight: 500; 
-  word-wrap: "break-word";
-  width:150px;
-  height:35px;
-  margin-top: 2vh;
-  border-radius: 15px;
-  flex-direction: row;
-  border: none;
-}
-
-.image-upload-button:hover{
-  background-color: #3e8e41;
-}
-.img-display-before{
-  height: 200px;
-  width: 200px;
-  margin-left: 35px;
-  border-radius: 100%;
+.image-upload-button {
+    background-color: #0e724c;
+    text-align: center;
+    color: white;
+    font-size: 20px;
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: 500;
+    word-wrap: 'break-word';
+    width: 150px;
+    height: 35px;
+    margin-top: 2vh;
+    border-radius: 15px;
+    flex-direction: row;
+    border: none;
 }
 
-.img-display-after{
-  height: 200px;
-  width: 200px;
-  border-radius: 100%;
-  border-radius: 100%;
+.image-upload-button:hover {
+    background-color: #3e8e41;
+}
+.img-display-before {
+    height: 200px;
+    width: 200px;
+    margin-left: 35px;
+    border-radius: 100%;
 }
 
-.profile-Update-Name{
-  border:none;
-  text-decoration: underline;
-  color: gray;
-  margin-top: 4vh;
-  font-weight: 500;
-  font-size: 35px;
-  font-family: 'Times New Roman', Times, serif;
-  
-}
-
-.website-logo{
-    position: absolute;
-    top: 110px;
-    left:40px;
-    box-shadow: 0px 0px 0px rgba(0,0,0,0.25);
-}
-.website-logo img{
-  width: 180px;
-  height: 150px;
-  border-radius: 40%;
-  overflow: hidden;
-  box-shadow: 0px 0px 0px rgba(0,0,0,0.25);
-}
-.titleStyle{
-  color:#0E724C;
-  font-size:50px;
-  font-family: 'Times New Roman', Times, serif;
-  word-wrap: break-word;
-  margin-top: 7px;
-  margin-left:15px;
-}
-
-.border-divide{
-  position: absolute;
-  top:5.8vh;
-  left:375px;
-  color:#666666;
-  border:3px solid;
-  box-shadow: 0 0 10px rgba(0,0,0,0);
-  height:89.5vh;
-}
-
-.home-button-style {
-  background-color: #0E724C;
-  text-align: center; 
-  color: white; 
-  font-size: 20px; 
-  font-family: 'Times New Roman', Times, serif; 
-  font-weight: 500; 
-  word-wrap: "break-word";
-  width:150px;
-  height:35px;
-  margin-left:18vh;
-  margin-top: 5vh;
-  padding: 0px;
-  border: none;
-  cursor: pointer;
-  border-radius: 15px;
-  flex-direction: row;
-}
-
-.home-button-style:hover{
-  background-color: #4CAF50;
-}
-
-.saveButton{
-  background-color: #0E724C;
-  text-align: center; 
-  color: white; 
-  font-size: 20px; 
-  font-family: 'Times New Roman', Times, serif; 
-  font-weight: 500; 
-  word-wrap: "break-word";
-  width:150px;
-  height:35px;
-  margin-left:18vh;
-  margin-top:10vh;
-  padding: 0px;
-  border: none;
-  cursor: pointer;
-  border-radius: 15px;
-  flex-direction: row;
-}
-.saveButton:hover{
-  background-color: #4CAF50;
-}
-
-
-.profile-picture-confirmer{
-  position:absolute;
-  top:400px;
-  left: 37px;
-  height: 215px;
-  width: 215px;
-  border-radius: 100%;
-}
-.confirmed-name{
-  position: absolute;
-  top:625px;
-  left:40px;
-  font-family: 'Times New Roman', Times, serif;
-  font-size: 30px;
-  color:#666666;
-}
-
-.homeButton img{
-  height:100px;
-  width:100px;
-  position: absolute;
-  top:125px;
-  left:400px;
-
+.img-display-after {
+    height: 200px;
+    width: 200px;
+    border-radius: 100%;
+    border-radius: 100%;
 }
 
 .profile-Update-Name {
+    border: none;
+    text-decoration: underline;
+    color: gray;
+    margin-top: 4vh;
+    font-weight: 500;
+    font-size: 35px;
+    font-family: 'Times New Roman', Times, serif;
+}
 
-  align-items: center;
-  margin-bottom: 10px;
-  font-size:30px;
-  text-decoration: none;
+.website-logo {
+    position: absolute;
+    top: 110px;
+    left: 40px;
+    box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.25);
+}
+.website-logo img {
+    width: 180px;
+    height: 150px;
+    border-radius: 40%;
+    overflow: hidden;
+    box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.25);
+}
+.titleStyle {
+    color: #0e724c;
+    font-size: 50px;
+    font-family: 'Times New Roman', Times, serif;
+    word-wrap: break-word;
+    margin-top: 7px;
+    margin-left: 15px;
+}
+
+.border-divide {
+    position: absolute;
+    top: 5.8vh;
+    left: 375px;
+    color: #666666;
+    border: 3px solid;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0);
+    height: 89.5vh;
+}
+
+.home-button-style {
+    background-color: #0e724c;
+    text-align: center;
+    color: white;
+    font-size: 20px;
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: 500;
+    word-wrap: 'break-word';
+    width: 150px;
+    height: 35px;
+    margin-left: 18vh;
+    margin-top: 5vh;
+    padding: 0px;
+    border: none;
+    cursor: pointer;
+    border-radius: 15px;
+    flex-direction: row;
+}
+
+.home-button-style:hover {
+    background-color: #4caf50;
+}
+
+.saveButton {
+    background-color: #0e724c;
+    text-align: center;
+    color: white;
+    font-size: 20px;
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: 500;
+    word-wrap: 'break-word';
+    width: 150px;
+    height: 35px;
+    margin-left: 18vh;
+    margin-top: 10vh;
+    padding: 0px;
+    border: none;
+    cursor: pointer;
+    border-radius: 15px;
+    flex-direction: row;
+}
+.saveButton:hover {
+    background-color: #4caf50;
+}
+
+.profile-picture-confirmer {
+    position: absolute;
+    top: 400px;
+    left: 37px;
+    height: 215px;
+    width: 215px;
+    border-radius: 100%;
+}
+.confirmed-name {
+    position: absolute;
+    top: 625px;
+    left: 40px;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 30px;
+    color: #666666;
+}
+
+.homeButton img {
+    height: 100px;
+    width: 100px;
+    position: absolute;
+    top: 125px;
+    left: 400px;
+}
+
+.profile-Update-Name {
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 30px;
+    text-decoration: none;
 }
 
 .profile-Update-Name input {
-  padding: 5px;
-  font-size: 20px;
-  border: 1px solid #ccc;
-  border-radius: 15px;
-  margin-top: 30px;
-  color:#7B7B7B;
+    padding: 5px;
+    font-size: 20px;
+    border: 1px solid #ccc;
+    border-radius: 15px;
+    margin-top: 30px;
+    color: #7b7b7b;
 }
 
 .emailStyle {
-  position: center;
-  text-align: center;
-  font-size:35px;
-  color:#7B7B7B;
-  font-weight: 500;
+    position: center;
+    text-align: center;
+    font-size: 35px;
+    color: #7b7b7b;
+    font-weight: 500;
 
-  padding: 5px;
-  font-size: 20px;
-  border-radius: 15px;
-  margin-top: 5px;
+    padding: 5px;
+    font-size: 20px;
+    border-radius: 15px;
+    margin-top: 5px;
 }
 
 .footer {
-  position: flex;
-  bottom: 0;
-  width: 100%;
-  height:5vh;
-  background-color: #0E724C;
-  color: #ffffff;
-  text-align: center;
-  padding: 0px;
+    position: flex;
+    bottom: 0;
+    width: 100%;
+    height: 5vh;
+    background-color: #0e724c;
+    color: #ffffff;
+    text-align: center;
+    padding: 0px;
 }
 
 /*.profile-Update-Name
@@ -231,7 +226,5 @@
   color : grey;
   background : transparent;
 }*/
-
-
 
 /* Additional styling for the overall layout as needed */

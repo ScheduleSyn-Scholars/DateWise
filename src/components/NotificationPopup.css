@@ -1,33 +1,33 @@
-.notification-popup{
+.notification-popup {
     background-color: antiquewhite;
     box-shadow: 0 5px 5px #717171;
     z-index: 9999;
     overflow-y: scroll;
-    height:500px;
+    height: 500px;
     margin-left: 5vh;
 }
-.notification-message{
-    color:#717171;
+.notification-message {
+    color: #717171;
     font-size: 15px;
     font-weight: 500;
-    font-family:'Times New Roman', Times, serif;
+    font-family: 'Times New Roman', Times, serif;
 }
-.close-button{
-    padding:5px;
+.close-button {
+    padding: 5px;
     background-color: blue;
-    color:white;
+    color: white;
     border-radius: 50%;
 }
-.Accept-button{
+.Accept-button {
     background-color: green;
-    color:white;
+    color: white;
     font-size: 15px;
-    font-weight:500;
+    font-weight: 500;
 }
-.Decline-button{
+.Decline-button {
     margin-left: 20px;
     background-color: red;
-    color:white;
+    color: white;
     font-size: 15px;
     font-weight: 500;
 }
