@@ -1,5 +1,5 @@
-import React from 'react'
-import './Header.css' // Import the CSS file for styling
+import React from 'react';
+import './Header.css'; // Import the CSS file for styling
 
 const Header = () => {
     return (
@@ -8,7 +8,7 @@ const Header = () => {
                 {/* Add navigation links or menu items here */}
             </nav>
         </header>
-    )
-}
+    );
+};
 
-export default Header
+export default Header;

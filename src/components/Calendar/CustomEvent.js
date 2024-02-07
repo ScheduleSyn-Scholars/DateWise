@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 const CustomEventComponent = ({ event }) => {
     return (
@@ -6,7 +6,7 @@ const CustomEventComponent = ({ event }) => {
             <div style={{ marginBottom: '4px' }}>{event.title}</div>
             <div>{event.formattedTime}</div>
         </div>
-    )
-}
+    );
+};
 
-export default CustomEventComponent
+export default CustomEventComponent;

@@ -353,4 +353,4 @@ const data = {
             passowrd: 'cxfSdSNV',
         },
     ],
-}
+};

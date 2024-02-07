@@ -1,29 +1,29 @@
-import React, { useState } from 'react'
-import './Login.css'
-import './Registration.css'
-import firebase from '../config/firebase'
-import { useNavigate } from 'react-router-dom' // Import useNavigate
-import { Link } from 'react-router-dom'
+import React, { useState } from 'react';
+import './Login.css';
+import './Registration.css';
+import firebase from '../config/firebase';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { Link } from 'react-router-dom';
 
 const Login = () => {
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-    const [error, setError] = useState(null)
-    const [successMessage, setSuccessMessage] = useState(null)
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState(null);
+    const [successMessage, setSuccessMessage] = useState(null);
     // Get the navigate function
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
     const handleSignIn = async () => {
         try {
-            await firebase.auth().signInWithEmailAndPassword(email, password)
-            setSuccessMessage('Sign-in successful!')
+            await firebase.auth().signInWithEmailAndPassword(email, password);
+            setSuccessMessage('Sign-in successful!');
 
             // Use navigate to redirect to the homepage
-            navigate('/homepage')
+            navigate('/homepage');
         } catch (error) {
-            setError(error.message)
+            setError(error.message);
         }
-    }
+    };
 
     return (
         <div className="login-container">
@@ -69,7 +69,7 @@ const Login = () => {
                 {/* Background image will be displayed here */}
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default Login
+export default Login;

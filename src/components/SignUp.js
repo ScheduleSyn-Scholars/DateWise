@@ -1,12 +1,12 @@
-import React, { useState } from 'react'
-import './SignUp.css' // Import the CSS file for styling
-import firebase from '../firebase.js'
+import React, { useState } from 'react';
+import './SignUp.css'; // Import the CSS file for styling
+import firebase from '../firebase.js';
 
 // To allow a user to sign up or add a user to the firebase collection of users.
 
 const Signup = () => {
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
     const signUp = async () => {
         firebase
@@ -14,16 +14,16 @@ const Signup = () => {
             .createUserWithEmailAndPassword(email, password)
             .then((userCredential) => {
                 // Signed in
-                var user = userCredential.user
+                var user = userCredential.user;
                 // alert("Successful Sign Up");
                 // ...
             })
             .catch((error) => {
-                var errorCode = error.code
-                var errorMessage = error.message
+                var errorCode = error.code;
+                var errorMessage = error.message;
                 console.error(errorCode, errorMessage);
-            })
-    }
+            });
+    };
 
     return (
         <div className="signup-container">
@@ -57,7 +57,7 @@ const Signup = () => {
                 {/* Background image will be displayed here */}
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default Signup
+export default Signup;

@@ -1,30 +1,30 @@
-import React, { useState } from 'react'
-import './Registration.css'
-import firebase from '../config/firebase'
-import 'firebase/compat/firestore'
-import { useNavigate } from 'react-router-dom'
+import React, { useState } from 'react';
+import './Registration.css';
+import firebase from '../config/firebase';
+import 'firebase/compat/firestore';
+import { useNavigate } from 'react-router-dom';
 
 const Form = () => {
     // Create instance of firestore database
-    const db = firebase.firestore()
+    const db = firebase.firestore();
 
     // Method to handle the Input Change
     const handleInputChange = (event) => {
-        const { name, value } = event.target
+        const { name, value } = event.target;
         setFormData((prevData) => ({
             ...prevData,
             [name]: value,
-        }))
-    }
-    const navigate = useNavigate()
+        }));
+    };
+    const navigate = useNavigate();
     // Method to handle the submission of a form
     const handleSubmit = (event) => {
-        event.preventDefault() // Prevent the form from actually submitting (which would refresh the page)
+        event.preventDefault(); // Prevent the form from actually submitting (which would refresh the page)
 
-        navigate('/')
+        navigate('/');
         // You can access all the form data as an object in 'formData' state variable
-        console.log(formData)
-    }
+        console.log(formData);
+    };
 
     // To store form Data with user's details
     const [formData, setFormData] = useState({
@@ -34,11 +34,11 @@ const Form = () => {
         email: '',
         password: '',
         userName: '',
-    })
+    });
 
     const signUp = async () => {
-        formData.userName = formData.email.split('@')[0] // Use part before @ in email address as default userName
-        console.log('Username: ', formData.userName)
+        formData.userName = formData.email.split('@')[0]; // Use part before @ in email address as default userName
+        console.log('Username: ', formData.userName);
 
         // Add new user through authenticator to get a uid
         firebase
@@ -46,13 +46,13 @@ const Form = () => {
             .createUserWithEmailAndPassword(formData.email, formData.password)
             .then((userCredential) => {
                 // Signed in
-                const userUid = userCredential.user.uid
-                console.log('Printing from signup:', userUid)
+                const userUid = userCredential.user.uid;
+                console.log('Printing from signup:', userUid);
 
-                console.log('starting to add doc ', userUid)
+                console.log('starting to add doc ', userUid);
 
                 // Use uid as document id in firestore database
-                const docRef = db.collection('users').doc(userUid)
+                const docRef = db.collection('users').doc(userUid);
 
                 // Add a new document to Firestore
                 docRef
@@ -60,22 +60,22 @@ const Form = () => {
                     .then(() => {
                         if (userUid) {
                             // alert when registration is successful
-                            alert('Register Successfully')
+                            alert('Register Successfully');
                         } else {
-                            alert('Error Occurred')
+                            alert('Error Occurred');
                         }
-                        console.log('Document written with ID: ', docRef.id)
+                        console.log('Document written with ID: ', docRef.id);
                     })
                     .catch((error) => {
-                        console.error('Error adding document: ', error)
-                    })
+                        console.error('Error adding document: ', error);
+                    });
             })
             .catch((error) => {
-                var errorCode = error.code
-                var errorMessage = error.message
-                console.error('Error: ', errorCode, errorMessage)
-            })
-    }
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                console.error('Error: ', errorCode, errorMessage);
+            });
+    };
 
     return (
         // Form to get the data
@@ -144,7 +144,7 @@ const Form = () => {
                 </div>
             </div>
         </>
-    )
-}
+    );
+};
 
-export default Form
+export default Form;

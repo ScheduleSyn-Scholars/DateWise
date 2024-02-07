@@ -1,15 +1,15 @@
-import React from 'react'
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
-import Header from './components/Header'
-import Footer from './components/Footer'
-import Login from './pages/Login'
-import ViewCalendar from './pages/ViewCalendar'
-import Registration from './pages/Registration'
-import Homepage from './pages/HomePage'
-import MyProfile from './pages/MyProfile'
-import NewCalendar from './pages/NewCalendar'
-import { UserProvider } from './pages/UserContext'
-import { NotificationsProvider } from './components/NotificationsContext'
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Header from './components/Header';
+import Footer from './components/Footer';
+import Login from './pages/Login';
+import ViewCalendar from './pages/ViewCalendar';
+import Registration from './pages/Registration';
+import Homepage from './pages/HomePage';
+import MyProfile from './pages/MyProfile';
+import NewCalendar from './pages/NewCalendar';
+import { UserProvider } from './pages/UserContext';
+import { NotificationsProvider } from './components/NotificationsContext';
 
 function App() {
     return (
@@ -37,7 +37,7 @@ function App() {
                 </div>
             </UserProvider>
         </Router>
-    )
+    );
 }
 
-export default App
+export default App;

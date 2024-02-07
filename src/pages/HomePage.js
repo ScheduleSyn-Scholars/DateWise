@@ -1,43 +1,43 @@
-import React, { useContext, useEffect, useState } from 'react'
-import './HomePage.css'
-import firebase from '../config/firebase'
-import { Link } from 'react-router-dom'
-import BellIcon from '../components/bell-filled.svg'
-import 'firebase/compat/firestore'
-import { useUser } from './UserContext'
-import NotificationPopup from '../components/NotificationPopup'
-import { NotificationsContext } from '../components/NotificationsContext'
-import { Calendar, momentLocalizer } from 'react-big-calendar'
-import moment from 'moment'
-import CustomEventComponent from '../components/Calendar/CustomEvent'
+import React, { useContext, useEffect, useState } from 'react';
+import './HomePage.css';
+import firebase from '../config/firebase';
+import { Link } from 'react-router-dom';
+import BellIcon from '../components/bell-filled.svg';
+import 'firebase/compat/firestore';
+import { useUser } from './UserContext';
+import NotificationPopup from '../components/NotificationPopup';
+import { NotificationsContext } from '../components/NotificationsContext';
+import { Calendar, momentLocalizer } from 'react-big-calendar';
+import moment from 'moment';
+import CustomEventComponent from '../components/Calendar/CustomEvent';
 
-const localizer = momentLocalizer(moment)
+const localizer = momentLocalizer(moment);
 
 const HomePage = () => {
-    const [image, setImage] = useState('')
-    const user = useUser()
-    const [showNotification, setShowNotification] = useState(false)
-    const [notificationMessage, setNotificationMessage] = useState('')
-    const [notificationCount, setNotificationCount] = useState()
-    const [userCalendars, setUserCalendars] = useState([])
-    const accepted = true
-    const [notificationsData, setNotificationsData] = useState([])
+    const [image, setImage] = useState('');
+    const user = useUser();
+    const [showNotification, setShowNotification] = useState(false);
+    const [notificationMessage, setNotificationMessage] = useState('');
+    const [notificationCount, setNotificationCount] = useState();
+    const [userCalendars, setUserCalendars] = useState([]);
+    const accepted = true;
+    const [notificationsData, setNotificationsData] = useState([]);
 
-    const [notifyID, setNotifyID] = useState('')
-    const [loading, setLoading] = useState(true)
+    const [notifyID, setNotifyID] = useState('');
+    const [loading, setLoading] = useState(true);
 
-    const [notificationCountReset, setNotificationCountReset] = useState(false)
+    const [notificationCountReset, setNotificationCountReset] = useState(false);
 
     const { notifications, handleAccept, handleDecline } =
-        useContext(NotificationsContext)
+        useContext(NotificationsContext);
 
-    const [events, setEvents] = useState([])
+    const [events, setEvents] = useState([]);
 
     if (user.imageURL == null) {
-        console.log('Printing from image addition My Profile')
-        user.image = './Screenshot 2023-09-15 at 1.46 1.png'
+        console.log('Printing from image addition My Profile');
+        user.image = './Screenshot 2023-09-15 at 1.46 1.png';
     } else {
-        user.image = user.imageURL
+        user.image = user.imageURL;
         //console.log("Printing from successful image addition My Profile: ", user.imageURL)
     }
     //   useEffect(() => {
@@ -46,58 +46,58 @@ const HomePage = () => {
     useEffect(() => {
         const loadUserCalendars = async () => {
             try {
-                const userUid = firebase.auth().currentUser.uid
+                const userUid = firebase.auth().currentUser.uid;
                 const userDocRef = firebase
                     .firestore()
                     .collection('users')
-                    .doc(userUid)
+                    .doc(userUid);
 
-                const userDoc = await userDocRef.get()
+                const userDoc = await userDocRef.get();
                 if (userDoc.exists) {
-                    const userData = userDoc.data()
-                    const calendars = userData.calendars || [] // Assuming calendars is an array in user's document
-                    setUserCalendars(calendars)
+                    const userData = userDoc.data();
+                    const calendars = userData.calendars || []; // Assuming calendars is an array in user's document
+                    setUserCalendars(calendars);
                 }
-                setLoading(false)
+                setLoading(false);
             } catch (error) {
-                console.error('Error loading user calendars:', error)
+                console.error('Error loading user calendars:', error);
             }
-        }
+        };
 
-        loadUserCalendars()
+        loadUserCalendars();
 
-        console.log('Notification Count after reset: ', notificationCount)
+        console.log('Notification Count after reset: ', notificationCount);
         const fetchEvents = async () => {
             try {
-                const userUid = firebase.auth().currentUser.uid
+                const userUid = firebase.auth().currentUser.uid;
                 const userDocRef = firebase
                     .firestore()
                     .collection('users')
-                    .doc(userUid)
+                    .doc(userUid);
 
-                const userDoc = await userDocRef.get()
+                const userDoc = await userDocRef.get();
                 if (userDoc.exists) {
-                    const userData = userDoc.data()
-                    const calendars = userData.calendars || []
+                    const userData = userDoc.data();
+                    const calendars = userData.calendars || [];
 
                     const eventsPromises = calendars.map(async (calendar) => {
                         const eventsRef = firebase
                             .firestore()
                             .collection('calendars')
                             .doc(calendar.id)
-                            .collection('events')
+                            .collection('events');
 
-                        const eventsSnapshot = await eventsRef.get()
+                        const eventsSnapshot = await eventsRef.get();
                         const calendarEvents = eventsSnapshot.docs.map(
                             (doc) => {
-                                const data = doc.data()
-                                const startDateTime = data.dateTime.toDate()
+                                const data = doc.data();
+                                const startDateTime = data.dateTime.toDate();
                                 const formattedTime =
                                     startDateTime.toLocaleTimeString([], {
                                         hour: '2-digit',
                                         minute: '2-digit',
-                                    })
-                                const title = `${calendar.calendarName}\n${formattedTime.replace(/\s+/g, '')}`
+                                    });
+                                const title = `${calendar.calendarName}\n${formattedTime.replace(/\s+/g, '')}`;
 
                                 return {
                                     ...data,
@@ -105,44 +105,47 @@ const HomePage = () => {
                                     title: title,
                                     start: data.dateTime.toDate(), // Convert Timestamp to Date
                                     end: data.dateTime.toDate(), // Convert Timestamp to Date
-                                }
+                                };
                             },
-                        )
+                        );
 
-                        return calendarEvents
-                    })
+                        return calendarEvents;
+                    });
 
-                    const allEvents = await Promise.all(eventsPromises)
-                    const flattenedEvents = [].concat(...allEvents)
+                    const allEvents = await Promise.all(eventsPromises);
+                    const flattenedEvents = [].concat(...allEvents);
 
-                    setEvents(flattenedEvents)
+                    setEvents(flattenedEvents);
                 }
             } catch (error) {
-                console.error('Error loading user calendars:', error)
+                console.error('Error loading user calendars:', error);
             }
-        }
-        fetchEvents()
-    }, [notificationCount])
+        };
+        fetchEvents();
+    }, [notificationCount]);
 
     const loadUserNotifications = async (userUid) => {
         try {
-            const firestore = firebase.firestore()
-            const notificationRef = firestore.collection('Notification-Data')
+            const firestore = firebase.firestore();
+            const notificationRef = firestore.collection('Notification-Data');
             const notificationSnapshot = await notificationRef
                 .where('receiver', '==', userUid)
-                .get()
+                .get();
             const notificationsData = notificationSnapshot.docs.map((doc) => ({
                 id: doc.id,
                 ...doc.data(),
-            }))
+            }));
 
-            processNotifications(notificationsData)
-            console.log('notifications Data: ', notificationsData)
-            console.log('Notification count after loading: ', notificationCount)
+            processNotifications(notificationsData);
+            console.log('notifications Data: ', notificationsData);
+            console.log(
+                'Notification count after loading: ',
+                notificationCount,
+            );
         } catch (error) {
-            console.error('Error loading user notifications:', error)
+            console.error('Error loading user notifications:', error);
         }
-    }
+    };
 
     const handleBellIconClick = async () => {
         try {
@@ -152,53 +155,53 @@ const HomePage = () => {
             //   .where('receiver', '==', user.uid)
             //   .get();
 
-            setNotificationCountReset(true) // Setting the flag for notification count reset
+            setNotificationCountReset(true); // Setting the flag for notification count reset
             setNotificationCount(0, () => {
                 console.log(
                     'Notification Count after reset: ',
                     notificationCount,
-                )
-            }) // Resetting the notification count to zero
-            console.log('Fetching notifications...')
-            await loadUserNotifications(user.uid)
+                );
+            }); // Resetting the notification count to zero
+            console.log('Fetching notifications...');
+            await loadUserNotifications(user.uid);
             //setNotificationMessage('You have new notifications!');
 
-            console.log('Bell Clicked')
-            console.log('Show notification:', showNotification)
+            console.log('Bell Clicked');
+            console.log('Show notification:', showNotification);
             if (notificationCount > 0) {
-                setNotificationMessage('You have new notifications!')
-                setShowNotification(true)
+                setNotificationMessage('You have new notifications!');
+                setShowNotification(true);
             } else {
-                setShowNotification(false)
+                setShowNotification(false);
             }
             //setShowNotification(true);
         } catch (error) {
-            console.error('Error loading notifications: ', error)
+            console.error('Error loading notifications: ', error);
         }
-    }
+    };
 
     const processNotifications = (notificationsData) => {
-        const notificationCountTemp = notificationsData.length
+        const notificationCountTemp = notificationsData.length;
         console.log(
             'amount of notifications processing: ',
             notificationCountTemp,
-        )
-        setNotificationCount(notificationCountTemp)
+        );
+        setNotificationCount(notificationCountTemp);
         notificationsData.forEach(async (notification) => {
-            const inviteMessage = `${notificationsData[0].sender} has sended an invitation for you to accept this certain meeting time and join "${notificationsData[0].calendarId}".`
+            const inviteMessage = `${notificationsData[0].sender} has sended an invitation for you to accept this certain meeting time and join "${notificationsData[0].calendarId}".`;
 
-            setNotificationMessage(inviteMessage)
+            setNotificationMessage(inviteMessage);
 
-            setShowNotification(true)
-            const notificationId = notification.id
-            const calendarId = notification.calendarId
+            setShowNotification(true);
+            const notificationId = notification.id;
+            const calendarId = notification.calendarId;
 
             //Render a Notification Popup for each notification
-            setNotifyID(notificationId)
-            setNotificationMessage(inviteMessage)
-            setShowNotification(true)
-        })
-    }
+            setNotifyID(notificationId);
+            setNotificationMessage(inviteMessage);
+            setShowNotification(true);
+        });
+    };
 
     return (
         <div className="homepage">
@@ -291,7 +294,7 @@ const HomePage = () => {
                 </Link>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default HomePage
+export default HomePage;

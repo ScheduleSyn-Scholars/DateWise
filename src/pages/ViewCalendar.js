@@ -1,49 +1,49 @@
-import React, { useEffect, useState } from 'react'
-import firebase from '../config/firebase'
-import 'firebase/compat/firestore'
-import { Link, useParams } from 'react-router-dom'
-import { useUser } from './UserContext'
-import AvailabilityForm from '../components/Calendar/AvailabilityForm'
-import DatePicker from 'react-datepicker'
-import 'react-datepicker/dist/react-datepicker.css'
-import './ViewCalendar.css'
+import React, { useEffect, useState } from 'react';
+import firebase from '../config/firebase';
+import 'firebase/compat/firestore';
+import { Link, useParams } from 'react-router-dom';
+import { useUser } from './UserContext';
+import AvailabilityForm from '../components/Calendar/AvailabilityForm';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import './ViewCalendar.css';
 
 const ViewCalendar = () => {
-    const { calendarId, calendarName } = useParams()
-    const user = useUser()
+    const { calendarId, calendarName } = useParams();
+    const user = useUser();
     const [availability, setAvailability] = useState({
         selectedDays: [],
         times: {},
-    })
-    const [teamAvailability, setTeamAvailability] = useState([])
-    const [showBestTime, setShowBestTime] = useState(false)
-    const [bestTime, setBestTime] = useState(null)
-    const [selectedDateTime, setSelectedDateTime] = useState(new Date())
-    const [showSavedPopup, setShowSavedPopup] = useState(false)
+    });
+    const [teamAvailability, setTeamAvailability] = useState([]);
+    const [showBestTime, setShowBestTime] = useState(false);
+    const [bestTime, setBestTime] = useState(null);
+    const [selectedDateTime, setSelectedDateTime] = useState(new Date());
+    const [showSavedPopup, setShowSavedPopup] = useState(false);
 
-    const firestore = firebase.firestore()
+    const firestore = firebase.firestore();
 
     useEffect(() => {
         const fetchData = async () => {
             if (user) {
-                await fetchUserAvailability(calendarId, user.uid)
+                await fetchUserAvailability(calendarId, user.uid);
                 const teamAvailabilityData =
-                    await fetchTeamAvailability(calendarId)
-                fetchTeamAvailabilityOnCommonDays(teamAvailabilityData)
+                    await fetchTeamAvailability(calendarId);
+                fetchTeamAvailabilityOnCommonDays(teamAvailabilityData);
             }
-        }
+        };
 
-        fetchData()
-    }, [calendarId, user])
+        fetchData();
+    }, [calendarId, user]);
 
     const handleAvailabilityChange = (newAvailability) => {
         // Handle changes in availability form
         const updatedAvailability = {
             selectedDays: Object.keys(newAvailability.times || {}),
             times: newAvailability.times || {},
-        }
-        setAvailability(updatedAvailability)
-    }
+        };
+        setAvailability(updatedAvailability);
+    };
 
     const fetchUserAvailability = async (calendarId, uid) => {
         try {
@@ -51,47 +51,48 @@ const ViewCalendar = () => {
                 .collection('calendars')
                 .doc(calendarId)
                 .collection('availability')
-                .doc(uid)
+                .doc(uid);
 
-            const availabilitySnapshot = await availabilityRef.get()
+            const availabilitySnapshot = await availabilityRef.get();
 
             if (availabilitySnapshot.exists) {
-                const availabilityData = availabilitySnapshot.data()
-                setAvailability(availabilityData)
+                const availabilityData = availabilitySnapshot.data();
+                setAvailability(availabilityData);
             }
         } catch (error) {
-            console.error('Error fetching user availability:', error)
+            console.error('Error fetching user availability:', error);
         }
-    }
+    };
 
     const fetchTeamAvailability = async (calendarId) => {
         try {
             const teamAvailabilityRef = firestore
                 .collection('calendars')
                 .doc(calendarId)
-                .collection('availability')
+                .collection('availability');
 
-            const teamAvailabilitySnapshot = await teamAvailabilityRef.get()
+            const teamAvailabilitySnapshot = await teamAvailabilityRef.get();
             const teamAvailabilityData = teamAvailabilitySnapshot.docs
                 .map((doc) => ({ uid: doc.id, ...doc.data() }))
                 .filter(
                     (teamMember) =>
                         teamMember.selectedDays &&
                         teamMember.selectedDays.length > 0,
-                )
+                );
 
-            setTeamAvailability(teamAvailabilityData)
+            setTeamAvailability(teamAvailabilityData);
 
-            return teamAvailabilityData // Add this line
+            return teamAvailabilityData; // Add this line
         } catch (error) {
-            console.error('Error fetching team availability:', error)
-            return []
+            console.error('Error fetching team availability:', error);
+            return [];
         }
-    }
+    };
 
     const fetchTeamAvailabilityOnCommonDays = async (commonDays) => {
         try {
-            const teamAvailabilityData = await fetchTeamAvailability(calendarId)
+            const teamAvailabilityData =
+                await fetchTeamAvailability(calendarId);
 
             // Filter the team availability data to include only common days
             const teamAvailabilityOnCommonDays = teamAvailabilityData.map(
@@ -105,176 +106,176 @@ const ViewCalendar = () => {
                         {},
                     ),
                 }),
-            )
+            );
 
             console.log(
                 'Team Availability On Common Days:',
                 teamAvailabilityOnCommonDays,
-            )
-            return teamAvailabilityOnCommonDays
+            );
+            return teamAvailabilityOnCommonDays;
         } catch (error) {
             console.error(
                 'Error fetching team availability on common days:',
                 error,
-            )
-            return []
+            );
+            return [];
         }
-    }
+    };
 
     const handleShowBestTime = async () => {
         try {
-            console.log('Handling Show Best Time...')
-            await findBestTimeToMeet()
+            console.log('Handling Show Best Time...');
+            await findBestTimeToMeet();
         } catch (error) {
-            console.error('Error in handleShowBestTime:', error)
+            console.error('Error in handleShowBestTime:', error);
         }
-    }
+    };
 
     const findBestTimeToMeet = async () => {
         // Find common days among all users
-        console.log('Inside findBestTimeToMeet')
-        const commonDays = findCommonDays()
+        console.log('Inside findBestTimeToMeet');
+        const commonDays = findCommonDays();
 
         if (commonDays.length === 0) {
-            setBestTime(null)
-            return
+            setBestTime(null);
+            return;
         }
 
         // Find overlapping time slots on common days
-        const overlappingTimes = await findOverlappingTimes(commonDays)
+        const overlappingTimes = await findOverlappingTimes(commonDays);
 
         // Determine the best time to meet
-        const bestTime = processOverlappingTimes(overlappingTimes)
+        const bestTime = processOverlappingTimes(overlappingTimes);
 
         // Set the best time to meet in the state
-        setBestTime(bestTime)
-    }
+        setBestTime(bestTime);
+    };
 
     const compareTimeSlots = (commonDays, teamAvailabilityData) => {
-        console.log('Raw Team Availability Data:', teamAvailabilityData)
+        console.log('Raw Team Availability Data:', teamAvailabilityData);
 
         // Ensure teamAvailabilityData is an array
         const teamAvailabilityArray = Array.isArray(teamAvailabilityData)
             ? teamAvailabilityData
-            : Object.values(teamAvailabilityData)
+            : Object.values(teamAvailabilityData);
 
-        console.log('Team Availability Array:', teamAvailabilityArray)
+        console.log('Team Availability Array:', teamAvailabilityArray);
 
         // Compare time slots for each common day
         const overlappingTimes = commonDays.reduce((acc, day) => {
-            const currentUserTimes = availability.times[day] || []
+            const currentUserTimes = availability.times[day] || [];
             const teamMemberTimes = teamAvailabilityArray.reduce(
                 (times, teamMember) => {
-                    return times.concat(teamMember.times[day] || [])
+                    return times.concat(teamMember.times[day] || []);
                 },
                 [],
-            )
+            );
 
             // Find overlapping times for each team member
             const overlappingTimesForDay = teamMemberTimes.filter((teamTime) =>
                 currentUserTimes.some((userTime) =>
                     areTimeSlotsOverlapping(userTime, teamTime),
                 ),
-            )
+            );
 
             // Set day explicitly
-            acc[day] = overlappingTimesForDay
+            acc[day] = overlappingTimesForDay;
 
-            return acc
-        }, {})
+            return acc;
+        }, {});
 
-        console.log('Overlapping Times:', overlappingTimes)
+        console.log('Overlapping Times:', overlappingTimes);
 
-        return overlappingTimes
-    }
+        return overlappingTimes;
+    };
 
     const findCommonDays = () => {
         // Extract selected days of the current user
-        const currentUserDays = availability.selectedDays || []
+        const currentUserDays = availability.selectedDays || [];
 
         // Extract selected days of team members
         const teamDays = teamAvailability.map(
             (teamMember) => teamMember.selectedDays || [],
-        )
+        );
 
         // Find the common days among all users
         const commonDays = currentUserDays.filter((day) =>
             teamDays.every((teamDays) => teamDays.includes(day)),
-        )
+        );
 
-        return commonDays
-    }
+        return commonDays;
+    };
 
     const findOverlappingTimes = async (commonDays) => {
         const teamAvailabilityOnCommonDays =
-            await fetchTeamAvailabilityOnCommonDays(commonDays)
+            await fetchTeamAvailabilityOnCommonDays(commonDays);
 
         const overlappingTimes = compareTimeSlots(
             commonDays,
             teamAvailabilityOnCommonDays,
-        )
+        );
 
-        console.log('Overlapping Times:', overlappingTimes)
-        return overlappingTimes
-    }
+        console.log('Overlapping Times:', overlappingTimes);
+        return overlappingTimes;
+    };
 
     const areTimeSlotsOverlapping = (time1, time2) => {
-        const start1 = new Date(`2000-01-01T${time1.start}`)
-        const end1 = new Date(`2000-01-01T${time1.end}`)
-        const start2 = new Date(`2000-01-01T${time2.start}`)
-        const end2 = new Date(`2000-01-01T${time2.end}`)
+        const start1 = new Date(`2000-01-01T${time1.start}`);
+        const end1 = new Date(`2000-01-01T${time1.end}`);
+        const start2 = new Date(`2000-01-01T${time2.start}`);
+        const end2 = new Date(`2000-01-01T${time2.end}`);
 
-        return start1 < end2 && end1 > start2
-    }
+        return start1 < end2 && end1 > start2;
+    };
 
     const processOverlappingTimes = (overlappingTimes) => {
         // Process overlapping times to find the best time to meet
         // This includes finding the latest start time and earliest end time for each day
 
-        console.log('Before loop - overlappingTimes:', overlappingTimes)
+        console.log('Before loop - overlappingTimes:', overlappingTimes);
 
         const bestTime = Object.entries(overlappingTimes).reduce(
             (acc, [day, times]) => {
-                console.log('Inside loop - day:', day, 'times:', times)
+                console.log('Inside loop - day:', day, 'times:', times);
 
                 if (!acc.day || times.length > acc.times.length) {
-                    acc.day = day
-                    acc.times = times
+                    acc.day = day;
+                    acc.times = times;
                 } else if (times.length === acc.times.length) {
                     // If the same number of overlapping slots, consider the latest start time
                     const latestStartTime = Math.max(
                         ...times.map((time) => parseInt(time.start, 10)),
-                    )
+                    );
                     const currentLatestStartTime = Math.max(
                         ...acc.times.map((time) => parseInt(time.start, 10)),
-                    )
+                    );
 
                     if (latestStartTime > currentLatestStartTime) {
-                        acc.day = day
-                        acc.times = times
+                        acc.day = day;
+                        acc.times = times;
                     }
                 }
-                return acc
+                return acc;
             },
             { day: null, times: [] },
-        )
+        );
 
         // Find the latest start time and earliest end time
         const latestStartTime = Math.max(
             ...bestTime.times.map((time) => parseInt(time.start, 10)),
-        )
+        );
         const earliestEndTime = Math.min(
             ...bestTime.times.map((time) => parseInt(time.end, 10)),
-        )
+        );
 
         // Set the overall start and end times
-        bestTime.start = latestStartTime
-        bestTime.end = earliestEndTime
+        bestTime.start = latestStartTime;
+        bestTime.end = earliestEndTime;
 
-        console.log('After loop - bestTime:', bestTime)
+        console.log('After loop - bestTime:', bestTime);
 
-        return bestTime
-    }
+        return bestTime;
+    };
 
     const updateAvailability = async () => {
         try {
@@ -282,55 +283,56 @@ const ViewCalendar = () => {
                 .collection('calendars')
                 .doc(calendarId)
                 .collection('availability')
-                .doc(user.uid)
+                .doc(user.uid);
 
             // Update selectedDays based on times object
             const updatedAvailability = {
                 ...availability,
                 selectedDays: Object.keys(availability.times || {}),
-            }
+            };
 
             await availabilityRef.set(
                 { ...updatedAvailability },
                 { merge: true },
-            )
+            );
 
-            console.log('availRef" ', updatedAvailability)
-            console.log(calendarId)
-            await availabilityRef.update({ ...updatedAvailability })
-            console.log('Adding availability for: ', user.uid)
-            console.log('Availability updated successfully!')
+            console.log('availRef" ', updatedAvailability);
+            console.log(calendarId);
+            await availabilityRef.update({ ...updatedAvailability });
+            console.log('Adding availability for: ', user.uid);
+            console.log('Availability updated successfully!');
 
             // Fetch team availability
-            const teamAvailabilityData = await fetchTeamAvailability(calendarId)
+            const teamAvailabilityData =
+                await fetchTeamAvailability(calendarId);
 
             // Reset showBestTime state
-            setShowBestTime(false)
+            setShowBestTime(false);
 
-            setShowSavedPopup(true)
+            setShowSavedPopup(true);
 
             setTimeout(() => {
-                setShowSavedPopup(false)
-            }, 2000)
+                setShowSavedPopup(false);
+            }, 2000);
         } catch (error) {
-            console.error('Error updating availability:', error)
+            console.error('Error updating availability:', error);
         }
-    }
+    };
 
     const createEvent = async (eventData) => {
         try {
             const eventsRef = firestore
                 .collection('calendars')
                 .doc(calendarId)
-                .collection('events')
+                .collection('events');
 
-            await eventsRef.add(eventData)
+            await eventsRef.add(eventData);
 
-            console.log('Event created successfully!')
+            console.log('Event created successfully!');
         } catch (error) {
-            console.error('Error creating event:', error)
+            console.error('Error creating event:', error);
         }
-    }
+    };
 
     const handleCreateEvent = async () => {
         try {
@@ -339,20 +341,20 @@ const ViewCalendar = () => {
                 dateTime: selectedDateTime,
                 creator: user.uid,
                 attendees: [user.uid],
-            }
-            console.log('Event Data:', eventData)
-            await createEvent(eventData)
+            };
+            console.log('Event Data:', eventData);
+            await createEvent(eventData);
         } catch (error) {
-            console.error('Error in handleCreateEvent:', error)
+            console.error('Error in handleCreateEvent:', error);
         }
-    }
+    };
 
     const convertTo12HourFormat = (time) => {
-        const hour = parseInt(time, 10)
-        const isPM = hour >= 12
-        const formattedHour = isPM ? (hour === 12 ? 12 : hour - 12) : hour
-        return `${formattedHour}:00 ${isPM ? 'PM' : 'AM'}`
-    }
+        const hour = parseInt(time, 10);
+        const isPM = hour >= 12;
+        const formattedHour = isPM ? (hour === 12 ? 12 : hour - 12) : hour;
+        return `${formattedHour}:00 ${isPM ? 'PM' : 'AM'}`;
+    };
 
     return (
         <div className="page">
@@ -427,7 +429,7 @@ const ViewCalendar = () => {
                 </Link>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default ViewCalendar
+export default ViewCalendar;

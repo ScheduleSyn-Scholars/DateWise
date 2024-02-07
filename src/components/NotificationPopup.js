@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import './NotificationPopup.css'
+import React, { useState } from 'react';
+import './NotificationPopup.css';
 
 const NotificationPopup = ({
     notifications,
@@ -41,7 +41,7 @@ const NotificationPopup = ({
                 Close
             </button>
         </div>
-    )
-}
+    );
+};
 
-export default NotificationPopup
+export default NotificationPopup;
