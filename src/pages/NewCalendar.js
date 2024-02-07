@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import './NewCalendar.css';
 import { Link } from 'react-router-dom';
 import firebase from '../config/firebase';
@@ -244,39 +244,8 @@ const NewCalendar = () => {
     }
   };
 
-
-
-  const displayErrorMessage = (message) => {
-    setErrorMessage(message);
-    setIsShaking(true);
-
-  };
-
-
   const handleInputFocus = () => {
     setInputValue(''); // Clear the input value when focused
-  };
-
-  const imageStyle = {
-    width: '215px',
-    height: '200px',
-    boxShadow: '0 0 0 rgba(0, 0, 0, 0.25)',
-    borderRadius: '50%',
-    border: '2px solid #DADADA',
-    position: 'relative',
-    top: '7px',
-    left: '45px',
-  };
-
-  const nameStyle = {
-    left: '50px',
-    position: 'relative',
-    margintop: '25px',
-    color: '#7B7B7B',
-    fontSize: '35px',
-    fontFamily: 'Times New Roman, Times, Serif',
-    fontWeight: '500',
-    wordWrap: 'break-word',
   };
 
   const subjectStyle = {
@@ -289,7 +258,6 @@ const NewCalendar = () => {
     fontWeight: '700',
     wordWrap: 'break-word',
   };
-
 
   return (
 
@@ -326,9 +294,6 @@ const NewCalendar = () => {
 
       </div>
     </div>
-
-
-
   );
 
 };
