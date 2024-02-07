@@ -129,8 +129,7 @@ const AvailabilityForm = ({ onAvailabilityChange }) => {
                                         className="remove-time-button"
                                         onClick={() =>
                                             handleRemoveTimeSlot(day, index)
-                                        }
-                                    >
+                                        }>
                                         x
                                     </button>
                                 </div>
@@ -141,8 +140,7 @@ const AvailabilityForm = ({ onAvailabilityChange }) => {
                         {selectedDays.includes(day) && (
                             <button
                                 onClick={() => handleAddTimeSlot(day)}
-                                className="add-time-button"
-                            >
+                                className="add-time-button">
                                 +
                             </button>
                         )}

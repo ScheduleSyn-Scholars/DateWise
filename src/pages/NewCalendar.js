@@ -302,8 +302,7 @@ const NewCalendar = () => {
                         placeholder="       Calendar Title"
                         type="text"
                         className="Calendar-title-input"
-                        id="CalendarTitle"
-                    ></input>
+                        id="CalendarTitle"></input>
                     <div className="addPeople">
                         <input
                             type="text"
@@ -320,8 +319,7 @@ const NewCalendar = () => {
                             onChange={handleInputValueChange}
                             onKeyDown={handleInputKeyDown}
                             onFocus={handleInputFocus}
-                            className={isShaking ? 'shake' : ''}
-                        ></input>
+                            className={isShaking ? 'shake' : ''}></input>
                         {errorMessage && (
                             <div className="error-message">{errorMessage}</div>
                         )}

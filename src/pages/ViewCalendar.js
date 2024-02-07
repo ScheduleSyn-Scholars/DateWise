@@ -370,15 +370,13 @@ const ViewCalendar = () => {
                     <button
                         className="saveButton2"
                         type="button"
-                        onClick={() => updateAvailability()}
-                    >
+                        onClick={() => updateAvailability()}>
                         Save
                     </button>
                     <button
                         className="showBestTimeButton"
                         type="button"
-                        onClick={handleShowBestTime}
-                    >
+                        onClick={handleShowBestTime}>
                         Show Best Time
                     </button>
 

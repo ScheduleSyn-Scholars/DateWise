@@ -277,8 +277,7 @@ const HomePage = () => {
                             <Link
                                 key={calendar.id}
                                 to={`/ViewCalendar/${calendar.id}/${encodeURIComponent(calendar.calendarName)}`}
-                                className="calendar-link"
-                            >
+                                className="calendar-link">
                                 <button className="mutual-calendar-button">
                                     {calendar.calendarName}
                                 </button>

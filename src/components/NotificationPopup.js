@@ -24,14 +24,12 @@ const NotificationPopup = ({
                     <div className="decision-buttons">
                         <button
                             className="Accept-button"
-                            onClick={() => handleAccept(index)}
-                        >
+                            onClick={() => handleAccept(index)}>
                             Accept
                         </button>
                         <button
                             className="Decline-button"
-                            onClick={() => handleDecline(index)}
-                        >
+                            onClick={() => handleDecline(index)}>
                             Decline
                         </button>
                     </div>

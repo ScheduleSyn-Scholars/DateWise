@@ -136,14 +136,12 @@ function MyProfile() {
                     <div className="box-decoration">
                         <label
                             htmlFor="image-upload-input"
-                            className="image-upload-label"
-                        >
+                            className="image-upload-label">
                             {image ? image.name : ''}
                         </label>
                         <div
                             onClick={handleImageClick}
-                            style={{ cursor: 'pointer' }}
-                        >
+                            style={{ cursor: 'pointer' }}>
                             {image ? (
                                 <img
                                     src={user.image}
@@ -168,8 +166,7 @@ function MyProfile() {
 
                         <button
                             className="image-upload-button"
-                            onClick={uploadImage}
-                        >
+                            onClick={uploadImage}>
                             Upload
                         </button>
 
@@ -187,8 +184,7 @@ function MyProfile() {
                             <button
                                 className="saveButton"
                                 type="button"
-                                onClick={handleSaveName}
-                            >
+                                onClick={handleSaveName}>
                                 Save
                             </button>
                             <Link to="/HomePage">
