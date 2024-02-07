@@ -21,7 +21,7 @@ const Signup = () => {
             .catch((error) => {
                 var errorCode = error.code
                 var errorMessage = error.message
-                // ..
+                console.error(errorCode, errorMessage);
             })
     }
 
