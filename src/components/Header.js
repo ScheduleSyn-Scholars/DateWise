@@ -1,13 +1,8 @@
 import React from 'react';
-import './Header.css'; // Import the CSS file for styling
 
 const Header = () => {
     return (
-        <header className="header">
-            <nav className="header-nav">
-                {/* Add navigation links or menu items here */}
-            </nav>
-        </header>
+        <header className="bg-green-800 text-white flex justify-between items-center p-6" />
     );
 };
 
