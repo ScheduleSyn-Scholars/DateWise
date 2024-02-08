@@ -1,34 +1,28 @@
-*
-{
+* {
     margin: 0;
     padding: 0;
     font-family: sans-serif;
     box-sizing: border-box;
 }
-body
-{
+body {
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
 }
-.form
-{
+.form {
     padding: 20px 30px;
     background: #f4f4f4;
     border-radius: 5px;
 }
-.form .container
-{
+.form .container {
     max-width: 100%;
 }
-.form .container form
-{
+.form .container form {
     display: flex;
     flex-direction: column;
 }
-.form .container form input
-{
+.form .container form input {
     margin: 10px 20px;
     padding: 10px 10px;
     width: 300px;
@@ -36,11 +30,10 @@ body
     border: none;
     outline: none;
     border-bottom: 1px solid #000;
-    color: #0d0d0d
+    color: #0d0d0d;
 }
 
-.form .container form button
-{
+.form .container form button {
     width: 100px;
     padding: 10px 0px;
     margin-left: 30px;

@@ -1,7 +1,5 @@
 module.exports = {
     transform: {
-      '^.+\\.jsx?$': 'babel-jest',
+        '^.+\\.jsx?$': 'babel-jest',
     },
-  };
-  
-  
+};
