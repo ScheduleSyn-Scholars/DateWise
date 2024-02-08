@@ -1,9 +1,8 @@
 import React from 'react';
-import './Footer.css'; // Import the CSS file for styling
 
 const Footer = () => {
     return (
-        <footer className="footer">
+        <footer className="bg-green-800 text-white text-center p-2">
             <p>&copy; 2023 Schedule Syncing App</p>
         </footer>
     );
