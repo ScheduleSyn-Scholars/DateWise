@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import './Registration.css';
 import firebase from '../config/firebase';
 import 'firebase/compat/firestore';
 import { useNavigate } from 'react-router-dom';
@@ -80,9 +79,9 @@ const Form = () => {
     return (
         // Form to get the data
         <>
-            <div className="form">
-                <div className="container">
-                    <form onSubmit={handleSubmit}>
+            <div className="form py-5 px-[30px] bg-[#f4f4f4] rounded-md">
+                <div className="max-w-full">
+                    <form className='flex flex-col' onSubmit={handleSubmit}>
                         <div>
                             <label htmlFor="id">Id:</label>
                             <input
@@ -91,6 +90,7 @@ const Form = () => {
                                 name="id"
                                 value={formData.id}
                                 onChange={handleInputChange}
+                                className='w-[300px] text-[#0d0d0d] mx-5 my-2.5 p-2.5 border-b-black border-[none] border-b border-solid'
                             />
                         </div>
 
@@ -102,6 +102,8 @@ const Form = () => {
                                 name="firstName"
                                 value={formData.firstName}
                                 onChange={handleInputChange}
+                                className='w-[300px] text-[#0d0d0d] mx-5 my-2.5 p-2.5 border-b-black border-[none] border-b border-solid'
+
                             />
                         </div>
 
@@ -113,6 +115,7 @@ const Form = () => {
                                 name="lastName"
                                 value={formData.lastName}
                                 onChange={handleInputChange}
+                                className='w-[300px] text-[#0d0d0d] mx-5 my-2.5 p-2.5 border-b-black border-[none] border-b border-solid'
                             />
                         </div>
 
@@ -124,6 +127,7 @@ const Form = () => {
                                 name="email"
                                 value={formData.email}
                                 onChange={handleInputChange}
+                                className='w-[300px] text-[#0d0d0d] mx-5 my-2.5 p-2.5 border-b-black border-[none] border-b border-solid'
                             />
                         </div>
 
@@ -135,10 +139,11 @@ const Form = () => {
                                 name="password"
                                 value={formData.password}
                                 onChange={handleInputChange}
+                                className='w-[300px] text-[#0d0d0d] mx-5 my-2.5 p-2.5 border-b-black border-[none] border-b border-solid'
                             />
                         </div>
                         <div>
-                            <button onClick={signUp}>Sign Up</button>
+                            <button className='bg-[#0cc0df] w-[100px] cursor-pointer ml-[30px] px-0 py-2.5' onClick={signUp}>Sign Up</button>
                         </div>
                     </form>
                 </div>

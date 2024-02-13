@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import './Login.css';
-import './Registration.css';
 import firebase from '../config/firebase';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import { Link } from 'react-router-dom';
@@ -26,8 +24,8 @@ const Login = () => {
     };
 
     return (
-        <div className="flex bg-transparent h-full">
-            <div className="login-left flex flex-1 flex-col justify-center items-center p-1 mt-0">
+        <div className="flex bg-white h-full w-full">
+            <div className="flex w-full flex-col justify-center items-center">
                 <img
                     className="w-72 h-72 mb-6"
                     src="/BearLogo.png"
@@ -81,10 +79,8 @@ const Login = () => {
                 </form>
             </div>
             <div
-                className="login-right flex-1 relative bg-cover bg-[left_center] bg-no-repeat 
-                bg-gradient-to-br from-transparent to-white">
-                {/* Background image will be displayed here */}
-            </div>
+                className="w-full bg-cover bg-left-center"
+                style={{ backgroundImage: `url('/GGCLibrary.jpg')` }}></div>
         </div>
     );
 };

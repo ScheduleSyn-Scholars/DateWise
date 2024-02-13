@@ -1,6 +1,5 @@
 import React from 'react';
 import { useState } from 'react';
-import './NewCalendar.css';
 import { Link } from 'react-router-dom';
 import firebase from '../config/firebase';
 import 'firebase/compat/firestore';
@@ -16,6 +15,7 @@ const NewCalendar = () => {
     const [addMessage, setAddMessage] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [isShaking, setIsShaking] = useState(false);
+    const shakingInputClass = 'font-times-new-roman text-3xl border-0 text-gray-500 bg-transparent outline-none';
 
     // ***********************************************************************************************************************
 
@@ -282,63 +282,45 @@ const NewCalendar = () => {
         setInputValue(''); // Clear the input value when focused
     };
 
-    const subjectStyle = {
-        left: '450px',
-        top: '95px',
-        position: 'absolute',
-        color: '#696969',
-        fontSize: '45px',
-        fontFamily: 'Inter',
-        fontWeight: '700',
-        wordWrap: 'break-word',
-    };
 
     return (
-        <div className="all-side-panel">
-            <div className="textinput">
-                <div style={subjectStyle}>
+        <div className="h-full w-full bg-white">
+            <div className="h-[1vh]">
+                <div className='font-inter left-[450px] top-[95px] absolute text-[#696969] text-5xl font-bold'>
                     {' '}
                     <input
                         placeholder="       Calendar Title"
                         type="text"
-                        className="Calendar-title-input"
+                        className="font-times-new-roman text-[35px] text-[#696969] underline font-bold text-xl border no-underline ml-[28vh] mt-[0vh] mb-[5vh] p-[5px] rounded-[15px] border-[none] border-solid border-[#ccc]"
                         id="CalendarTitle"></input>
-                    <div className="addPeople">
+                    <div className="font-times-new-roman text-[gray] font-medium text-xl no-underline border ml-[20vh] mt-[0vh] rounded-[15px] border-[none] border-solid border-[#ccc]">
                         <input
                             type="text"
-                            style={{
-                                fontSize: '35px',
-                                border: 'none',
-                                fontFamily: 'Times New Roman, Times, serif',
-                                color: 'grey',
-                                background: 'transparent',
-                                outline: 'none',
-                            }}
                             placeholder="   Enter email to invite"
                             value={inputValue}
                             onChange={handleInputValueChange}
                             onKeyDown={handleInputKeyDown}
                             onFocus={handleInputFocus}
-                            className={isShaking ? 'shake' : ''}></input>
+                            className={isShaking ? shakingInputClass + 'animate-bounce': shakingInputClass}></input>
                         {errorMessage && (
-                            <div className="error-message">{errorMessage}</div>
+                            <div className="text-4xl text-red-500 font-semibold">{errorMessage}</div>
                         )}
                         {limitMessage && (
-                            <div className="limit-message">{limitMessage}</div>
+                            <div className="text-4xl text-red-500 font-semibold">{limitMessage}</div>
                         )}
                         {addMessage && (
-                            <div className="add-message">{addMessage}</div>
+                            <div className="text-4xl text-green-600 font-semibold">{addMessage}</div>
                         )}
                     </div>
                 </div>
             </div>
-            <div className="allbuttons">
-                <button className="create-btn" onClick={handleCreate}>
+            <div className="mt-[50vh]">
+                <button className="font-times-new-roman text-center bg-[#0e724c] text-[white] font-medium text-[25px] cursor-pointer w-[150px] h-[35px] relative flex items-center justify-center ml-[85vh] mt-[0vh] mb-[5vh] p-2.5 rounded-[15px] border-[none] hover:bg-[#4caf50]" onClick={handleCreate}>
                     Create
                 </button>
                 <Link to="/HomePage">
                     {' '}
-                    <button className="buttons">Homepage</button>{' '}
+                    <button className="font-times-new-roman text-center bg-[#0e724c] text-[white] font-medium text-[25px] cursor-pointer w-[150px] h-[35px] relative leading-[10px] ml-[85vh] my-[0vh] p-2.5 rounded-[15px] border-[none] hover:bg-[#4caf50]">Homepage</button>{' '}
                 </Link>
             </div>
         </div>
