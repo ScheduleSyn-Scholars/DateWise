@@ -357,7 +357,9 @@ const ViewCalendar = () => {
 
     return (
         <div className="page">
-            <div className="relative text-center text-[#696969] text-[50px] font-medium ml-[0vh] mt-[0vh]e">{calendarName}</div>
+            <div className="relative text-center text-[#696969] text-[50px] font-medium ml-[0vh] mt-[0vh]e">
+                {calendarName}
+            </div>
 
             <div className="relative ml-[50vh] mt-[0vh]">
                 <div className="relative mt-0 ml-[13vh]">
@@ -380,9 +382,13 @@ const ViewCalendar = () => {
 
                     {bestTime && (
                         <div classname="ml-[25vh]">
-                            <p className='mt-0.5 ml-[20vh]'>Best Time to Meet:</p>
-                            <p className='mt-0.5 ml-[20vh]'>Day: {bestTime.day}</p>
-                            <p className='mt-0.5 ml-[20vh]'>
+                            <p className="mt-0.5 ml-[20vh]">
+                                Best Time to Meet:
+                            </p>
+                            <p className="mt-0.5 ml-[20vh]">
+                                Day: {bestTime.day}
+                            </p>
+                            <p className="mt-0.5 ml-[20vh]">
                                 Time:
                                 {bestTime.start !== undefined
                                     ? convertTo12HourFormat(bestTime.start)
@@ -420,7 +426,9 @@ const ViewCalendar = () => {
                 </div>
                 <Link to="/HomePage">
                     {' '}
-                    <button className="font-times-new-roman relative bg-[#0e724c] text-[white] text-center text-xl font-medium w-[120px] h-[35px] cursor-pointer ml-[35vh] mt-[2vh] mb-[5px] rounded-[40px] border-[none]">Homepage</button>{' '}
+                    <button className="font-times-new-roman relative bg-[#0e724c] text-[white] text-center text-xl font-medium w-[120px] h-[35px] cursor-pointer ml-[35vh] mt-[2vh] mb-[5px] rounded-[40px] border-[none]">
+                        Homepage
+                    </button>{' '}
                 </Link>
             </div>
         </div>

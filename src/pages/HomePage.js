@@ -245,13 +245,10 @@ const HomePage = () => {
 
                 <Link to="/">
                     <button className="text-white text-xl cursor-pointer w-[150px] h-[35px] leading-[10px] mb-6 p-2.5 rounded-[15px] border-[none] left-[100px] top-[735px] hover:text-white hover:cursor-pointer hover:rounded-[15px] hover:border-[none] bg-[#ff0000] hover:bg-[#dd0000]">
-                    Logout
+                        Logout
                     </button>
                 </Link>
             </div>
-            
-
-
 
             <div className="bg-[white] shadow-[0_0_20px_rgba(0,0,0,0)] h-4/5 w-1/2">
                 <Calendar

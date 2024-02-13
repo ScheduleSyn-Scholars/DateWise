@@ -169,7 +169,9 @@ function MyProfile() {
                             Upload
                         </button>
 
-                        <div className="text-center text-[35px] text-[#7b7b7b] font-medium text-xl mt-[5px] p-[5px] rounded-[15px]">Email: {user.email}</div>
+                        <div className="text-center text-[35px] text-[#7b7b7b] font-medium text-xl mt-[5px] p-[5px] rounded-[15px]">
+                            Email: {user.email}
+                        </div>
 
                         <div className="font-times-new-roman text-[gray] font-medium text-[35px] mt-[4vh] border-[none] items-center text-3xl no-underline mb-2.5">
                             Profile Name:

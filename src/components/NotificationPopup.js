@@ -34,7 +34,9 @@ const NotificationPopup = ({
                     </div>
                 </div>
             ))}
-            <button className="bg-[blue] text-[white] p-[5px] rounded-[50%]" onClick={onClose}>
+            <button
+                className="bg-[blue] text-[white] p-[5px] rounded-[50%]"
+                onClick={onClose}>
                 Close
             </button>
         </div>

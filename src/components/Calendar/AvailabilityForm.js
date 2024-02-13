@@ -78,7 +78,9 @@ const AvailabilityForm = ({ onAvailabilityChange }) => {
 
     return (
         <div className="flex flex-col items-start w-[90%] max-w-[500px] bg-[#f8f8f8] shadow-[0_0_10px_rgba(0,0,0,0.1)] m-5 p-5 rounded-[10px] border-2 border-solid border-[#228b22]">
-            <h2 className="text-[#228b22] text-2xl mb-5">Select Your Availability</h2>
+            <h2 className="text-[#228b22] text-2xl mb-5">
+                Select Your Availability
+            </h2>
             {['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'].map((day) => (
                 <div key={day} className="flex items-baseline">
                     <label className="w-[75px] flex items-center text-base font-[bold] mb-2.5">
@@ -86,14 +88,16 @@ const AvailabilityForm = ({ onAvailabilityChange }) => {
                             type="checkbox"
                             checked={selectedDays.includes(day)}
                             onChange={() => handleDayToggle(day)}
-                            className='w-[15px] h-[15px] mr-2.5'
+                            className="w-[15px] h-[15px] mr-2.5"
                         />
                         {day}
                     </label>
                     {selectedDays.includes(day) && (
                         <div className="flex items-baseline">
                             {times[day]?.map((timeSlot, index) => (
-                                <div key={index} className="flex items-center mb-2.5">
+                                <div
+                                    key={index}
+                                    className="flex items-center mb-2.5">
                                     <label className="w-[125px] flex items-center text-base font-[bold] mb-2.5">
                                         <input
                                             type="time"
@@ -107,7 +111,7 @@ const AvailabilityForm = ({ onAvailabilityChange }) => {
                                                 )
                                             }
                                             step="1800"
-                                            className='h-10 w-[150%] mx-[1vw]'
+                                            className="h-10 w-[150%] mx-[1vw]"
                                         />
                                     </label>
                                     <label className="w-[125px] flex items-center text-base font-[bold] mb-2.5">
@@ -124,7 +128,7 @@ const AvailabilityForm = ({ onAvailabilityChange }) => {
                                                 )
                                             }
                                             step="1800"
-                                            className='h-10 w-[150%] mx-[1vw]'
+                                            className="h-10 w-[150%] mx-[1vw]"
                                         />
                                     </label>
                                     <button

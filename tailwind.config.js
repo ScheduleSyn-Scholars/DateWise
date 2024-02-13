@@ -5,7 +5,7 @@ module.exports = {
         extend: {
             fontFamily: {
                 'times-new-roman': ['Times New Roman', 'Times', 'serif'],
-                'inter': ['Inter'],
+                inter: ['Inter'],
             },
         },
     },

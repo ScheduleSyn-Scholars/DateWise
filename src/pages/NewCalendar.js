@@ -15,7 +15,8 @@ const NewCalendar = () => {
     const [addMessage, setAddMessage] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [isShaking, setIsShaking] = useState(false);
-    const shakingInputClass = 'font-times-new-roman text-3xl border-0 text-gray-500 bg-transparent outline-none';
+    const shakingInputClass =
+        'font-times-new-roman text-3xl border-0 text-gray-500 bg-transparent outline-none';
 
     // ***********************************************************************************************************************
 
@@ -282,11 +283,10 @@ const NewCalendar = () => {
         setInputValue(''); // Clear the input value when focused
     };
 
-
     return (
         <div className="h-full w-full bg-white">
             <div className="h-[1vh]">
-                <div className='font-inter left-[450px] top-[95px] absolute text-[#696969] text-5xl font-bold'>
+                <div className="font-inter left-[450px] top-[95px] absolute text-[#696969] text-5xl font-bold">
                     {' '}
                     <input
                         placeholder="       Calendar Title"
@@ -301,26 +301,40 @@ const NewCalendar = () => {
                             onChange={handleInputValueChange}
                             onKeyDown={handleInputKeyDown}
                             onFocus={handleInputFocus}
-                            className={isShaking ? shakingInputClass + 'animate-bounce': shakingInputClass}></input>
+                            className={
+                                isShaking
+                                    ? shakingInputClass + 'animate-bounce'
+                                    : shakingInputClass
+                            }></input>
                         {errorMessage && (
-                            <div className="text-4xl text-red-500 font-semibold">{errorMessage}</div>
+                            <div className="text-4xl text-red-500 font-semibold">
+                                {errorMessage}
+                            </div>
                         )}
                         {limitMessage && (
-                            <div className="text-4xl text-red-500 font-semibold">{limitMessage}</div>
+                            <div className="text-4xl text-red-500 font-semibold">
+                                {limitMessage}
+                            </div>
                         )}
                         {addMessage && (
-                            <div className="text-4xl text-green-600 font-semibold">{addMessage}</div>
+                            <div className="text-4xl text-green-600 font-semibold">
+                                {addMessage}
+                            </div>
                         )}
                     </div>
                 </div>
             </div>
             <div className="mt-[50vh]">
-                <button className="font-times-new-roman text-center bg-[#0e724c] text-[white] font-medium text-[25px] cursor-pointer w-[150px] h-[35px] relative flex items-center justify-center ml-[85vh] mt-[0vh] mb-[5vh] p-2.5 rounded-[15px] border-[none] hover:bg-[#4caf50]" onClick={handleCreate}>
+                <button
+                    className="font-times-new-roman text-center bg-[#0e724c] text-[white] font-medium text-[25px] cursor-pointer w-[150px] h-[35px] relative flex items-center justify-center ml-[85vh] mt-[0vh] mb-[5vh] p-2.5 rounded-[15px] border-[none] hover:bg-[#4caf50]"
+                    onClick={handleCreate}>
                     Create
                 </button>
                 <Link to="/HomePage">
                     {' '}
-                    <button className="font-times-new-roman text-center bg-[#0e724c] text-[white] font-medium text-[25px] cursor-pointer w-[150px] h-[35px] relative leading-[10px] ml-[85vh] my-[0vh] p-2.5 rounded-[15px] border-[none] hover:bg-[#4caf50]">Homepage</button>{' '}
+                    <button className="font-times-new-roman text-center bg-[#0e724c] text-[white] font-medium text-[25px] cursor-pointer w-[150px] h-[35px] relative leading-[10px] ml-[85vh] my-[0vh] p-2.5 rounded-[15px] border-[none] hover:bg-[#4caf50]">
+                        Homepage
+                    </button>{' '}
                 </Link>
             </div>
         </div>
