@@ -129,13 +129,13 @@ function MyProfile() {
     };
 
     return (
-        <div className="w-[1600px] justify-betweenshadow-[3px_4px_4px_rgba(0,0,0,0.25)]">
+        <div className="justify-betweenshadow-[3px_4px_4px_rgba(0,0,0,0.25)] w-[1600px]">
             <div className="center-panel">
-                <div className="flex justify-center items-center mr-[20vh] p-[2.6rem]">
-                    <div className="w-[500px] flex flex-col justify-center items-center ml-[15%] p-[5px]">
+                <div className="mr-[20vh] flex items-center justify-center p-[2.6rem]">
+                    <div className="ml-[15%] flex w-[500px] flex-col items-center justify-center p-[5px]">
                         <label
                             htmlFor="image-upload-input"
-                            className="text-2xl font-[bold] cursor-pointer mb-4">
+                            className="mb-4 cursor-pointer font-[bold] text-2xl">
                             {image ? image.name : ''}
                         </label>
                         <div
@@ -151,7 +151,7 @@ function MyProfile() {
                                 <img
                                     src={user.image}
                                     alt="default"
-                                    className="h-[200px] w-[200px] ml-[35px] rounded-[100%]"
+                                    className="ml-[35px] h-[200px] w-[200px] rounded-[100%]"
                                 />
                             )}
                             <input
@@ -164,16 +164,16 @@ function MyProfile() {
                         </div>
 
                         <button
-                            className="font-times-new-roman bg-[#0e724c] text-center text-[white] text-xl font-medium w-[150px] h-[35px] flex-row mt-[2vh] rounded-[15px] border-[none] hover:bg-[#3e8e41]"
+                            className="mt-[2vh] h-[35px] w-[150px] flex-row rounded-[15px] border-[none] bg-[#0e724c] text-center font-times-new-roman text-xl font-medium text-[white] hover:bg-[#3e8e41]"
                             onClick={uploadImage}>
                             Upload
                         </button>
 
-                        <div className="text-center text-[35px] text-[#7b7b7b] font-medium text-xl mt-[5px] p-[5px] rounded-[15px]">
+                        <div className="mt-[5px] rounded-[15px] p-[5px] text-center text-[35px] text-xl font-medium text-[#7b7b7b]">
                             Email: {user.email}
                         </div>
 
-                        <div className="font-times-new-roman text-[gray] font-medium text-[35px] mt-[4vh] border-[none] items-center text-3xl no-underline mb-2.5">
+                        <div className="mb-2.5 mt-[4vh] items-center border-[none] font-times-new-roman text-3xl text-[35px] font-medium text-[gray] no-underline">
                             Profile Name:
                             <input
                                 defaultValue={user.userName}
@@ -183,14 +183,14 @@ function MyProfile() {
                         </div>
                         <div>
                             <button
-                                className="font-times-new-roman bg-[#0e724c] text-center text-[white] text-xl font-medium w-[150px] h-[35px] cursor-pointer flex-row ml-[18vh] mt-[10vh] p-0 rounded-[15px] border-[none] hover:bg-[#4caf50]"
+                                className="ml-[18vh] mt-[10vh] h-[35px] w-[150px] cursor-pointer flex-row rounded-[15px] border-[none] bg-[#0e724c] p-0 text-center font-times-new-roman text-xl font-medium text-[white] hover:bg-[#4caf50]"
                                 type="button"
                                 onClick={handleSaveName}>
                                 Save
                             </button>
                             <Link to="/HomePage">
                                 {' '}
-                                <button className="font-times-new-roman bg-[#0e724c] text-center text-[white] text-xl font-medium w-[150px] h-[35px] cursor-pointer flex-row ml-[18vh] mt-[5vh] p-0 rounded-[15px] border-[none] hover:bg-[#4caf50]">
+                                <button className="ml-[18vh] mt-[5vh] h-[35px] w-[150px] cursor-pointer flex-row rounded-[15px] border-[none] bg-[#0e724c] p-0 text-center font-times-new-roman text-xl font-medium text-[white] hover:bg-[#4caf50]">
                                     Homepage
                                 </button>{' '}
                             </Link>

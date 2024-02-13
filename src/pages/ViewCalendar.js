@@ -357,24 +357,24 @@ const ViewCalendar = () => {
 
     return (
         <div className="page">
-            <div className="relative text-center text-[#696969] text-[50px] font-medium ml-[0vh] mt-[0vh]e">
+            <div className="mt-[0vh]e relative ml-[0vh] text-center text-[50px] font-medium text-[#696969]">
                 {calendarName}
             </div>
 
             <div className="relative ml-[50vh] mt-[0vh]">
-                <div className="relative mt-0 ml-[13vh]">
+                <div className="relative ml-[13vh] mt-0">
                     <AvailabilityForm
                         availability={availability}
                         onAvailabilityChange={handleAvailabilityChange}
                     />
                     <button
-                        className="font-times-new-roman relative bg-[#0e724c] text-[white] text-center text-xl font-medium w-[100px] cursor-pointer h-[35px] ml-[15vh] mt-[0vh] rounded-[40px] border-[none]"
+                        className="relative ml-[15vh] mt-[0vh] h-[35px] w-[100px] cursor-pointer rounded-[40px] border-[none] bg-[#0e724c] text-center font-times-new-roman text-xl font-medium text-[white]"
                         type="button"
                         onClick={() => updateAvailability()}>
                         Save
                     </button>
                     <button
-                        className="font-times-new-roman relative bg-[#0e724c] text-[white] text-center text-xl h-[35px] font-medium w-[150px] cursor-pointer ml-[3vh] mt-[0vh] rounded-[40px] border-[none]"
+                        className="relative ml-[3vh] mt-[0vh] h-[35px] w-[150px] cursor-pointer rounded-[40px] border-[none] bg-[#0e724c] text-center font-times-new-roman text-xl font-medium text-[white]"
                         type="button"
                         onClick={handleShowBestTime}>
                         Show Best Time
@@ -382,13 +382,13 @@ const ViewCalendar = () => {
 
                     {bestTime && (
                         <div classname="ml-[25vh]">
-                            <p className="mt-0.5 ml-[20vh]">
+                            <p className="ml-[20vh] mt-0.5">
                                 Best Time to Meet:
                             </p>
-                            <p className="mt-0.5 ml-[20vh]">
+                            <p className="ml-[20vh] mt-0.5">
                                 Day: {bestTime.day}
                             </p>
-                            <p className="mt-0.5 ml-[20vh]">
+                            <p className="ml-[20vh] mt-0.5">
                                 Time:
                                 {bestTime.start !== undefined
                                     ? convertTo12HourFormat(bestTime.start)
@@ -419,14 +419,14 @@ const ViewCalendar = () => {
                         dateFormat="Pp"
                     />
                 </div>
-                <div className="font-times-new-roman relative text-[white] text-center text-xl font-medium w-[100px] cursor-pointer ml-[36vh] rounded-[40px] border-[none]">
+                <div className="relative ml-[36vh] w-[100px] cursor-pointer rounded-[40px] border-[none] text-center font-times-new-roman text-xl font-medium text-[white]">
                     <button type="button" onClick={handleCreateEvent}>
                         Submit Event
                     </button>
                 </div>
                 <Link to="/HomePage">
                     {' '}
-                    <button className="font-times-new-roman relative bg-[#0e724c] text-[white] text-center text-xl font-medium w-[120px] h-[35px] cursor-pointer ml-[35vh] mt-[2vh] mb-[5px] rounded-[40px] border-[none]">
+                    <button className="relative mb-[5px] ml-[35vh] mt-[2vh] h-[35px] w-[120px] cursor-pointer rounded-[40px] border-[none] bg-[#0e724c] text-center font-times-new-roman text-xl font-medium text-[white]">
                         Homepage
                     </button>{' '}
                 </Link>

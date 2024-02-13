@@ -24,20 +24,20 @@ const Login = () => {
     };
 
     return (
-        <div className="flex bg-white h-full w-full">
-            <div className="flex w-full flex-col justify-center items-center">
+        <div className="flex h-full w-full bg-white">
+            <div className="flex w-full flex-col items-center justify-center">
                 <img
-                    className="w-72 h-72 mb-6"
+                    className="mb-6 h-72 w-72"
                     src="/BearLogo.png"
                     alt="Bear Logo"
                 />
                 <h2 className="text-teal-700">Login</h2>
-                <form className="flex flex-col justify-center items-center w-full max-w-72">
+                <form className="flex w-full max-w-72 flex-col items-center justify-center">
                     <label className="mb-2" htmlFor="email">
                         Email:
                     </label>
                     <input
-                        className="w-full p-2 outline-none border-none rounded-2xl bg-gray-300"
+                        className="w-full rounded-2xl border-none bg-gray-300 p-2 outline-none"
                         type="email"
                         id="email"
                         name="email"
@@ -49,7 +49,7 @@ const Login = () => {
                         Password:
                     </label>
                     <input
-                        className="w-full p-2 outline-none border-none rounded-2xl bg-gray-300"
+                        className="w-full rounded-2xl border-none bg-gray-300 p-2 outline-none"
                         type="password"
                         id="password"
                         name="password"
@@ -61,16 +61,16 @@ const Login = () => {
                     {successMessage && (
                         <p className="success-message">{successMessage}</p>
                     )}
-                    <div className="flex justify-between w-full max-w-56 mt-5">
+                    <div className="mt-5 flex w-full max-w-56 justify-between">
                         <button
-                            className="w-24 bg-green-700 text-white p-2.5 border-none cursor-pointer rounded-2xl relative mt-5 left-1"
+                            className="relative left-1 mt-5 w-24 cursor-pointer rounded-2xl border-none bg-green-700 p-2.5 text-white"
                             type="button"
                             onClick={handleSignIn}>
                             Login
                         </button>
                         <Link to="/sign-up">
                             <button
-                                className="w-24 bg-green-700 text-white p-2.5 border-none cursor-pointer rounded-2xl relative mt-5 left-1"
+                                className="relative left-1 mt-5 w-24 cursor-pointer rounded-2xl border-none bg-green-700 p-2.5 text-white"
                                 type="button">
                                 Sign-Up
                             </button>
@@ -79,7 +79,7 @@ const Login = () => {
                 </form>
             </div>
             <div
-                className="w-full bg-cover bg-left-center"
+                className="bg-left-center w-full bg-cover"
                 style={{ backgroundImage: `url('/GGCLibrary.jpg')` }}></div>
         </div>
     );

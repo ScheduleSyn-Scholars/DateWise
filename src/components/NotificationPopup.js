@@ -11,7 +11,7 @@ const NotificationPopup = ({
     // onClose=() => setShowNotification(false);
 
     return (
-        <div className="bg-[antiquewhite] shadow-[0_5px_5px_#717171] z-[9999] overflow-y-scroll h-[500px] ml-[5vh]">
+        <div className="z-[9999] ml-[5vh] h-[500px] overflow-y-scroll bg-[antiquewhite] shadow-[0_5px_5px_#717171]">
             {notifications.map((notification, index) => (
                 <div key={index}>
                     <p>
@@ -22,12 +22,12 @@ const NotificationPopup = ({
                     </p>
                     <div>
                         <button
-                            className="bg-[green] text-[white] text-[15px] font-medium"
+                            className="bg-[green] text-[15px] font-medium text-[white]"
                             onClick={() => handleAccept(index)}>
                             Accept
                         </button>
                         <button
-                            className="bg-[red] text-[white] text-[15px] font-medium ml-5"
+                            className="ml-5 bg-[red] text-[15px] font-medium text-[white]"
                             onClick={() => handleDecline(index)}>
                             Decline
                         </button>
@@ -35,7 +35,7 @@ const NotificationPopup = ({
                 </div>
             ))}
             <button
-                className="bg-[blue] text-[white] p-[5px] rounded-[50%]"
+                className="rounded-[50%] bg-[blue] p-[5px] text-[white]"
                 onClick={onClose}>
                 Close
             </button>

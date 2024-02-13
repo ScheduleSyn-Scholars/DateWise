@@ -203,11 +203,11 @@ const HomePage = () => {
     };
 
     return (
-        <div className="flex flex-row w-full h-full">
-            <div className="relative cursor-pointer left-[360px]">
+        <div className="flex h-full w-full flex-row">
+            <div className="relative left-[360px] cursor-pointer">
                 <img src={BellIcon} onClick={handleBellIconClick} />
                 {notificationCount > 0 && (
-                    <div className="absolute top-[-5px] bg-[#ff0000] text-[white] text-xs w-5 h-5 flex items-center justify-center font-[bold] shadow-[0_0_4px_rgba(0,0,0,0.3)] rounded-[50%] left-[17px]">
+                    <div className="absolute left-[17px] top-[-5px] flex h-5 w-5 items-center justify-center rounded-[50%] bg-[#ff0000] font-[bold] text-xs text-[white] shadow-[0_0_4px_rgba(0,0,0,0.3)]">
                         {notificationCount}
                     </div>
                 )}
@@ -221,13 +221,13 @@ const HomePage = () => {
                 />
             )}
 
-            <div className="flex flex-col justify-center items-center h-full top-36 text-center w-1/4 space-y-4">
+            <div className="top-36 flex h-full w-1/4 flex-col items-center justify-center space-y-4 text-center">
                 <img
-                    className="w-44 h-36 overflow-hidden shadow-[0px_0px_0px_rgba(0,0,0,0.25)] rounded-[40%]"
+                    className="h-36 w-44 overflow-hidden rounded-[40%] shadow-[0px_0px_0px_rgba(0,0,0,0.25)]"
                     src="Logo.png"
                     alt="Grizzly Bear face"
                 />
-                <div className="font-times-new-roman text-green-800 text-5xl mt-2 -ml-8">
+                <div className="-ml-8 mt-2 font-times-new-roman text-5xl text-green-800">
                     DateWise
                 </div>
                 <Link to="/MyProfile">
@@ -235,7 +235,7 @@ const HomePage = () => {
                         <img
                             alt="User profile"
                             src={user.image}
-                            className="w-[180px] h-[180px] bg-[#ccc] rounded-[80%] mt-2"
+                            className="mt-2 h-[180px] w-[180px] rounded-[80%] bg-[#ccc]"
                         />
                     </div>
                 </Link>
@@ -244,13 +244,13 @@ const HomePage = () => {
                 </div>
 
                 <Link to="/">
-                    <button className="text-white text-xl cursor-pointer w-[150px] h-[35px] leading-[10px] mb-6 p-2.5 rounded-[15px] border-[none] left-[100px] top-[735px] hover:text-white hover:cursor-pointer hover:rounded-[15px] hover:border-[none] bg-[#ff0000] hover:bg-[#dd0000]">
+                    <button className="left-[100px] top-[735px] mb-6 h-[35px] w-[150px] cursor-pointer rounded-[15px] border-[none] bg-[#ff0000] p-2.5 text-xl leading-[10px] text-white hover:cursor-pointer hover:rounded-[15px] hover:border-[none] hover:bg-[#dd0000] hover:text-white">
                         Logout
                     </button>
                 </Link>
             </div>
 
-            <div className="bg-[white] shadow-[0_0_20px_rgba(0,0,0,0)] h-4/5 w-1/2">
+            <div className="h-4/5 w-1/2 bg-[white] shadow-[0_0_20px_rgba(0,0,0,0)]">
                 <Calendar
                     localizer={localizer}
                     events={events}
@@ -266,19 +266,19 @@ const HomePage = () => {
                 />
             </div>
 
-            <div className="bg-white w-1/4 border-l-2 border-solid border-gray-700">
-                <div className="font-times-new-roman text-[#696969] text-center text-[25px] font-medium ml-0 mt-5">
+            <div className="w-1/4 border-l-2 border-solid border-gray-700 bg-white">
+                <div className="ml-0 mt-5 text-center font-times-new-roman text-[25px] font-medium text-[#696969]">
                     Mutual Calendars
                 </div>
                 {loading ? (
                     <p>Loading Calendars... </p>
                 ) : (
-                    <div className="overflow-y-scroll h-[600px] ml-[4vh] flex flex-col items-center">
+                    <div className="ml-[4vh] flex h-[600px] flex-col items-center overflow-y-scroll">
                         {userCalendars.map((calendar) => (
                             <Link
                                 key={calendar.id}
                                 to={`/ViewCalendar/${calendar.id}/${encodeURIComponent(calendar.calendarName)}`}>
-                                <button className="font-times-new-roman bg-[#0e724c] text-center text-[white] text-xl font-medium w-[150px] h-[35px] cursor-pointer mb-2 p-2.5 rounded-[15px] border-[none]">
+                                <button className="mb-2 h-[35px] w-[150px] cursor-pointer rounded-[15px] border-[none] bg-[#0e724c] p-2.5 text-center font-times-new-roman text-xl font-medium text-[white]">
                                     {calendar.calendarName}
                                 </button>
                             </Link>
@@ -287,7 +287,7 @@ const HomePage = () => {
                 )}
 
                 <Link to="/NewCalendar">
-                    <button className="font-times-new-roman bg-[#0e724c] text-center text-[white] text-xl font-medium w-[150px] h-[35px] items-center justify-center no-underline ml-[4vh] mt-[6vh] rounded-[15px] border-[none] hover:bg-[#095c3e]">
+                    <button className="ml-[4vh] mt-[6vh] h-[35px] w-[150px] items-center justify-center rounded-[15px] border-[none] bg-[#0e724c] text-center font-times-new-roman text-xl font-medium text-[white] no-underline hover:bg-[#095c3e]">
                         New Calendar
                     </button>
                 </Link>

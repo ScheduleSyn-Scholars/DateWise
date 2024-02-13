@@ -286,14 +286,14 @@ const NewCalendar = () => {
     return (
         <div className="h-full w-full bg-white">
             <div className="h-[1vh]">
-                <div className="font-inter left-[450px] top-[95px] absolute text-[#696969] text-5xl font-bold">
+                <div className="absolute left-[450px] top-[95px] font-inter text-5xl font-bold text-[#696969]">
                     {' '}
                     <input
                         placeholder="       Calendar Title"
                         type="text"
-                        className="font-times-new-roman text-[35px] text-[#696969] underline font-bold text-xl border no-underline ml-[28vh] mt-[0vh] mb-[5vh] p-[5px] rounded-[15px] border-[none] border-solid border-[#ccc]"
+                        className="mb-[5vh] ml-[28vh] mt-[0vh] rounded-[15px] border border-solid border-[#ccc] border-[none] p-[5px] font-times-new-roman text-[35px] text-xl font-bold text-[#696969] underline no-underline"
                         id="CalendarTitle"></input>
-                    <div className="font-times-new-roman text-[gray] font-medium text-xl no-underline border ml-[20vh] mt-[0vh] rounded-[15px] border-[none] border-solid border-[#ccc]">
+                    <div className="ml-[20vh] mt-[0vh] rounded-[15px] border border-solid border-[#ccc] border-[none] font-times-new-roman text-xl font-medium text-[gray] no-underline">
                         <input
                             type="text"
                             placeholder="   Enter email to invite"
@@ -307,17 +307,17 @@ const NewCalendar = () => {
                                     : shakingInputClass
                             }></input>
                         {errorMessage && (
-                            <div className="text-4xl text-red-500 font-semibold">
+                            <div className="text-4xl font-semibold text-red-500">
                                 {errorMessage}
                             </div>
                         )}
                         {limitMessage && (
-                            <div className="text-4xl text-red-500 font-semibold">
+                            <div className="text-4xl font-semibold text-red-500">
                                 {limitMessage}
                             </div>
                         )}
                         {addMessage && (
-                            <div className="text-4xl text-green-600 font-semibold">
+                            <div className="text-4xl font-semibold text-green-600">
                                 {addMessage}
                             </div>
                         )}
@@ -326,13 +326,13 @@ const NewCalendar = () => {
             </div>
             <div className="mt-[50vh]">
                 <button
-                    className="font-times-new-roman text-center bg-[#0e724c] text-[white] font-medium text-[25px] cursor-pointer w-[150px] h-[35px] relative flex items-center justify-center ml-[85vh] mt-[0vh] mb-[5vh] p-2.5 rounded-[15px] border-[none] hover:bg-[#4caf50]"
+                    className="relative mb-[5vh] ml-[85vh] mt-[0vh] flex h-[35px] w-[150px] cursor-pointer items-center justify-center rounded-[15px] border-[none] bg-[#0e724c] p-2.5 text-center font-times-new-roman text-[25px] font-medium text-[white] hover:bg-[#4caf50]"
                     onClick={handleCreate}>
                     Create
                 </button>
                 <Link to="/HomePage">
                     {' '}
-                    <button className="font-times-new-roman text-center bg-[#0e724c] text-[white] font-medium text-[25px] cursor-pointer w-[150px] h-[35px] relative leading-[10px] ml-[85vh] my-[0vh] p-2.5 rounded-[15px] border-[none] hover:bg-[#4caf50]">
+                    <button className="relative my-[0vh] ml-[85vh] h-[35px] w-[150px] cursor-pointer rounded-[15px] border-[none] bg-[#0e724c] p-2.5 text-center font-times-new-roman text-[25px] font-medium leading-[10px] text-[white] hover:bg-[#4caf50]">
                         Homepage
                     </button>{' '}
                 </Link>

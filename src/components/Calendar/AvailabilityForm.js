@@ -77,18 +77,18 @@ const AvailabilityForm = ({ onAvailabilityChange }) => {
     };
 
     return (
-        <div className="flex flex-col items-start w-[90%] max-w-[500px] bg-[#f8f8f8] shadow-[0_0_10px_rgba(0,0,0,0.1)] m-5 p-5 rounded-[10px] border-2 border-solid border-[#228b22]">
-            <h2 className="text-[#228b22] text-2xl mb-5">
+        <div className="m-5 flex w-[90%] max-w-[500px] flex-col items-start rounded-[10px] border-2 border-solid border-[#228b22] bg-[#f8f8f8] p-5 shadow-[0_0_10px_rgba(0,0,0,0.1)]">
+            <h2 className="mb-5 text-2xl text-[#228b22]">
                 Select Your Availability
             </h2>
             {['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'].map((day) => (
                 <div key={day} className="flex items-baseline">
-                    <label className="w-[75px] flex items-center text-base font-[bold] mb-2.5">
+                    <label className="mb-2.5 flex w-[75px] items-center font-[bold] text-base">
                         <input
                             type="checkbox"
                             checked={selectedDays.includes(day)}
                             onChange={() => handleDayToggle(day)}
-                            className="w-[15px] h-[15px] mr-2.5"
+                            className="mr-2.5 h-[15px] w-[15px]"
                         />
                         {day}
                     </label>
@@ -97,8 +97,8 @@ const AvailabilityForm = ({ onAvailabilityChange }) => {
                             {times[day]?.map((timeSlot, index) => (
                                 <div
                                     key={index}
-                                    className="flex items-center mb-2.5">
-                                    <label className="w-[125px] flex items-center text-base font-[bold] mb-2.5">
+                                    className="mb-2.5 flex items-center">
+                                    <label className="mb-2.5 flex w-[125px] items-center font-[bold] text-base">
                                         <input
                                             type="time"
                                             value={timeSlot.start}
@@ -111,10 +111,10 @@ const AvailabilityForm = ({ onAvailabilityChange }) => {
                                                 )
                                             }
                                             step="1800"
-                                            className="h-10 w-[150%] mx-[1vw]"
+                                            className="mx-[1vw] h-10 w-[150%]"
                                         />
                                     </label>
-                                    <label className="w-[125px] flex items-center text-base font-[bold] mb-2.5">
+                                    <label className="mb-2.5 flex w-[125px] items-center font-[bold] text-base">
                                         -
                                         <input
                                             type="time"
@@ -128,11 +128,11 @@ const AvailabilityForm = ({ onAvailabilityChange }) => {
                                                 )
                                             }
                                             step="1800"
-                                            className="h-10 w-[150%] mx-[1vw]"
+                                            className="mx-[1vw] h-10 w-[150%]"
                                         />
                                     </label>
                                     <button
-                                        className="ml-[-1vw] bg-[#f8f8f8] text-[#747474] text-[larger] cursor-pointer mb-2.5 px-3 py-2 border-[none] hover:bg-[#85ab86] hover:rounded-[10px] mr-[1.5vw]"
+                                        className="mb-2.5 ml-[-1vw] mr-[1.5vw] cursor-pointer border-[none] bg-[#f8f8f8] px-3 py-2 text-[larger] text-[#747474] hover:rounded-[10px] hover:bg-[#85ab86]"
                                         onClick={() =>
                                             handleRemoveTimeSlot(day, index)
                                         }>
@@ -142,11 +142,11 @@ const AvailabilityForm = ({ onAvailabilityChange }) => {
                             ))}
                         </div>
                     )}
-                    <div className="flex flex-col mt-2.5">
+                    <div className="mt-2.5 flex flex-col">
                         {selectedDays.includes(day) && (
                             <button
                                 onClick={() => handleAddTimeSlot(day)}
-                                className="font-bold ml-auto bg-[#f8f8f8] text-[#747474] text-[larger] cursor-pointer mb-2.5 px-3 py-2 border-[none] hover:bg-[#85ab86] hover:rounded-[10px] mr-[1.5vw]">
+                                className="mb-2.5 ml-auto mr-[1.5vw] cursor-pointer border-[none] bg-[#f8f8f8] px-3 py-2 text-[larger] font-bold text-[#747474] hover:rounded-[10px] hover:bg-[#85ab86]">
                                 +
                             </button>
                         )}

@@ -79,7 +79,7 @@ const Form = () => {
     return (
         // Form to get the data
         <>
-            <div className="form py-5 px-[30px] bg-[#f4f4f4] rounded-md">
+            <div className="form rounded-md bg-[#f4f4f4] px-[30px] py-5">
                 <div className="max-w-full">
                     <form className="flex flex-col" onSubmit={handleSubmit}>
                         <div>
@@ -90,7 +90,7 @@ const Form = () => {
                                 name="id"
                                 value={formData.id}
                                 onChange={handleInputChange}
-                                className="w-[300px] text-[#0d0d0d] mx-5 my-2.5 p-2.5 border-b-black border-[none] border-b border-solid"
+                                className="mx-5 my-2.5 w-[300px] border-b border-solid border-[none] border-b-black p-2.5 text-[#0d0d0d]"
                             />
                         </div>
 
@@ -102,7 +102,7 @@ const Form = () => {
                                 name="firstName"
                                 value={formData.firstName}
                                 onChange={handleInputChange}
-                                className="w-[300px] text-[#0d0d0d] mx-5 my-2.5 p-2.5 border-b-black border-[none] border-b border-solid"
+                                className="mx-5 my-2.5 w-[300px] border-b border-solid border-[none] border-b-black p-2.5 text-[#0d0d0d]"
                             />
                         </div>
 
@@ -114,7 +114,7 @@ const Form = () => {
                                 name="lastName"
                                 value={formData.lastName}
                                 onChange={handleInputChange}
-                                className="w-[300px] text-[#0d0d0d] mx-5 my-2.5 p-2.5 border-b-black border-[none] border-b border-solid"
+                                className="mx-5 my-2.5 w-[300px] border-b border-solid border-[none] border-b-black p-2.5 text-[#0d0d0d]"
                             />
                         </div>
 
@@ -126,7 +126,7 @@ const Form = () => {
                                 name="email"
                                 value={formData.email}
                                 onChange={handleInputChange}
-                                className="w-[300px] text-[#0d0d0d] mx-5 my-2.5 p-2.5 border-b-black border-[none] border-b border-solid"
+                                className="mx-5 my-2.5 w-[300px] border-b border-solid border-[none] border-b-black p-2.5 text-[#0d0d0d]"
                             />
                         </div>
 
@@ -138,12 +138,12 @@ const Form = () => {
                                 name="password"
                                 value={formData.password}
                                 onChange={handleInputChange}
-                                className="w-[300px] text-[#0d0d0d] mx-5 my-2.5 p-2.5 border-b-black border-[none] border-b border-solid"
+                                className="mx-5 my-2.5 w-[300px] border-b border-solid border-[none] border-b-black p-2.5 text-[#0d0d0d]"
                             />
                         </div>
                         <div>
                             <button
-                                className="bg-[#0cc0df] w-[100px] cursor-pointer ml-[30px] px-0 py-2.5"
+                                className="ml-[30px] w-[100px] cursor-pointer bg-[#0cc0df] px-0 py-2.5"
                                 onClick={signUp}>
                                 Sign Up
                             </button>
