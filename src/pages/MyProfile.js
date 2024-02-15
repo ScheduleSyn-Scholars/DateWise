@@ -1,6 +1,5 @@
 import React from 'react';
 import { useRef, useState } from 'react';
-import './MyProfile.css';
 import { Link } from 'react-router-dom';
 import firebase from '../config/firebase'; // Import your firebase.js file
 import 'firebase/compat/firestore';
@@ -130,13 +129,13 @@ function MyProfile() {
     };
 
     return (
-        <div className="App">
+        <div className="justify-betweenshadow-[3px_4px_4px_rgba(0,0,0,0.25)] w-[1600px]">
             <div className="center-panel">
-                <div className="image-upload-container">
-                    <div className="box-decoration">
+                <div className="mr-[20vh] flex items-center justify-center p-[2.6rem]">
+                    <div className="ml-[15%] flex w-[500px] flex-col items-center justify-center p-[5px]">
                         <label
                             htmlFor="image-upload-input"
-                            className="image-upload-label">
+                            className="mb-4 cursor-pointer font-[bold] text-2xl">
                             {image ? image.name : ''}
                         </label>
                         <div
@@ -146,13 +145,13 @@ function MyProfile() {
                                 <img
                                     src={user.image}
                                     alt="user update"
-                                    className="img-display-after"
+                                    className="h-[200px] w-[200px] rounded-[100%]"
                                 />
                             ) : (
                                 <img
                                     src={user.image}
                                     alt="default"
-                                    className="img-display-before"
+                                    className="ml-[35px] h-[200px] w-[200px] rounded-[100%]"
                                 />
                             )}
                             <input
@@ -165,14 +164,16 @@ function MyProfile() {
                         </div>
 
                         <button
-                            className="image-upload-button"
+                            className="mt-[2vh] h-[35px] w-[150px] flex-row rounded-[15px] border-[none] bg-[#0e724c] text-center font-times-new-roman text-xl font-medium text-[white] hover:bg-[#3e8e41]"
                             onClick={uploadImage}>
                             Upload
                         </button>
 
-                        <div className="emailStyle">Email: {user.email}</div>
+                        <div className="mt-[5px] rounded-[15px] p-[5px] text-center text-[35px] text-xl font-medium text-[#7b7b7b]">
+                            Email: {user.email}
+                        </div>
 
-                        <div className="profile-Update-Name">
+                        <div className="mb-2.5 mt-[4vh] items-center border-[none] font-times-new-roman text-3xl text-[35px] font-medium text-[gray] no-underline">
                             Profile Name:
                             <input
                                 defaultValue={user.userName}
@@ -182,14 +183,14 @@ function MyProfile() {
                         </div>
                         <div>
                             <button
-                                className="saveButton"
+                                className="ml-[18vh] mt-[10vh] h-[35px] w-[150px] cursor-pointer flex-row rounded-[15px] border-[none] bg-[#0e724c] p-0 text-center font-times-new-roman text-xl font-medium text-[white] hover:bg-[#4caf50]"
                                 type="button"
                                 onClick={handleSaveName}>
                                 Save
                             </button>
                             <Link to="/HomePage">
                                 {' '}
-                                <button className="home-button-style">
+                                <button className="ml-[18vh] mt-[5vh] h-[35px] w-[150px] cursor-pointer flex-row rounded-[15px] border-[none] bg-[#0e724c] p-0 text-center font-times-new-roman text-xl font-medium text-[white] hover:bg-[#4caf50]">
                                     Homepage
                                 </button>{' '}
                             </Link>
@@ -197,8 +198,6 @@ function MyProfile() {
                     </div>
                 </div>
             </div>
-
-            <div className="left-panel"></div>
         </div>
     );
 }

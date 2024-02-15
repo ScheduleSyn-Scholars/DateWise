@@ -6,7 +6,6 @@ import { useUser } from './UserContext';
 import AvailabilityForm from '../components/Calendar/AvailabilityForm';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import './ViewCalendar.css';
 
 const ViewCalendar = () => {
     const { calendarId, calendarName } = useParams();
@@ -358,33 +357,38 @@ const ViewCalendar = () => {
 
     return (
         <div className="page">
-            <div className="pageTitle">{calendarName}</div>
+            <div className="mt-[0vh]e relative ml-[0vh] text-center text-[50px] font-medium text-[#696969]">
+                {calendarName}
+            </div>
 
-            <div className="meeting-section">
-                <div className="avform">
+            <div className="relative ml-[50vh] mt-[0vh]">
+                <div className="relative ml-[13vh] mt-0">
                     <AvailabilityForm
-                        className="avform"
                         availability={availability}
                         onAvailabilityChange={handleAvailabilityChange}
                     />
                     <button
-                        className="saveButton2"
+                        className="relative ml-[15vh] mt-[0vh] h-[35px] w-[100px] cursor-pointer rounded-[40px] border-[none] bg-[#0e724c] text-center font-times-new-roman text-xl font-medium text-[white]"
                         type="button"
                         onClick={() => updateAvailability()}>
                         Save
                     </button>
                     <button
-                        className="showBestTimeButton"
+                        className="relative ml-[3vh] mt-[0vh] h-[35px] w-[150px] cursor-pointer rounded-[40px] border-[none] bg-[#0e724c] text-center font-times-new-roman text-xl font-medium text-[white]"
                         type="button"
                         onClick={handleShowBestTime}>
                         Show Best Time
                     </button>
 
                     {bestTime && (
-                        <div classname="bestRec">
-                            <p>Best Time to Meet:</p>
-                            <p>Day: {bestTime.day}</p>
-                            <p>
+                        <div classname="ml-[25vh]">
+                            <p className="ml-[20vh] mt-0.5">
+                                Best Time to Meet:
+                            </p>
+                            <p className="ml-[20vh] mt-0.5">
+                                Day: {bestTime.day}
+                            </p>
+                            <p className="ml-[20vh] mt-0.5">
                                 Time:
                                 {bestTime.start !== undefined
                                     ? convertTo12HourFormat(bestTime.start)
@@ -400,15 +404,14 @@ const ViewCalendar = () => {
                         </div>
                     )}
                     {showSavedPopup && (
-                        <div className="savedPopup">
+                        <div className="ml-[1vh]">
                             <p>Availability saved!</p>
                         </div>
                     )}
                 </div>
 
-                <div className="datepicker">
+                <div className="relative ml-[25vh] mt-[2vh]">
                     <DatePicker
-                        classname="datepicker"
                         selected={selectedDateTime}
                         onChange={(date) => setSelectedDateTime(date)}
                         inline
@@ -416,14 +419,16 @@ const ViewCalendar = () => {
                         dateFormat="Pp"
                     />
                 </div>
-                <div className="SubmitEvent">
+                <div className="relative ml-[36vh] w-[100px] cursor-pointer rounded-[40px] border-[none] text-center font-times-new-roman text-xl font-medium text-[white]">
                     <button type="button" onClick={handleCreateEvent}>
                         Submit Event
                     </button>
                 </div>
                 <Link to="/HomePage">
                     {' '}
-                    <button className="homepagebtn">Homepage</button>{' '}
+                    <button className="relative mb-[5px] ml-[35vh] mt-[2vh] h-[35px] w-[120px] cursor-pointer rounded-[40px] border-[none] bg-[#0e724c] text-center font-times-new-roman text-xl font-medium text-[white]">
+                        Homepage
+                    </button>{' '}
                 </Link>
             </div>
         </div>

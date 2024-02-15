@@ -1,6 +1,5 @@
 import React from 'react';
 import { useState } from 'react';
-import './NewCalendar.css';
 import { Link } from 'react-router-dom';
 import firebase from '../config/firebase';
 import 'firebase/compat/firestore';
@@ -16,6 +15,8 @@ const NewCalendar = () => {
     const [addMessage, setAddMessage] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [isShaking, setIsShaking] = useState(false);
+    const shakingInputClass =
+        'font-times-new-roman text-3xl border-0 text-gray-500 bg-transparent outline-none';
 
     // ***********************************************************************************************************************
 
@@ -282,63 +283,58 @@ const NewCalendar = () => {
         setInputValue(''); // Clear the input value when focused
     };
 
-    const subjectStyle = {
-        left: '450px',
-        top: '95px',
-        position: 'absolute',
-        color: '#696969',
-        fontSize: '45px',
-        fontFamily: 'Inter',
-        fontWeight: '700',
-        wordWrap: 'break-word',
-    };
-
     return (
-        <div className="all-side-panel">
-            <div className="textinput">
-                <div style={subjectStyle}>
+        <div className="h-full w-full bg-white">
+            <div className="h-[1vh]">
+                <div className="absolute left-[450px] top-[95px] font-inter text-5xl font-bold text-[#696969]">
                     {' '}
                     <input
                         placeholder="       Calendar Title"
                         type="text"
-                        className="Calendar-title-input"
+                        className="mb-[5vh] ml-[28vh] mt-[0vh] rounded-[15px] border border-solid border-[#ccc] border-[none] p-[5px] font-times-new-roman text-[35px] text-xl font-bold text-[#696969] underline no-underline"
                         id="CalendarTitle"></input>
-                    <div className="addPeople">
+                    <div className="ml-[20vh] mt-[0vh] rounded-[15px] border border-solid border-[#ccc] border-[none] font-times-new-roman text-xl font-medium text-[gray] no-underline">
                         <input
                             type="text"
-                            style={{
-                                fontSize: '35px',
-                                border: 'none',
-                                fontFamily: 'Times New Roman, Times, serif',
-                                color: 'grey',
-                                background: 'transparent',
-                                outline: 'none',
-                            }}
                             placeholder="   Enter email to invite"
                             value={inputValue}
                             onChange={handleInputValueChange}
                             onKeyDown={handleInputKeyDown}
                             onFocus={handleInputFocus}
-                            className={isShaking ? 'shake' : ''}></input>
+                            className={
+                                isShaking
+                                    ? shakingInputClass + 'animate-bounce'
+                                    : shakingInputClass
+                            }></input>
                         {errorMessage && (
-                            <div className="error-message">{errorMessage}</div>
+                            <div className="text-4xl font-semibold text-red-500">
+                                {errorMessage}
+                            </div>
                         )}
                         {limitMessage && (
-                            <div className="limit-message">{limitMessage}</div>
+                            <div className="text-4xl font-semibold text-red-500">
+                                {limitMessage}
+                            </div>
                         )}
                         {addMessage && (
-                            <div className="add-message">{addMessage}</div>
+                            <div className="text-4xl font-semibold text-green-600">
+                                {addMessage}
+                            </div>
                         )}
                     </div>
                 </div>
             </div>
-            <div className="allbuttons">
-                <button className="create-btn" onClick={handleCreate}>
+            <div className="mt-[50vh]">
+                <button
+                    className="relative mb-[5vh] ml-[85vh] mt-[0vh] flex h-[35px] w-[150px] cursor-pointer items-center justify-center rounded-[15px] border-[none] bg-[#0e724c] p-2.5 text-center font-times-new-roman text-[25px] font-medium text-[white] hover:bg-[#4caf50]"
+                    onClick={handleCreate}>
                     Create
                 </button>
                 <Link to="/HomePage">
                     {' '}
-                    <button className="buttons">Homepage</button>{' '}
+                    <button className="relative my-[0vh] ml-[85vh] h-[35px] w-[150px] cursor-pointer rounded-[15px] border-[none] bg-[#0e724c] p-2.5 text-center font-times-new-roman text-[25px] font-medium leading-[10px] text-[white] hover:bg-[#4caf50]">
+                        Homepage
+                    </button>{' '}
                 </Link>
             </div>
         </div>

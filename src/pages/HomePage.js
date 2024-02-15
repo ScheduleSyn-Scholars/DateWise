@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react';
-import './HomePage.css';
 import firebase from '../config/firebase';
 import { Link } from 'react-router-dom';
 import BellIcon from '../components/bell-filled.svg';
@@ -204,20 +203,16 @@ const HomePage = () => {
     };
 
     return (
-        <div className="homepage">
-            <div className="bell">
+        <div className="flex h-full w-full flex-row">
+            <div className="relative left-[360px] cursor-pointer">
                 <img src={BellIcon} onClick={handleBellIconClick} />
                 {notificationCount > 0 && (
-                    <div className="notification-count">
+                    <div className="absolute left-[17px] top-[-5px] flex h-5 w-5 items-center justify-center rounded-[50%] bg-[#ff0000] font-[bold] text-xs text-[white] shadow-[0_0_4px_rgba(0,0,0,0.3)]">
                         {notificationCount}
                     </div>
                 )}
             </div>
             {showNotification && (
-                // <NotificationPopup
-                // message = {notificationMessage}
-                // onClose={() => setShowNotification(false)}
-                // />
                 <NotificationPopup
                     notifications={notifications}
                     handleAccept={handleAccept}
@@ -225,33 +220,37 @@ const HomePage = () => {
                     onClose={() => setShowNotification(false)}
                 />
             )}
-            <h1>
-                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                &nbsp; &nbsp;{' '}
-            </h1>
 
-            <div className="left-panel"></div>
-            <div className="logo-photo">
-                <img src="./logo.png" alt="Grizzly Bear face" />
-                <div className="titleStyle">DateWise</div>
-            </div>
-            <Link to="/MyProfile">
-                <div>
-                    <img
-                        alt="User profile"
-                        src={user.image}
-                        className="user-photo"
-                    />
+            <div className="top-36 flex h-full w-1/4 flex-col items-center justify-center space-y-4 text-center">
+                <img
+                    className="h-36 w-44 overflow-hidden rounded-[40%] shadow-[0px_0px_0px_rgba(0,0,0,0.25)]"
+                    src="Logo.png"
+                    alt="Grizzly Bear face"
+                />
+                <div className="-ml-8 mt-2 font-times-new-roman text-5xl text-green-800">
+                    DateWise
                 </div>
-            </Link>
+                <Link to="/MyProfile">
+                    <div>
+                        <img
+                            alt="User profile"
+                            src={user.image}
+                            className="mt-2 h-[180px] w-[180px] rounded-[80%] bg-[#ccc]"
+                        />
+                    </div>
+                </Link>
+                <div className="font-times-new-roman text-3xl text-[#666666]">
+                    {user.userName}
+                </div>
 
-            <div className="profileName">{user.userName}</div>
+                <Link to="/">
+                    <button className="left-[100px] top-[735px] mb-6 h-[35px] w-[150px] cursor-pointer rounded-[15px] border-[none] bg-[#ff0000] p-2.5 text-xl leading-[10px] text-white hover:cursor-pointer hover:rounded-[15px] hover:border-[none] hover:bg-[#dd0000] hover:text-white">
+                        Logout
+                    </button>
+                </Link>
+            </div>
 
-            <Link to="/">
-                <button className="logout-button">Logout</button>
-            </Link>
-
-            <div className="center-panel">
+            <div className="h-4/5 w-1/2 bg-[white] shadow-[0_0_20px_rgba(0,0,0,0)]">
                 <Calendar
                     localizer={localizer}
                     events={events}
@@ -267,18 +266,19 @@ const HomePage = () => {
                 />
             </div>
 
-            <div className="right-panel">
-                <div className="calendarName">Mutual Calendars</div>
+            <div className="w-1/4 border-l-2 border-solid border-gray-700 bg-white">
+                <div className="ml-0 mt-5 text-center font-times-new-roman text-[25px] font-medium text-[#696969]">
+                    Mutual Calendars
+                </div>
                 {loading ? (
                     <p>Loading Calendars... </p>
                 ) : (
-                    <div className="user-calendars">
+                    <div className="ml-[4vh] flex h-[600px] flex-col items-center overflow-y-scroll">
                         {userCalendars.map((calendar) => (
                             <Link
                                 key={calendar.id}
-                                to={`/ViewCalendar/${calendar.id}/${encodeURIComponent(calendar.calendarName)}`}
-                                className="calendar-link">
-                                <button className="mutual-calendar-button">
+                                to={`/ViewCalendar/${calendar.id}/${encodeURIComponent(calendar.calendarName)}`}>
+                                <button className="mb-2 h-[35px] w-[150px] cursor-pointer rounded-[15px] border-[none] bg-[#0e724c] p-2.5 text-center font-times-new-roman text-xl font-medium text-[white]">
                                     {calendar.calendarName}
                                 </button>
                             </Link>
@@ -287,7 +287,7 @@ const HomePage = () => {
                 )}
 
                 <Link to="/NewCalendar">
-                    <button className="new-calendar-button">
+                    <button className="ml-[4vh] mt-[6vh] h-[35px] w-[150px] items-center justify-center rounded-[15px] border-[none] bg-[#0e724c] text-center font-times-new-roman text-xl font-medium text-[white] no-underline hover:bg-[#095c3e]">
                         New Calendar
                     </button>
                 </Link>

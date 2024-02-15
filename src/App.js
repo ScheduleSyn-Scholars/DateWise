@@ -15,7 +15,7 @@ function App() {
     return (
         <Router>
             <UserProvider>
-                <div className="App">
+                <div className="flex h-screen w-screen flex-col justify-center">
                     <Header />
                     <NotificationsProvider>
                         <Routes>

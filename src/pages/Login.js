@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import './Login.css';
-import './Registration.css';
 import firebase from '../config/firebase';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import { Link } from 'react-router-dom';
@@ -26,13 +24,20 @@ const Login = () => {
     };
 
     return (
-        <div className="login-container">
-            <div className="login-left">
-                <img src="/BearLogo.png" alt="Bear Logo" />
-                <h2>Login</h2>
-                <form>
-                    <label htmlFor="email">Email:</label>
+        <div className="flex h-full w-full bg-white">
+            <div className="flex w-full flex-col items-center justify-center">
+                <img
+                    className="mb-6 h-72 w-72"
+                    src="/BearLogo.png"
+                    alt="Bear Logo"
+                />
+                <h2 className="text-teal-700">Login</h2>
+                <form className="flex w-full max-w-72 flex-col items-center justify-center">
+                    <label className="mb-2" htmlFor="email">
+                        Email:
+                    </label>
                     <input
+                        className="w-full rounded-2xl border-none bg-gray-300 p-2 outline-none"
                         type="email"
                         id="email"
                         name="email"
@@ -40,8 +45,11 @@ const Login = () => {
                         onChange={(e) => setEmail(e.target.value)}
                         required
                     />
-                    <label htmlFor="password">Password:</label>
+                    <label className="mb-2" htmlFor="password">
+                        Password:
+                    </label>
                     <input
+                        className="w-full rounded-2xl border-none bg-gray-300 p-2 outline-none"
                         type="password"
                         id="password"
                         name="password"
@@ -53,21 +61,26 @@ const Login = () => {
                     {successMessage && (
                         <p className="success-message">{successMessage}</p>
                     )}
-                    <div className="buttonContainer">
-                        <button type="button" onClick={handleSignIn}>
+                    <div className="mt-5 flex w-full max-w-56 justify-between">
+                        <button
+                            className="relative left-1 mt-5 w-24 cursor-pointer rounded-2xl border-none bg-green-700 p-2.5 text-white"
+                            type="button"
+                            onClick={handleSignIn}>
                             Login
                         </button>
                         <Link to="/sign-up">
-                            <button type="button" className="sign-up-btn">
-                                sign-up
+                            <button
+                                className="relative left-1 mt-5 w-24 cursor-pointer rounded-2xl border-none bg-green-700 p-2.5 text-white"
+                                type="button">
+                                Sign-Up
                             </button>
                         </Link>
                     </div>
                 </form>
             </div>
-            <div className="login-right">
-                {/* Background image will be displayed here */}
-            </div>
+            <div
+                className="bg-left-center w-full bg-cover"
+                style={{ backgroundImage: `url('/GGCLibrary.jpg')` }}></div>
         </div>
     );
 };
