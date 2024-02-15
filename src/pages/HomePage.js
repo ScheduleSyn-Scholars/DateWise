@@ -4,8 +4,6 @@ import { Link } from 'react-router-dom';
 import BellIcon from '../components/bell-filled.svg';
 import 'firebase/compat/firestore';
 import { useUser } from './UserContext';
-import NotificationPopup from '../components/NotificationPopup';
-import { NotificationsContext } from '../components/NotificationsContext';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import CustomEventComponent from '../components/Calendar/CustomEvent';
@@ -15,20 +13,10 @@ const localizer = momentLocalizer(moment);
 const HomePage = () => {
     const [image, setImage] = useState('');
     const user = useUser();
-    const [showNotification, setShowNotification] = useState(false);
-    const [notificationMessage, setNotificationMessage] = useState('');
-    const [notificationCount, setNotificationCount] = useState();
     const [userCalendars, setUserCalendars] = useState([]);
     const accepted = true;
-    const [notificationsData, setNotificationsData] = useState([]);
 
-    const [notifyID, setNotifyID] = useState('');
     const [loading, setLoading] = useState(true);
-
-    const [notificationCountReset, setNotificationCountReset] = useState(false);
-
-    const { notifications, handleAccept, handleDecline } =
-        useContext(NotificationsContext);
 
     const [events, setEvents] = useState([]);
 
@@ -39,8 +27,6 @@ const HomePage = () => {
         user.image = user.imageURL;
         //console.log("Printing from successful image addition My Profile: ", user.imageURL)
     }
-    //   useEffect(() => {
-    // }, [notificationCount]);
 
     useEffect(() => {
         const loadUserCalendars = async () => {
@@ -57,15 +43,11 @@ const HomePage = () => {
                     const calendars = userData.calendars || []; // Assuming calendars is an array in user's document
                     setUserCalendars(calendars);
                 }
-                setLoading(false);
             } catch (error) {
                 console.error('Error loading user calendars:', error);
             }
         };
 
-        loadUserCalendars();
-
-        console.log('Notification Count after reset: ', notificationCount);
         const fetchEvents = async () => {
             try {
                 const userUid = firebase.auth().currentUser.uid;
@@ -120,107 +102,16 @@ const HomePage = () => {
                 console.error('Error loading user calendars:', error);
             }
         };
+        loadUserCalendars();
         fetchEvents();
-    }, [notificationCount]);
+        setLoading(false);
 
-    const loadUserNotifications = async (userUid) => {
-        try {
-            const firestore = firebase.firestore();
-            const notificationRef = firestore.collection('Notification-Data');
-            const notificationSnapshot = await notificationRef
-                .where('receiver', '==', userUid)
-                .get();
-            const notificationsData = notificationSnapshot.docs.map((doc) => ({
-                id: doc.id,
-                ...doc.data(),
-            }));
+    }, []);
 
-            processNotifications(notificationsData);
-            console.log('notifications Data: ', notificationsData);
-            console.log(
-                'Notification count after loading: ',
-                notificationCount,
-            );
-        } catch (error) {
-            console.error('Error loading user notifications:', error);
-        }
-    };
-
-    const handleBellIconClick = async () => {
-        try {
-            // const notificationsSnapshot = await firebase
-            //   .firestore()
-            //   .collection('Notification-Data')
-            //   .where('receiver', '==', user.uid)
-            //   .get();
-
-            setNotificationCountReset(true); // Setting the flag for notification count reset
-            setNotificationCount(0, () => {
-                console.log(
-                    'Notification Count after reset: ',
-                    notificationCount,
-                );
-            }); // Resetting the notification count to zero
-            console.log('Fetching notifications...');
-            await loadUserNotifications(user.uid);
-            //setNotificationMessage('You have new notifications!');
-
-            console.log('Bell Clicked');
-            console.log('Show notification:', showNotification);
-            if (notificationCount > 0) {
-                setNotificationMessage('You have new notifications!');
-                setShowNotification(true);
-            } else {
-                setShowNotification(false);
-            }
-            //setShowNotification(true);
-        } catch (error) {
-            console.error('Error loading notifications: ', error);
-        }
-    };
-
-    const processNotifications = (notificationsData) => {
-        const notificationCountTemp = notificationsData.length;
-        console.log(
-            'amount of notifications processing: ',
-            notificationCountTemp,
-        );
-        setNotificationCount(notificationCountTemp);
-        notificationsData.forEach(async (notification) => {
-            const inviteMessage = `${notificationsData[0].sender} has sended an invitation for you to accept this certain meeting time and join "${notificationsData[0].calendarId}".`;
-
-            setNotificationMessage(inviteMessage);
-
-            setShowNotification(true);
-            const notificationId = notification.id;
-            const calendarId = notification.calendarId;
-
-            //Render a Notification Popup for each notification
-            setNotifyID(notificationId);
-            setNotificationMessage(inviteMessage);
-            setShowNotification(true);
-        });
-    };
+    
 
     return (
         <div className="flex h-full w-full flex-row">
-            <div className="relative left-[360px] cursor-pointer">
-                <img src={BellIcon} onClick={handleBellIconClick} />
-                {notificationCount > 0 && (
-                    <div className="absolute left-[17px] top-[-5px] flex h-5 w-5 items-center justify-center rounded-[50%] bg-[#ff0000] font-[bold] text-xs text-[white] shadow-[0_0_4px_rgba(0,0,0,0.3)]">
-                        {notificationCount}
-                    </div>
-                )}
-            </div>
-            {showNotification && (
-                <NotificationPopup
-                    notifications={notifications}
-                    handleAccept={handleAccept}
-                    handleDecline={handleDecline}
-                    onClose={() => setShowNotification(false)}
-                />
-            )}
-
             <div className="top-36 flex h-full w-1/4 flex-col items-center justify-center space-y-4 text-center">
                 <img
                     className="h-36 w-44 overflow-hidden rounded-[40%] shadow-[0px_0px_0px_rgba(0,0,0,0.25)]"

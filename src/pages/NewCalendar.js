@@ -253,26 +253,6 @@ const NewCalendar = () => {
                 );
             }
 
-            // Loop through invitees, but don't add to their 'calendars' field
-            for (const userId of amountOfEnteredUsers) {
-                if (userId !== creatorUid) {
-                    const notificationData = {
-                        sender: user.uid,
-                        receiver: userId,
-                        message: `You have been invited to join the calendar "${calendarTitleValue}".`,
-                        calendarId: docRef.id,
-                        decision: null,
-                    };
-                    try {
-                        await firestore
-                            .collection('Notification-Data')
-                            .add(notificationData);
-                    } catch (error) {
-                        console.error('Error adding notification: ', error);
-                    }
-                }
-            }
-
             navigate('/homepage'); // Navigate after completing the process
         } catch (error) {
             console.error('Error creating calendar: ', error);
