@@ -14,8 +14,7 @@ function App() {
     return (
         <Router>
             <UserProvider>
-                <div className="flex h-screen w-screen flex-col justify-center">
-                    <Header />
+                <div className="flex h-screen w-screen flex-col">
                     <Routes>
                         <Route path="/" element={<Login />} />
                         <Route path="/sign-up" element={<Registration />} />

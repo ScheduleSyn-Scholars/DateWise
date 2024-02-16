@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import firebase from '../config/firebase';
 import { Link } from 'react-router-dom';
 import 'firebase/compat/firestore';
@@ -6,12 +6,11 @@ import { useUser } from './UserContext';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import CustomEventComponent from '../components/Calendar/CustomEvent';
-import Header from '../components/Header';
+import Header from '../components/Header.js';
 
 const localizer = momentLocalizer(moment);
 
 const HomePage = () => {
-    const [image, setImage] = useState('');
     const user = useUser();
     const [userCalendars, setUserCalendars] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -105,50 +104,54 @@ const HomePage = () => {
     }, []);
 
     return (
-        <div className="flex h-screen w-screen flex-row pt-32">
-            <div className="w-70 flex grow">
-                <Calendar
-                    localizer={localizer}
-                    events={events}
-                    startAccessor="start"
-                    endAccessor="end"
-                    toolbar={true}
-                    onSelectEvent={(event) => console.log(event)}
-                    onSelectSlot={(slotInfo) => console.log(slotInfo)}
-                    timezone="America/New_York"
-                    components={{
-                        event: CustomEventComponent,
-                    }}
-                />
-            </div>
-            <div className="w-29 flex grow">
-                <div className="">Mutual Calendars</div>
-                {loading ? (
-                    <p>Loading Calendars... </p>
-                ) : (
-                    <div className=" flex-col items-center overflow-y-scroll">
-                        {userCalendars.map((calendar) => (
-                            <Link
-                                key={calendar.id}
-                                to={`/ViewCalendar/${calendar.id}/${encodeURIComponent(calendar.calendarName)}`}>
-                                <button className="mb-2 h-[35px] w-[150px] cursor-pointer rounded-[15px] border-[none] bg-[#0e724c] p-2.5 text-center font-times-new-roman text-xl font-medium text-[white]">
-                                    {calendar.calendarName}
-                                </button>
-                            </Link>
-                        ))}
-                    </div>
-                )}
-
-                <Link to="/NewCalendar">
-                    <button className="ml-[4vh] mt-[6vh] h-[35px] w-[150px] items-center justify-center rounded-[15px] border-[none] bg-[#0e724c] text-center font-times-new-roman text-xl font-medium text-[white] no-underline hover:bg-[#095c3e]">
-                        New Calendar
-                    </button>
-                </Link>
-                <Link to="/">
-                    <button className="left-[100px] top-[735px] mb-6 h-[35px] w-[150px] cursor-pointer rounded-[15px] border-[none] bg-[#ff0000] p-2.5 text-xl leading-[10px] text-white hover:cursor-pointer hover:rounded-[15px] hover:border-[none] hover:bg-[#dd0000] hover:text-white">
-                        Logout
-                    </button>
-                </Link>
+        <div className="flex h-full w-full flex-col">
+            <Header />
+            <div class="flex h-fit w-full">
+                <div className="items-center justify-center w-full">
+                    <Calendar
+                        localizer={localizer}
+                        events={events}
+                        startAccessor="start"
+                        endAccessor="end"
+                        toolbar={true}
+                        onSelectEvent={(event) => console.log(event)}
+                        onSelectSlot={(slotInfo) => console.log(slotInfo)}
+                        timezone="America/New_York"
+                        components={{
+                            event: CustomEventComponent,
+                        }}
+                    />
+                </div>
+                <div className="divider divider-horizontal"/>
+                <div className="flex w-1/4 flex-col items-center justify-between">
+                    <div className="text-2xl text-gray-700 font-bold mt-10">Shared Calendars</div>
+                    {loading ? (
+                        <p>Loading Calendars... </p>
+                    ) : (
+                        <div className="flex flex-col items-center overflow-y-scroll h-4/5">
+                            {userCalendars.map((calendar) => (
+                                <Link
+                                    key={calendar.id}
+                                    to={`/ViewCalendar/${calendar.id}/${encodeURIComponent(calendar.calendarName)}`}>
+                                    <button className="mb-2 h-[35px] w-[150px] cursor-pointer rounded-[15px] border-[none] bg-[#0e724c] p-2.5 text-center font-times-new-roman text-xl font-medium text-[white]">
+                                        {calendar.calendarName}
+                                    </button>
+                                </Link>
+                            ))}
+                        </div>
+                    )}
+                    
+                    <Link to="/NewCalendar">
+                        <button className="ml-[4vh] mt-[6vh] h-[35px] w-[150px] items-center justify-center rounded-[15px] border-[none] bg-[#0e724c] text-center font-times-new-roman text-xl font-medium text-[white] no-underline hover:bg-[#095c3e]">
+                            New Calendar
+                        </button>
+                    </Link>
+                    <Link to="/">
+                        <button className="left-[100px] top-[735px] mb-6 h-[35px] w-[150px] cursor-pointer rounded-[15px] border-[none] bg-[#ff0000] p-2.5 text-xl leading-[10px] text-white hover:cursor-pointer hover:rounded-[15px] hover:border-[none] hover:bg-[#dd0000] hover:text-white">
+                            Logout
+                        </button>
+                    </Link>
+                </div>
             </div>
         </div>
     );
