@@ -69,8 +69,7 @@ const NewCalendar = () => {
             // }
 
             //This is to check if an when the user has exceed their limit in adding people
-            //It's because like array/arraylist it starts in 0 and counting so 4 but it's 5 numberically
-            if (amountOfEnteredUsers.size > 4) {
+            if (amountOfEnteredUsers.size > 5) {
                 setErrorMessage(
                     'You have reached your limit in adding people please create calendar.',
                 );
@@ -251,26 +250,6 @@ const NewCalendar = () => {
                     { calendars: updatedCalendars },
                     { merge: true },
                 );
-            }
-
-            // Loop through invitees, but don't add to their 'calendars' field
-            for (const userId of amountOfEnteredUsers) {
-                if (userId !== creatorUid) {
-                    const notificationData = {
-                        sender: user.uid,
-                        receiver: userId,
-                        message: `You have been invited to join the calendar "${calendarTitleValue}".`,
-                        calendarId: docRef.id,
-                        decision: null,
-                    };
-                    try {
-                        await firestore
-                            .collection('Notification-Data')
-                            .add(notificationData);
-                    } catch (error) {
-                        console.error('Error adding notification: ', error);
-                    }
-                }
             }
 
             navigate('/homepage'); // Navigate after completing the process

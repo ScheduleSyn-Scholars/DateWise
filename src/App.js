@@ -9,7 +9,6 @@ import Homepage from './pages/HomePage';
 import MyProfile from './pages/MyProfile';
 import NewCalendar from './pages/NewCalendar';
 import { UserProvider } from './pages/UserContext';
-import { NotificationsProvider } from './components/NotificationsContext';
 
 function App() {
     return (
@@ -17,7 +16,6 @@ function App() {
             <UserProvider>
                 <div className="flex h-screen w-screen flex-col justify-center">
                     <Header />
-                    <NotificationsProvider>
                         <Routes>
                             <Route path="/" element={<Login />} />
                             <Route path="/sign-up" element={<Registration />} />
@@ -32,7 +30,6 @@ function App() {
                                 element={<NewCalendar />}
                             />
                         </Routes>
-                    </NotificationsProvider>
                     <Footer />
                 </div>
             </UserProvider>
