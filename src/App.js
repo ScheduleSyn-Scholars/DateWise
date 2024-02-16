@@ -16,20 +16,17 @@ function App() {
             <UserProvider>
                 <div className="flex h-screen w-screen flex-col justify-center">
                     <Header />
-                        <Routes>
-                            <Route path="/" element={<Login />} />
-                            <Route path="/sign-up" element={<Registration />} />
-                            <Route path="/homepage" element={<Homepage />} />
-                            <Route path="/MyProfile" element={<MyProfile />} />
-                            <Route
-                                path="/ViewCalendar/:calendarId/:calendarName"
-                                element={<ViewCalendar />}
-                            />
-                            <Route
-                                path="/NewCalendar"
-                                element={<NewCalendar />}
-                            />
-                        </Routes>
+                    <Routes>
+                        <Route path="/" element={<Login />} />
+                        <Route path="/sign-up" element={<Registration />} />
+                        <Route path="/homepage" element={<Homepage />} />
+                        <Route path="/MyProfile" element={<MyProfile />} />
+                        <Route
+                            path="/ViewCalendar/:calendarId/:calendarName"
+                            element={<ViewCalendar />}
+                        />
+                        <Route path="/NewCalendar" element={<NewCalendar />} />
+                    </Routes>
                     <Footer />
                 </div>
             </UserProvider>

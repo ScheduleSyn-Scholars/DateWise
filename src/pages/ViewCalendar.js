@@ -19,7 +19,7 @@ const ViewCalendar = () => {
     const [bestTime, setBestTime] = useState(null);
     const [selectedDateTime, setSelectedDateTime] = useState(new Date());
     const [showSavedPopup, setShowSavedPopup] = useState(false);
-    
+
     const firestore = firebase.firestore();
     const navigate = useNavigate();
 
@@ -359,39 +359,50 @@ const ViewCalendar = () => {
     const handleLeaveGroup = async () => {
         try {
             const userRef = firestore.collection('users').doc(user.uid);
-    
+
             // Fetch the user's document
             const userDoc = await userRef.get();
             if (userDoc.exists) {
                 // Get the current calendars array
                 const calendars = userDoc.data().calendars || [];
-    
+
                 // Remove the map with the specified calendarId
-                const updatedCalendars = calendars.filter(calendar => calendar.id !== calendarId);
-    
+                const updatedCalendars = calendars.filter(
+                    (calendar) => calendar.id !== calendarId,
+                );
+
                 // Update the user document with the updated calendars array
                 await userRef.update({
-                calendars: updatedCalendars
+                    calendars: updatedCalendars,
                 });
 
                 // Query the calendars collection to find documents containing the calendarId
-    const calendarsQuerySnapshot = await firestore.collection('calendars').where('users', 'array-contains', user.uid).get();
+                const calendarsQuerySnapshot = await firestore
+                    .collection('calendars')
+                    .where('users', 'array-contains', user.uid)
+                    .get();
 
-    // Delete the calendar from each document found
-    const deletePromises = [];
-    calendarsQuerySnapshot.forEach(doc => {
-        const calendarData = doc.data();
-        const updatedUsers = calendarData.users.filter(userId => userId !== user.uid);
-        deletePromises.push(doc.ref.update({ users: updatedUsers }));
-    });
+                // Delete the calendar from each document found
+                const deletePromises = [];
+                calendarsQuerySnapshot.forEach((doc) => {
+                    const calendarData = doc.data();
+                    const updatedUsers = calendarData.users.filter(
+                        (userId) => userId !== user.uid,
+                    );
+                    deletePromises.push(
+                        doc.ref.update({ users: updatedUsers }),
+                    );
+                });
 
-    // Wait for all delete operations to complete
-    await Promise.all(deletePromises);
+                // Wait for all delete operations to complete
+                await Promise.all(deletePromises);
 
-    console.log('Calendar removed successfully from both collections.');
+                console.log(
+                    'Calendar removed successfully from both collections.',
+                );
 
                 navigate('/HomePage');
-                window.location.reload()
+                window.location.reload();
 
                 console.log('User removed from calendar:', calendarId);
             } else {
@@ -400,9 +411,8 @@ const ViewCalendar = () => {
         } catch (error) {
             console.error('Error removing user from calendar:', error);
         }
-    }
+    };
 
-    
     return (
         <div className="flex h-screen w-screen flex-row pt-32">
             <div className="mt-[0vh]e relative ml-[0vh] text-center text-[50px] font-medium text-[#696969]">
@@ -468,7 +478,10 @@ const ViewCalendar = () => {
                     />
                 </div>
                 <div className="relative ml-[36vh] w-[100px] cursor-pointer rounded-[40px] border-[none] text-center font-times-new-roman text-xl font-medium text-[white]">
-                    <button className="" type="button" onClick={handleCreateEvent}>
+                    <button
+                        className=""
+                        type="button"
+                        onClick={handleCreateEvent}>
                         Submit Event
                     </button>
                 </div>
@@ -478,8 +491,10 @@ const ViewCalendar = () => {
                         Homepage
                     </button>{' '}
                 </Link>
-              
-                <button onClick={handleLeaveGroup} className=''>Leave Group</button>
+
+                <button onClick={handleLeaveGroup} className="">
+                    Leave Group
+                </button>
             </div>
         </div>
     );

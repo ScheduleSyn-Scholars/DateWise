@@ -105,7 +105,6 @@ const HomePage = () => {
     }, []);
 
     return (
-        
         <div className="flex h-screen w-screen flex-row pt-32">
             <div className="w-70 flex grow">
                 <Calendar
@@ -123,9 +122,7 @@ const HomePage = () => {
                 />
             </div>
             <div className="w-29 flex grow">
-                <div className="">
-                    Mutual Calendars
-                </div>
+                <div className="">Mutual Calendars</div>
                 {loading ? (
                     <p>Loading Calendars... </p>
                 ) : (

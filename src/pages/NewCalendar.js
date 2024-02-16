@@ -213,7 +213,10 @@ const NewCalendar = () => {
 
         // Include the creator of the calendar in the list of users
         const creatorUid = firebase.auth().currentUser.uid;
-        const updatedAmountOfEnteredUsers = new Set([...Array.from(amountOfEnteredUsers), creatorUid]);
+        const updatedAmountOfEnteredUsers = new Set([
+            ...Array.from(amountOfEnteredUsers),
+            creatorUid,
+        ]);
 
         const calendarData = {
             calendarName: calendarTitleValue,
