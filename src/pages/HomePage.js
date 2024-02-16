@@ -9,6 +9,7 @@ import { NotificationsContext } from '../components/NotificationsContext';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import CustomEventComponent from '../components/Calendar/CustomEvent';
+import Header from '../components/Header';
 
 const localizer = momentLocalizer(moment);
 
@@ -203,8 +204,24 @@ const HomePage = () => {
     };
 
     return (
-        <div className="flex h-full w-full flex-row">
-            <div className="relative left-[360px] cursor-pointer">
+        
+        <div className="flex h-screen w-screen flex-row pt-32">
+            <div className="w-70 flex grow">
+                <Calendar
+                    localizer={localizer}
+                    events={events}
+                    startAccessor="start"
+                    endAccessor="end"
+                    toolbar={true}
+                    onSelectEvent={(event) => console.log(event)}
+                    onSelectSlot={(slotInfo) => console.log(slotInfo)}
+                    timezone="America/New_York"
+                    components={{
+                        event: CustomEventComponent,
+                    }}
+                />
+            </div>
+            <div className="w-10">
                 <img src={BellIcon} onClick={handleBellIconClick} />
                 {notificationCount > 0 && (
                     <div className="absolute left-[17px] top-[-5px] flex h-5 w-5 items-center justify-center rounded-[50%] bg-[#ff0000] font-[bold] text-xs text-[white] shadow-[0_0_4px_rgba(0,0,0,0.3)]">
@@ -220,60 +237,14 @@ const HomePage = () => {
                     onClose={() => setShowNotification(false)}
                 />
             )}
-
-            <div className="top-36 flex h-full w-1/4 flex-col items-center justify-center space-y-4 text-center">
-                <img
-                    className="h-36 w-44 overflow-hidden rounded-[40%] shadow-[0px_0px_0px_rgba(0,0,0,0.25)]"
-                    src="Logo.png"
-                    alt="Grizzly Bear face"
-                />
-                <div className="-ml-8 mt-2 font-times-new-roman text-5xl text-green-800">
-                    DateWise
-                </div>
-                <Link to="/MyProfile">
-                    <div>
-                        <img
-                            alt="User profile"
-                            src={user.image}
-                            className="mt-2 h-[180px] w-[180px] rounded-[80%] bg-[#ccc]"
-                        />
-                    </div>
-                </Link>
-                <div className="font-times-new-roman text-3xl text-[#666666]">
-                    {user.userName}
-                </div>
-
-                <Link to="/">
-                    <button className="left-[100px] top-[735px] mb-6 h-[35px] w-[150px] cursor-pointer rounded-[15px] border-[none] bg-[#ff0000] p-2.5 text-xl leading-[10px] text-white hover:cursor-pointer hover:rounded-[15px] hover:border-[none] hover:bg-[#dd0000] hover:text-white">
-                        Logout
-                    </button>
-                </Link>
-            </div>
-
-            <div className="h-4/5 w-1/2 bg-[white] shadow-[0_0_20px_rgba(0,0,0,0)]">
-                <Calendar
-                    localizer={localizer}
-                    events={events}
-                    startAccessor="start"
-                    endAccessor="end"
-                    toolbar={true}
-                    onSelectEvent={(event) => console.log(event)}
-                    onSelectSlot={(slotInfo) => console.log(slotInfo)}
-                    timezone="America/New_York"
-                    components={{
-                        event: CustomEventComponent,
-                    }}
-                />
-            </div>
-
-            <div className="w-1/4 border-l-2 border-solid border-gray-700 bg-white">
-                <div className="ml-0 mt-5 text-center font-times-new-roman text-[25px] font-medium text-[#696969]">
+            <div className="w-29 flex grow">
+                <div className="">
                     Mutual Calendars
                 </div>
                 {loading ? (
                     <p>Loading Calendars... </p>
                 ) : (
-                    <div className="ml-[4vh] flex h-[600px] flex-col items-center overflow-y-scroll">
+                    <div className=" flex-col items-center overflow-y-scroll">
                         {userCalendars.map((calendar) => (
                             <Link
                                 key={calendar.id}
@@ -289,6 +260,11 @@ const HomePage = () => {
                 <Link to="/NewCalendar">
                     <button className="ml-[4vh] mt-[6vh] h-[35px] w-[150px] items-center justify-center rounded-[15px] border-[none] bg-[#0e724c] text-center font-times-new-roman text-xl font-medium text-[white] no-underline hover:bg-[#095c3e]">
                         New Calendar
+                    </button>
+                </Link>
+                <Link to="/">
+                    <button className="left-[100px] top-[735px] mb-6 h-[35px] w-[150px] cursor-pointer rounded-[15px] border-[none] bg-[#ff0000] p-2.5 text-xl leading-[10px] text-white hover:cursor-pointer hover:rounded-[15px] hover:border-[none] hover:bg-[#dd0000] hover:text-white">
+                        Logout
                     </button>
                 </Link>
             </div>
