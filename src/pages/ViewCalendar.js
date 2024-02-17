@@ -424,48 +424,27 @@ const ViewCalendar = () => {
         }
     };
 
-    const handleCreateEvent = async () => {
-        try {
-            const eventData = {
-                name: calendarName, // Use calendarName directly
-                dateTime: selectedDateTime,
-                creator: user.uid,
-                attendees: [user.uid],
-            };
-            console.log('Event Data:', eventData);
-            await createEvent(eventData);
-        } catch (error) {
-            console.error('Error in handleCreateEvent:', error);
-        }
-    };
-
-  //code for adding user to a calendar
-  const addUser = async (userData) => {
-    try{
-      const userRef = firestore.collection('calendars').doc(calendarId).update({
-        users:firestore.FieldValue.arrayUnion()
-      })
-      await userRef.add(userData);
-    }catch(error){
-      console.error('Error while trying to add user', error);
+  const handleCreateEvent = async () => {
+    try {
+      const eventData = {
+        name: calendarName, // Use calendarName directly
+        dateTime: selectedDateTime,
+        creator: user.uid,
+        attendees: [user.uid],
+      };
+      console.log('Event Data:', eventData);
+      await createEvent(eventData);
+    } catch (error) {
+      console.error('Error in handleCreateEvent:', error);
     }
-    
-    //await 
-    //setUsers();
-  };
+  }
 
-    // Sends each calendar member a notification for the event
-    const sendEventInvites = async (newEventId) => {
-        for (const userInfo of usersInfo) {
-            await sendEventInvite(user, userInfo.email, calendarId, newEventId);
-        }
-    };
-    const convertTo12HourFormat = (time) => {
-        const hour = parseInt(time, 10);
-        const isPM = hour >= 12;
-        const formattedHour = isPM ? (hour === 12 ? 12 : hour - 12) : hour;
-        return `${formattedHour}:00 ${isPM ? 'PM' : 'AM'}`;
-    };
+  const convertTo12HourFormat = (time) => {
+    const hour = parseInt(time, 10);
+    const isPM = hour >= 12;
+    const formattedHour = isPM ? (hour === 12 ? 12 : hour - 12) : hour;
+    return `${formattedHour}:00 ${isPM ? 'PM' : 'AM'}`;
+  };
 
     const handleLeaveGroup = async () => {
         try {
@@ -524,6 +503,9 @@ const ViewCalendar = () => {
         }
     };
 
+    
+
+    
     const closeModal = () => {
         setIsOpen(false);
     };
@@ -536,24 +518,24 @@ const ViewCalendar = () => {
   return (
     <div className="page">
       <div className="pageTitle">{calendarName}</div>
-     
-<div className="meeting-section">
-<div className="avform">
-<AvailabilityForm
-          className="avform"
-          availability={availability}
-          onAvailabilityChange={handleAvailabilityChange}
-        />
-        <button className="saveButton2" type="button" onClick={() => updateAvailability()}>
-          Save
-        </button>
-        <button
-          className="showBestTimeButton"
-          type="button"
-          onClick={handleShowBestTime}
-        >
-          Show Best Time
-        </button>
+
+      <div className="meeting-section">
+        <div className="avform">
+          <AvailabilityForm
+            className="avform"
+            availability={availability}
+            onAvailabilityChange={handleAvailabilityChange}
+          />
+          <button className="saveButton2" type="button" onClick={() => updateAvailability()}>
+            Save
+          </button>
+          <button
+            className="showBestTimeButton"
+            type="button"
+            onClick={handleShowBestTime}
+          >
+            Show Best Time
+          </button>
 
                     {bestTime && (
                         <div className="mt-5">
