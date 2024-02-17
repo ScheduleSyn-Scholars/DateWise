@@ -12,6 +12,8 @@ import CalendarEventModal from '../components/CalendarEvent';
 const ViewCalendar = () => {
     const { calendarId, calendarName } = useParams();
     const user = useUser();
+  const [users, setUsers] = useState([]);
+  const [userEmail, setUserEmail] = useState();
     const [availability, setAvailability] = useState({
         selectedDays: [],
         times: {},
@@ -26,19 +28,19 @@ const ViewCalendar = () => {
 
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const fetchData = async () => {
-            if (user) {
-                await fetchUserAvailability(calendarId, user.uid);
-                const teamAvailabilityData =
-                    await fetchTeamAvailability(calendarId);
+  useEffect(() => {
+    const fetchData = async () => {
+      if (user) {
+        await fetchUserAvailability(calendarId, user.uid);
+        await fetchUser(calendarId);
+        const teamAvailabilityData = await fetchTeamAvailability(calendarId);
                 await fetchUsersInfo(calendarId); // Await the fetchUsersInfo function here
-                fetchTeamAvailabilityOnCommonDays(teamAvailabilityData);
-            }
-        };
+        fetchTeamAvailabilityOnCommonDays(teamAvailabilityData);
+      }
+    };
 
-        fetchData();
-    }, [calendarId, user]);
+    fetchData();
+  }, [calendarId, user]);
 
     const handleAvailabilityChange = (newAvailability) => {
         // Handle changes in availability form
@@ -67,6 +69,25 @@ const ViewCalendar = () => {
             console.error('Error fetching user availability:', error);
         }
     };
+
+  const fetchUser = async (calendarId) => {
+    try{
+      const userRef = firestore
+      .collection('calendars').doc(calendarId).collection('users');
+      const userSnapshot = await userRef.get();
+      if(userSnapshot.exists){
+        const userData = userSnapshot.data();
+        setUsers(userData);
+      }
+
+    }catch(error){
+      console.error('Error fetching user', error);
+    }
+  };
+  function handleNewUser(event){
+    console.log(event.target.value);
+    setUserEmail(event.target.value);
+  }
 
     const fetchTeamAvailability = async (calendarId) => {
         try {
@@ -269,108 +290,98 @@ const ViewCalendar = () => {
         }
     };
 
-    const processOverlappingTimes = (overlappingTimes) => {
-        // Process overlapping times to find the best time to meet
-        // This includes finding the latest start time and earliest end time for each day
+  const processOverlappingTimes = (overlappingTimes) => {
+    // Process overlapping times to find the best time to meet
+    // This includes finding the latest start time and earliest end time for each day
 
-        console.log('Before loop - overlappingTimes:', overlappingTimes);
+    console.log('Before loop - overlappingTimes:', overlappingTimes);
 
-        const bestTime = Object.entries(overlappingTimes).reduce(
-            (acc, [day, times]) => {
-                console.log('Inside loop - day:', day, 'times:', times);
+    const bestTime = Object.entries(overlappingTimes).reduce((acc, [day, times]) => {
+      console.log('Inside loop - day:', day, 'times:', times);
 
-                if (!acc.day || times.length > acc.times.length) {
-                    acc.day = day;
-                    acc.times = times;
-                } else if (times.length === acc.times.length) {
-                    // If the same number of overlapping slots, consider the latest start time
-                    const latestStartTime = Math.max(
-                        ...times.map((time) => parseInt(time.start, 10)),
-                    );
-                    const currentLatestStartTime = Math.max(
-                        ...acc.times.map((time) => parseInt(time.start, 10)),
-                    );
+      if (!acc.day || times.length > acc.times.length) {
+        acc.day = day;
+        acc.times = times;
+      } else if (times.length === acc.times.length) {
+        // If the same number of overlapping slots, consider the latest start time
+        const latestStartTime = Math.max(...times.map((time) => parseInt(time.start, 10)));
+        const currentLatestStartTime = Math.max(...acc.times.map((time) => parseInt(time.start, 10)));
 
-                    if (latestStartTime > currentLatestStartTime) {
-                        acc.day = day;
-                        acc.times = times;
-                    }
-                }
-                return acc;
-            },
-            { day: null, times: [] },
-        );
+        if (latestStartTime > currentLatestStartTime) {
+          acc.day = day;
+          acc.times = times;
+        }
+      }
+      return acc;
+    }, { day: null, times: [] });
 
-        // Find the latest start time and earliest end time
-        const latestStartTime = Math.max(
-            ...bestTime.times.map((time) => parseInt(time.start, 10)),
-        );
-        const earliestEndTime = Math.min(
-            ...bestTime.times.map((time) => parseInt(time.end, 10)),
-        );
+    // Find the latest start time and earliest end time
+    const latestStartTime = Math.max(...bestTime.times.map((time) => parseInt(time.start, 10)));
+    const earliestEndTime = Math.min(...bestTime.times.map((time) => parseInt(time.end, 10)));
 
-        // Set the overall start and end times
-        bestTime.start = latestStartTime;
-        bestTime.end = earliestEndTime;
+    // Set the overall start and end times
+    bestTime.start = latestStartTime;
+    bestTime.end = earliestEndTime;
 
-        console.log('After loop - bestTime:', bestTime);
+    console.log('After loop - bestTime:', bestTime);
 
-        return bestTime;
-    };
+    return bestTime;
+  };
 
-    const updateAvailability = async () => {
-        try {
-            const availabilityRef = firestore
-                .collection('calendars')
-                .doc(calendarId)
-                .collection('availability')
-                .doc(user.uid);
 
-            // Update selectedDays based on times object
-            const updatedAvailability = {
-                ...availability,
-                selectedDays: Object.keys(availability.times || {}),
-            };
+  const updateAvailability = async () => {
+    try {
+      const availabilityRef = firestore
+        .collection('calendars')
+        .doc(calendarId)
+        .collection('availability')
+        .doc(user.uid);
 
-            await availabilityRef.set(
-                { ...updatedAvailability },
-                { merge: true },
-            );
 
-            console.log('availRef" ', updatedAvailability);
-            console.log(calendarId);
-            await availabilityRef.update({ ...updatedAvailability });
-            console.log('Adding availability for: ', user.uid);
-            console.log('Availability updated successfully!');
+      // Update selectedDays based on times object
+      const updatedAvailability = {
+        ...availability,
+        selectedDays: Object.keys(availability.times || {}),
+      };
 
-            // Fetch team availability
-            const teamAvailabilityData =
-                await fetchTeamAvailability(calendarId);
+      await availabilityRef.set({ ...updatedAvailability }, { merge: true });
 
-            // Reset showBestTime state
-            setShowBestTime(false);
+      console.log('availRef" ', updatedAvailability);
+      console.log(calendarId);
+      await availabilityRef.update({ ...updatedAvailability });
+      console.log("Adding availability for: ", user.uid);
+      console.log('Availability updated successfully!');
+
+      // Fetch team availability
+      const teamAvailabilityData = await fetchTeamAvailability(calendarId);
+
+
+      // Reset showBestTime state
+      setShowBestTime(false);
 
             setShowSavedPopup(true);
 
-            setTimeout(() => {
-                setShowSavedPopup(false);
-            }, 2000);
-        } catch (error) {
-            console.error('Error updating availability:', error);
-        }
-    };
+      setTimeout(() => {
+        setShowSavedPopup(false);
+      }, 2000);
+
+    } catch (error) {
+      console.error('Error updating availability:', error);
+    }
+  };
+
 
     const createEvent = async (eventData) => {
         try {
             const eventsRef = firestore
-                .collection('calendars')
-                .doc(calendarId)
-                .collection('events');
+                  .collection('calendars')
+                  .doc(calendarId)
+                  .collection('events');
 
             const newEventRef = await eventsRef.add(eventData);
             sendEventInvites(newEventRef.id);
             console.log('Event created successfully!');
-        } catch (error) {
+        }  catch (error) {
             console.error('Error creating event:', error);
         }
     };
@@ -389,6 +400,19 @@ const ViewCalendar = () => {
             console.error('Error in handleCreateEvent:', error);
         }
     };
+
+  //code for adding user to a calendar
+  const addUser = async (userData) => {
+    try{
+      const userRef = firestore.collection('calendars').collection('users');
+      await userRef.add(userData);
+    }catch(error){
+      console.error('Error while trying to add user', error);
+    }
+    
+    //await 
+    //setUsers();
+  };
 
     // Sends each calendar member a notification for the event
     const sendEventInvites = async (newEventId) => {
@@ -470,28 +494,28 @@ const ViewCalendar = () => {
         handleShowBestTime(); // Then call handleShowBestTime
     };
 
-    return (
-        <div className="flex h-screen flex-col">
-            <Header />
-            <div className="mt-10vh text-center text-5xl font-medium text-gray-600">
-                {calendarName}
-            </div>
+  return (
+    <div className="page">
+      <div className="pageTitle">{calendarName}</div>
+     
+<div className="meeting-section">
+<div className="avform">
+<AvailabilityForm
+          className="avform"
+          availability={availability}
+          onAvailabilityChange={handleAvailabilityChange}
+        />
+        <button className="saveButton2" type="button" onClick={() => updateAvailability()}>
+          Save
+        </button>
+        <button
+          className="showBestTimeButton"
+          type="button"
+          onClick={handleShowBestTime}
+        >
+          Show Best Time
+        </button>
 
-            <div className="mt-5vh flex flex-col items-center justify-center sm:flex-row">
-                <div className="mb-5 flex flex-col items-center sm:mb-0 sm:mr-10">
-                    <AvailabilityForm
-                        availability={availability}
-                        onAvailabilityChange={handleAvailabilityChange}
-                    />
-                    <div className="flex flex-row">
-                        <button
-                            className="btn bg-green-800 text-white"
-                            type="button"
-                            onClick={handleSaveAndUpdate}>
-                            Save
-                        </button>
-                      
-                    </div>
                     {bestTime && (
                         <div className="mt-5">
                             <p>Best Time to Meet:</p>
@@ -540,6 +564,10 @@ const ViewCalendar = () => {
                     className="btn mt-5 ml-5 h-10 w-40  border-none bg-green-800 text-white">
                     Leave Group
                 </button>
+                    <input onChange={handleNewUser} type="text"></input>
+                    <button type="button" onClick={addUser}>
+                      Add User
+                    </button>
                 </div>
                 
             </div>
