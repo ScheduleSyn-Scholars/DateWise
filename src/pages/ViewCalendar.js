@@ -6,6 +6,7 @@ import { useUser } from './UserContext';
 import AvailabilityForm from '../components/Calendar/AvailabilityForm';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import Header from '../components/Header';
 
 const ViewCalendar = () => {
     const { calendarId, calendarName } = useParams();
@@ -414,7 +415,8 @@ const ViewCalendar = () => {
     };
 
     return (
-        <div className="flex h-screen w-screen flex-row pt-32">
+        <div className="flex h-screen w-screen flex-col">
+            <Header />
             <div className="mt-[0vh]e relative ml-[0vh] text-center text-[50px] font-medium text-[#696969]">
                 {calendarName}
             </div>
