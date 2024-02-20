@@ -110,12 +110,10 @@ const ViewCalendar = () => {
     try{
       const userRef = firestore.collection("users");
       const userSnapshot = await userRef.get();
-      console.log("data below:");
-      console.log(userSnapshot);
       userSnapshot.forEach((doc) =>{
-        console.log(doc.data());
-        const {uid, emailAddress, firstName, imageURL, lastName} = doc.data();
-        const userObject = {uid,emailAddress, firstName, imageURL, lastName};
+        const id = doc.id;
+        const {emailAddress, firstName, imageURL, lastName} = doc.data();
+        const userObject = {id,emailAddress, firstName, imageURL, lastName};
         usersDataArray.push(userObject);
       });
       setUsers(usersDataArray);
@@ -444,7 +442,9 @@ const ViewCalendar = () => {
   //code for adding user to a calendar
   const addUser = async (userData) => {
     try{
-      const userRef = firestore.collection('calendars').collection('users');
+      const userRef = firestore.collection('calendars').doc(calendarId).update({
+        users:firestore.FieldValue.arrayUnion()
+      })
       await userRef.add(userData);
     }catch(error){
       console.error('Error while trying to add user', error);
@@ -460,7 +460,6 @@ const ViewCalendar = () => {
             await sendEventInvite(user, userInfo.email, calendarId, newEventId);
         }
     };
-
     const convertTo12HourFormat = (time) => {
         const hour = parseInt(time, 10);
         const isPM = hour >= 12;
@@ -604,7 +603,14 @@ const ViewCalendar = () => {
                     className="btn mt-5 ml-5 h-10 w-40  border-none bg-green-800 text-white">
                     Leave Group
                 </button>
-                    <input onChange={handleNewUser} type="text"></input>
+                <input onChange={handleNewUser} type="text" list="data"></input>
+                <datalist id="data">
+                {users.map((item) =>
+                <option key ={item.id} value={item.id} label={`${item.emailAddress} - ${item.firstName} ${item.lastName}`}>
+              
+                </option>
+                )}
+                </datalist>
                     <button type="button" onClick={addUser}>
                       Add User
                     </button>
