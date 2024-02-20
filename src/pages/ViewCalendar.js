@@ -123,6 +123,7 @@ const ViewCalendar = () => {
     }
     
   }
+  //Button that handles Adding User to Calendar
   function handleNewUser(event){
     console.log(event.target.value);
     setUserEmail(event.target.value);
@@ -456,8 +457,9 @@ const ViewCalendar = () => {
       console.error('Error while trying to add user', error);
     }
     setUserAdded(true);
-    //await 
-    //setUsers();
+    setTimeout(() =>{
+      setUserAdded(false);
+    }, 3000)
   };
 
   const convertTo12HourFormat = (time) => {
@@ -524,9 +526,6 @@ const ViewCalendar = () => {
         }
     };
 
-    
-
-    
     const closeModal = () => {
         setIsOpen(false);
     };
@@ -623,7 +622,7 @@ const ViewCalendar = () => {
                     </button>
                 </div>
                 {userAdded? (
-                <div role="alert" className="alert alert-success">
+                <div role="alert" className="alert alert-success relative">
                   <span>User has been added to Calendar!</span>
                 </div>
                 ) : 
