@@ -13,6 +13,7 @@ const ViewCalendar = () => {
     const { calendarId, calendarName } = useParams();
     const user = useUser();
   const [users, setUsers] = useState([]);
+  const [userAdded, setUserAdded] = useState(false);
   const [userEmail, setUserEmail] = useState();
     const [availability, setAvailability] = useState({
         selectedDays: [],
@@ -440,16 +441,21 @@ const ViewCalendar = () => {
   }
 
   //code for adding user to a calendar
-  const addUser = async (userData) => {
+  const addUser = async () => {
     try{
-      const userRef = firestore.collection('calendars').doc(calendarId).update({
-        users:firestore.FieldValue.arrayUnion()
-      })
-      await userRef.add(userData);
+      const calRef = firestore.collection('calendars').doc(calendarId);
+      const calSnapshot = await calRef.get();
+      console.log("Help");
+      if(calSnapshot.exists){
+        await calRef.update({
+          users:firebase.firestore.FieldValue.arrayUnion(userEmail)
+        })
+      }
+      
     }catch(error){
       console.error('Error while trying to add user', error);
     }
-    
+    setUserAdded(true);
     //await 
     //setUsers();
   };
@@ -531,26 +537,30 @@ const ViewCalendar = () => {
     };
 
   return (
-    <div className="page">
-      <div className="pageTitle">{calendarName}</div>
+    <div className="flex h-screen w-screen flex-col">
+            <Header />
+            <div className="mt-[0vh]e relative ml-[0vh] text-center text-[50px] font-medium text-[#696969]">
+                {calendarName}
+            </div>
 
-      <div className="meeting-section">
-        <div className="avform">
-          <AvailabilityForm
-            className="avform"
-            availability={availability}
-            onAvailabilityChange={handleAvailabilityChange}
-          />
-          <button className="saveButton2" type="button" onClick={() => updateAvailability()}>
-            Save
-          </button>
-          <button
-            className="showBestTimeButton"
-            type="button"
-            onClick={handleShowBestTime}
-          >
-            Show Best Time
-          </button>
+            <div className="relative ml-[50vh] mt-[0vh]">
+                <div className="relative ml-[13vh] mt-0">
+                    <AvailabilityForm
+                        availability={availability}
+                        onAvailabilityChange={handleAvailabilityChange}
+                    />
+                    <button
+                        className="relative ml-[15vh] mt-[0vh] h-[35px] w-[100px] cursor-pointer rounded-[40px] border-[none] bg-[#0e724c] text-center font-times-new-roman text-xl font-medium text-[white]"
+                        type="button"
+                        onClick={() => updateAvailability()}>
+                        Save
+                    </button>
+                    <button
+                        className="relative ml-[3vh] mt-[0vh] h-[35px] w-[150px] cursor-pointer rounded-[40px] border-[none] bg-[#0e724c] text-center font-times-new-roman text-xl font-medium text-[white]"
+                        type="button"
+                        onClick={handleShowBestTime}>
+                        Show Best Time
+                    </button>
 
                     {bestTime && (
                         <div className="mt-5">
@@ -612,6 +622,14 @@ const ViewCalendar = () => {
                       Add User
                     </button>
                 </div>
+                {userAdded? (
+                <div role="alert" className="alert alert-success">
+                  <span>User has been added to Calendar!</span>
+                </div>
+                ) : 
+                <div role="alert" className="alert alert-error">
+                  <span>Error occured while trying to add user!</span>
+                </div>}
                 
             </div>
             
