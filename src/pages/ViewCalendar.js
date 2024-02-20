@@ -439,6 +439,21 @@ const ViewCalendar = () => {
     }
   }
 
+  //code for adding user to a calendar
+  const addUser = async (userData) => {
+    try{
+      const userRef = firestore.collection('calendars').doc(calendarId).update({
+        users:firestore.FieldValue.arrayUnion()
+      })
+      await userRef.add(userData);
+    }catch(error){
+      console.error('Error while trying to add user', error);
+    }
+    
+    //await 
+    //setUsers();
+  };
+
   const convertTo12HourFormat = (time) => {
     const hour = parseInt(time, 10);
     const isPM = hour >= 12;
