@@ -415,90 +415,86 @@ const ViewCalendar = () => {
     };
 
     return (
-        <div className="flex h-screen w-screen flex-col">
-            <Header />
-            <div className="mt-[0vh]e relative ml-[0vh] text-center text-[50px] font-medium text-[#696969]">
-                {calendarName}
+        <div className="flex flex-col h-screen">
+    <Header />
+    <div className="mt-10vh text-center text-5xl font-medium text-gray-600">
+        {calendarName}
+    </div>
+
+    <div className="flex flex-col sm:flex-row justify-center items-center mt-5vh">
+        <div className="flex flex-col items-center mb-5 sm:mb-0 sm:mr-10">
+            <AvailabilityForm
+                availability={availability}
+                onAvailabilityChange={handleAvailabilityChange}
+            />
+            <div className='flex flex-row'>
+            <button
+                className="mt-2 h-10 w-32 rounded-full border-none bg-green-800 text-white"
+                type="button"
+                onClick={() => updateAvailability()}>
+                Save
+            </button>
+            <button
+                className="mt-2 h-10 w-40 rounded-full border-none bg-green-800 text-white"
+                type="button"
+                onClick={handleShowBestTime}>
+                Show Best Time
+            </button>
             </div>
-
-            <div className="relative ml-[50vh] mt-[0vh]">
-                <div className="relative ml-[13vh] mt-0">
-                    <AvailabilityForm
-                        availability={availability}
-                        onAvailabilityChange={handleAvailabilityChange}
-                    />
-                    <button
-                        className="relative ml-[15vh] mt-[0vh] h-[35px] w-[100px] cursor-pointer rounded-[40px] border-[none] bg-[#0e724c] text-center font-times-new-roman text-xl font-medium text-[white]"
-                        type="button"
-                        onClick={() => updateAvailability()}>
-                        Save
-                    </button>
-                    <button
-                        className="relative ml-[3vh] mt-[0vh] h-[35px] w-[150px] cursor-pointer rounded-[40px] border-[none] bg-[#0e724c] text-center font-times-new-roman text-xl font-medium text-[white]"
-                        type="button"
-                        onClick={handleShowBestTime}>
-                        Show Best Time
-                    </button>
-
-                    {bestTime && (
-                        <div classname="ml-[25vh]">
-                            <p className="ml-[20vh] mt-0.5">
-                                Best Time to Meet:
-                            </p>
-                            <p className="ml-[20vh] mt-0.5">
-                                Day: {bestTime.day}
-                            </p>
-                            <p className="ml-[20vh] mt-0.5">
-                                Time:
-                                {bestTime.start !== undefined
-                                    ? convertTo12HourFormat(bestTime.start)
-                                    : ''}
-                                {bestTime.start !== undefined &&
-                                bestTime.end !== undefined
-                                    ? '-'
-                                    : ''}
-                                {bestTime.end !== undefined
-                                    ? convertTo12HourFormat(bestTime.end)
-                                    : ''}
-                            </p>
-                        </div>
-                    )}
-                    {showSavedPopup && (
-                        <div className="ml-[1vh]">
-                            <p>Availability saved!</p>
-                        </div>
-                    )}
+            {bestTime && (
+                <div className="mt-5">
+                    <p>Best Time to Meet:</p>
+                    <p>Day: {bestTime.day}</p>
+                    <p>
+                        Time: {bestTime.start !== undefined ? convertTo12HourFormat(bestTime.start) : ''}{' '}
+                        {bestTime.start !== undefined && bestTime.end !== undefined ? '-' : ''}{' '}
+                        {bestTime.end !== undefined ? convertTo12HourFormat(bestTime.end) : ''}
+                    </p>
                 </div>
-
-                <div className="relative ml-[25vh] mt-[2vh]">
-                    <DatePicker
-                        selected={selectedDateTime}
-                        onChange={(date) => setSelectedDateTime(date)}
-                        inline
-                        showTimeSelect
-                        dateFormat="Pp"
-                    />
+            )}
+            {showSavedPopup && (
+                <div className="mt-5">
+                    <p>Availability saved!</p>
                 </div>
-                <div className="relative ml-[36vh] w-[100px] cursor-pointer rounded-[40px] border-[none] text-center font-times-new-roman text-xl font-medium text-[white]">
-                    <button
-                        className=""
-                        type="button"
-                        onClick={handleCreateEvent}>
-                        Submit Event
-                    </button>
-                </div>
-                <Link to="/HomePage">
-                    {' '}
-                    <button className="relative mb-[5px] ml-[35vh] mt-[2vh] h-[35px] w-[120px] cursor-pointer rounded-[40px] border-[none] bg-[#0e724c] text-center font-times-new-roman text-xl font-medium text-[white]">
-                        Homepage
-                    </button>{' '}
-                </Link>
-
-                <button onClick={handleLeaveGroup} className="">
-                    Leave Group
-                </button>
-            </div>
+            )}
         </div>
+        <div className="flex flex-col items-center h-full border-r border-gray-500 pr-5">
+            <button>User 1</button>
+            <button>User 2</button>
+            <button>User 3</button>
+        </div>
+
+        <div className="mt-5 sm:mt-0 flex flex-col items-center pl-5">
+            <DatePicker 
+                selected={selectedDateTime}
+                onChange={(date) => setSelectedDateTime(date)}
+                inline
+                showTimeSelect
+                dateFormat="Pp"
+            />
+            <button
+            className="h-10 w-32 items center rounded-full border-none bg-green-800 text-white"
+            type="button"
+            onClick={handleCreateEvent}>
+            Submit Event
+        </button>
+        </div>
+        
+    </div>
+    <div className="flex justify-center mt-5">
+        
+        <Link to="/HomePage" className="ml-5">
+            <button className="h-10 w-40 rounded-full border-none bg-green-800 text-white">
+                Homepage
+            </button>
+        </Link>
+        <button
+            onClick={handleLeaveGroup}
+            className="ml-5 h-10 w-40 rounded-full border-none bg-green-800 text-white">
+            Leave Group
+        </button>
+    </div>
+</div>
     );
 };
 

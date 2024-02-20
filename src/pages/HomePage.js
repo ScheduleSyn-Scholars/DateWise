@@ -107,7 +107,7 @@ const HomePage = () => {
         <div className="flex h-full w-full flex-col">
             <Header />
             <div class="flex h-fit w-full">
-                <div className="items-center justify-center w-full">
+                <div className="items-center justify-center w-full border-r border-gray-500">
                     <Calendar
                         localizer={localizer}
                         events={events}
@@ -122,7 +122,7 @@ const HomePage = () => {
                         }}
                     />
                 </div>
-                <div className="divider divider-horizontal"/>
+        
                 <div className="flex w-1/4 flex-col items-center justify-between">
                     <div className="text-2xl text-gray-700 font-bold mt-10">Shared Calendars</div>
                     {loading ? (
@@ -133,7 +133,7 @@ const HomePage = () => {
                                 <Link
                                     key={calendar.id}
                                     to={`/ViewCalendar/${calendar.id}/${encodeURIComponent(calendar.calendarName)}`}>
-                                    <button className="mb-2 h-[35px] w-[150px] cursor-pointer rounded-[15px] border-[none] bg-[#0e724c] p-2.5 text-center font-times-new-roman text-xl font-medium text-[white]">
+                                    <button className="mb-2 h-auto w-auto cursor-pointer rounded-[15px] border-[none] p-2 text-center font-times-new-roman text-2xl font-medium text-gray-800/60">
                                         {calendar.calendarName}
                                     </button>
                                 </Link>
@@ -142,12 +142,12 @@ const HomePage = () => {
                     )}
                     
                     <Link to="/NewCalendar">
-                        <button className="ml-[4vh] mt-[6vh] h-[35px] w-[150px] items-center justify-center rounded-[15px] border-[none] bg-[#0e724c] text-center font-times-new-roman text-xl font-medium text-[white] no-underline hover:bg-[#095c3e]">
+                        <button className="h-10 w-32 rounded-full border-none bg-green-800 text-white">
                             New Calendar
                         </button>
                     </Link>
                     <Link to="/">
-                        <button className="left-[100px] top-[735px] mb-6 h-[35px] w-[150px] cursor-pointer rounded-[15px] border-[none] bg-[#ff0000] p-2.5 text-xl leading-[10px] text-white hover:cursor-pointer hover:rounded-[15px] hover:border-[none] hover:bg-[#dd0000] hover:text-white">
+                        <button className="mt-5 h-10 w-32 rounded-full border-none bg-gray-500 text-white">
                             Logout
                         </button>
                     </Link>
