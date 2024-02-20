@@ -32,7 +32,7 @@ const ViewCalendar = () => {
     const fetchData = async () => {
       if (user) {
         await fetchUserAvailability(calendarId, user.uid);
-        await fetchUser(calendarId);
+        await fetchUser2(calendarId);
         const teamAvailabilityData = await fetchTeamAvailability(calendarId);
                 await fetchUsersInfo(calendarId); // Await the fetchUsersInfo function here
         fetchTeamAvailabilityOnCommonDays(teamAvailabilityData);
@@ -72,18 +72,58 @@ const ViewCalendar = () => {
 
   const fetchUser = async (calendarId) => {
     try{
-      const userRef = firestore
-      .collection('calendars').doc(calendarId).collection('users');
-      const userSnapshot = await userRef.get();
-      if(userSnapshot.exists){
-        const userData = userSnapshot.data();
-        setUsers(userData);
+      //get calendar reference
+      const usersDataArray = [];
+      //const propertyData = ['emailAddress', 'firstName', 'imageURL', 'lastName'];
+      const calendarRef = firestore.collection('calendars').doc(calendarId);
+      
+      const calendarSnapshot = await calendarRef.get();
+      //gets Users from calendar reference and assigns to useState
+      if(calendarSnapshot.exists){
+        const userIds = calendarSnapshot.get('users');
+
+        //2nd database call to get the actual user data by their user id
+        for(const userId of userIds){
+          try{
+            const userData = await firestore.collection('users').doc(userId).get();
+            if(userData.exists){
+              const {emailAddress, firstName, imageURL, lastName} = userData.data();
+              const userObject = {userId,emailAddress, firstName, imageURL, lastName};
+              usersDataArray.push(userObject);
+            }
+          }catch(Exception){
+            console.log("Error while trying to retrieve user data");
+          }
+        }
+        setUsers(usersDataArray);
+        //setUsers(userData);
       }
 
     }catch(error){
       console.error('Error fetching user', error);
     }
   };
+
+  const fetchUser2 = async()=>{
+    //fetch all users from the users collection
+    const usersDataArray = [];
+    try{
+      const userRef = firestore.collection("users");
+      const userSnapshot = await userRef.get();
+      console.log("data below:");
+      console.log(userSnapshot);
+      userSnapshot.forEach((doc) =>{
+        console.log(doc.data());
+        const {uid, emailAddress, firstName, imageURL, lastName} = doc.data();
+        const userObject = {uid,emailAddress, firstName, imageURL, lastName};
+        usersDataArray.push(userObject);
+      });
+      setUsers(usersDataArray);
+    }catch(Exception){
+      console.log("Error fetching use", Exception);
+    }
+    
+  }
   function handleNewUser(event){
     console.log(event.target.value);
     setUserEmail(event.target.value);
