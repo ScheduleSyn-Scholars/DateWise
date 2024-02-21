@@ -20,6 +20,7 @@ const ViewCalendar = () => {
     const [bestTime, setBestTime] = useState(null);
     const [selectedDateTime, setSelectedDateTime] = useState(new Date());
     const [showSavedPopup, setShowSavedPopup] = useState(false);
+    const [usersInfo, setUsersInfo] = useState([]);
 
     const firestore = firebase.firestore();
     const navigate = useNavigate();
@@ -30,10 +31,11 @@ const ViewCalendar = () => {
                 await fetchUserAvailability(calendarId, user.uid);
                 const teamAvailabilityData =
                     await fetchTeamAvailability(calendarId);
+                await fetchUsersInfo(calendarId); // Await the fetchUsersInfo function here
                 fetchTeamAvailabilityOnCommonDays(teamAvailabilityData);
             }
         };
-
+    
         fetchData();
     }, [calendarId, user]);
 
@@ -229,6 +231,35 @@ const ViewCalendar = () => {
         return start1 < end2 && end1 > start2;
     };
 
+    const fetchUsersInfo = async (calendarId) => {
+        try {
+            const calendarDoc = await firestore.collection('calendars').doc(calendarId).get();
+            if (calendarDoc.exists) {
+                const usersIds = calendarDoc.data().users || [];
+                const usersInfoPromises = usersIds.map(async (userId) => {
+                    const userDoc = await firestore.collection('users').doc(userId).get();
+                    if (userDoc.exists) {
+                        const userData = userDoc.data();
+                        return {
+                            uid: userId,
+                            emailAddress: userData.emailAddress,
+                            imageURL: userData.imageURL,
+                        };
+                    } else {
+                        console.error(`User with ID ${userId} not found in the 'users' collection.`);
+                        return null;
+                    }
+                });
+                const usersInfoData = await Promise.all(usersInfoPromises);
+                setUsersInfo(usersInfoData.filter(user => user !== null));
+            } else {
+                console.error(`Calendar with ID ${calendarId} not found.`);
+            }
+        } catch (error) {
+            console.error('Error fetching users info:', error);
+        }
+    };
+
     const processOverlappingTimes = (overlappingTimes) => {
         // Process overlapping times to find the best time to meet
         // This includes finding the latest start time and earliest end time for each day
@@ -416,85 +447,90 @@ const ViewCalendar = () => {
 
     return (
         <div className="flex flex-col h-screen">
-    <Header />
-    <div className="mt-10vh text-center text-5xl font-medium text-gray-600">
-        {calendarName}
-    </div>
-
-    <div className="flex flex-col sm:flex-row justify-center items-center mt-5vh">
-        <div className="flex flex-col items-center mb-5 sm:mb-0 sm:mr-10">
-            <AvailabilityForm
-                availability={availability}
-                onAvailabilityChange={handleAvailabilityChange}
-            />
-            <div className='flex flex-row'>
-            <button
-                className="mt-2 h-10 w-32 rounded-full border-none bg-green-800 text-white"
-                type="button"
-                onClick={() => updateAvailability()}>
-                Save
-            </button>
-            <button
-                className="mt-2 h-10 w-40 rounded-full border-none bg-green-800 text-white"
-                type="button"
-                onClick={handleShowBestTime}>
-                Show Best Time
-            </button>
+            <Header />
+            <div className="mt-10vh text-center text-5xl font-medium text-gray-600">
+                {calendarName}
             </div>
-            {bestTime && (
-                <div className="mt-5">
-                    <p>Best Time to Meet:</p>
-                    <p>Day: {bestTime.day}</p>
-                    <p>
-                        Time: {bestTime.start !== undefined ? convertTo12HourFormat(bestTime.start) : ''}{' '}
-                        {bestTime.start !== undefined && bestTime.end !== undefined ? '-' : ''}{' '}
-                        {bestTime.end !== undefined ? convertTo12HourFormat(bestTime.end) : ''}
-                    </p>
-                </div>
-            )}
-            {showSavedPopup && (
-                <div className="mt-5">
-                    <p>Availability saved!</p>
-                </div>
-            )}
-        </div>
-        <div className="flex flex-col items-center h-full border-r border-gray-500 pr-5">
-            <button>User 1</button>
-            <button>User 2</button>
-            <button>User 3</button>
-        </div>
 
-        <div className="mt-5 sm:mt-0 flex flex-col items-center pl-5">
-            <DatePicker 
-                selected={selectedDateTime}
-                onChange={(date) => setSelectedDateTime(date)}
-                inline
-                showTimeSelect
-                dateFormat="Pp"
-            />
-            <button
-            className="h-10 w-32 items center rounded-full border-none bg-green-800 text-white"
-            type="button"
-            onClick={handleCreateEvent}>
-            Submit Event
-        </button>
+            <div className="flex flex-col sm:flex-row justify-center items-center mt-5vh">
+                <div className="flex flex-col items-center mb-5 sm:mb-0 sm:mr-10">
+                    <AvailabilityForm
+                        availability={availability}
+                        onAvailabilityChange={handleAvailabilityChange}
+                    />
+                    <div className='flex flex-row'>
+                        <button
+                            className="mt-2 h-10 w-32 rounded-full border-none bg-green-800 text-white"
+                            type="button"
+                            onClick={() => updateAvailability()}>
+                            Save
+                        </button>
+                        <button
+                            className="mt-2 h-10 w-40 rounded-full border-none bg-green-800 text-white"
+                            type="button"
+                            onClick={handleShowBestTime}>
+                            Show Best Time
+                        </button>
+                    </div>
+                    {bestTime && (
+                        <div className="mt-5">
+                            <p>Best Time to Meet:</p>
+                            <p>Day: {bestTime.day}</p>
+                            <p>
+                                Time: {bestTime.start !== undefined ? convertTo12HourFormat(bestTime.start) : ''}{' '}
+                                {bestTime.start !== undefined && bestTime.end !== undefined ? '-' : ''}{' '}
+                                {bestTime.end !== undefined ? convertTo12HourFormat(bestTime.end) : ''}
+                            </p>
+                        </div>
+                    )}
+                    {showSavedPopup && (
+                        <div className="mt-5">
+                            <p>Availability saved!</p>
+                        </div>
+                    )}
+                </div>
+                <div className="flex flex-col items-center h-full border-r border-gray-500 pr-5">
+
+                Users:
+                <div className="flex flex-col items-center mt-5vh">
+    {usersInfo.map(user => (
+        <div key={user.uid} className="flex flex-col items-center mb-5">
+            <img src={user.imageURL} alt="User" className="rounded-full w-20 h-20 mb-2" />
+            <p>{user.emailAddress}</p>
         </div>
-        
-    </div>
-    <div className="flex justify-center mt-5">
-        
-        <Link to="/HomePage" className="ml-5">
-            <button className="h-10 w-40 rounded-full border-none bg-green-800 text-white">
-                Homepage
-            </button>
-        </Link>
-        <button
-            onClick={handleLeaveGroup}
-            className="ml-5 h-10 w-40 rounded-full border-none bg-green-800 text-white">
-            Leave Group
-        </button>
-    </div>
+    ))}
 </div>
+                
+                </div>
+                <div className="mt-5 sm:mt-0 flex flex-col items-center pl-5">
+                    <DatePicker
+                        selected={selectedDateTime}
+                        onChange={(date) => setSelectedDateTime(date)}
+                        inline
+                        showTimeSelect
+                        dateFormat="Pp"
+                    />
+                    <button
+                        className="h-10 w-32 items center rounded-full border-none bg-green-800 text-white"
+                        type="button"
+                        onClick={handleCreateEvent}>
+                        Submit Event
+                    </button>
+                </div>
+            </div>
+            <div className="flex justify-center mt-5">
+                <Link to="/HomePage" className="ml-5">
+                    <button className="h-10 w-40 rounded-full border-none bg-green-800 text-white">
+                        Homepage
+                    </button>
+                </Link>
+                <button
+                    onClick={handleLeaveGroup}
+                    className="ml-5 h-10 w-40 rounded-full border-none bg-green-800 text-white">
+                    Leave Group
+                </button>
+            </div>
+        </div>
     );
 };
 
