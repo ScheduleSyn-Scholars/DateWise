@@ -201,11 +201,7 @@ const NewCalendar = () => {
         const calendarTitleValue = calendarTitleInput.value;
 
         // Include the creator of the calendar in the list of users
-        const creatorUid = auth.currentUser.uid;
-        const updatedAmountOfEnteredUsers = new Set([
-            ...Array.from(amountOfEnteredUsers),
-            creatorUid,
-        ]);
+        const creatorUid = user.uid;
 
         const calendarData = {
             calendarName: calendarTitleValue,
