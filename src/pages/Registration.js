@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import firebase from '../resources/firebase';
+import { firebase, firestore } from '../resources/firebase';
 import 'firebase/compat/firestore';
 import { useNavigate } from 'react-router-dom';
 
@@ -49,8 +49,7 @@ const Form = () => {
             const userUid = userCredential.user.uid;
 
             // Use uid as document id in firestore database
-            const docRef = firebase
-                .firestore()
+            const docRef = firestore
                 .collection('users')
                 .doc(userUid);
 

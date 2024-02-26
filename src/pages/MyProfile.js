@@ -1,7 +1,7 @@
 import React from 'react';
 import { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import firebase from '../resources/firebase'; // Import your firebase.js file
+import { firebase, firestore } from '../resources/firebase'; // Import your firebase.js file
 import 'firebase/compat/firestore';
 import 'firebase/compat/storage';
 import { useUser } from '../resources/UserContext';
@@ -11,7 +11,6 @@ function MyProfile() {
     const hiddenFileInput = useRef(null);
     const [newProfileName, setNewProfileName] = useState('');
     const user = useUser();
-    const firestore = firebase.firestore();
     const uuid = user.uid;
 
     if (user.imageURL == null) {
@@ -79,7 +78,6 @@ function MyProfile() {
 
     // Create a root reference
     const storageRef = firebase.storage().ref();
-    const db = firebase.firestore();
 
     const uploadImage = () => {
         const imageInput = document.getElementById('image-upload-input');
@@ -98,7 +96,7 @@ function MyProfile() {
                         .getDownloadURL()
                         .then((url) => {
                             // Update the Firestore document for the user
-                            const userDocRef = db
+                            const userDocRef = firestore
                                 .collection('users')
                                 .doc(user.uid);
                             userDocRef

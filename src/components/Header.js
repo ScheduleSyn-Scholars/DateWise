@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import firebase from '../resources/firebase';
+import { firebase, firestore } from '../resources/firebase';
 
 const Header = () => {
     const [profilePictureUrl, setProfilePictureUrl] = useState(null);
@@ -11,7 +11,7 @@ const Header = () => {
                 const user = firebase.auth().currentUser;
                 if (user) {
                     const userUid = user.uid;
-                    const userDocRef = firebase.firestore().collection('users').doc(userUid);
+                    const userDocRef = firestore.collection('users').doc(userUid);
                     const userDoc = await userDocRef.get();
                     if (userDoc.exists) {
                         const userData = userDoc.data();

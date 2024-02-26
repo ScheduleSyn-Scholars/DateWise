@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import firebase from '../resources/firebase';
+import { firebase, firestore } from '../resources/firebase';
 import 'firebase/compat/firestore';
 import { useUser } from '../resources/UserContext';
 import { useNavigate } from 'react-router-dom';
@@ -30,8 +30,6 @@ const NewCalendar = () => {
         console.log('Amount of entered users: ', amountOfEnteredUsers);
         console.log('Printing from successful image addition: ');
     }
-
-    const firestore = firebase.firestore();
 
     const handleInputValueChange = (e) => {
         const value = e.target.value;

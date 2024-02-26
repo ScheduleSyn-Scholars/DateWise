@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import firebase from '../resources/firebase.js';
+import {firebase, firestore}  from '../resources/firebase.js';
 import { Link } from 'react-router-dom';
 import 'firebase/compat/firestore';
 import { useUser } from '../resources/UserContext.js';
@@ -20,8 +20,7 @@ const HomePage = () => {
         const loadUserData = async () => {
             try {
                 // Load and set user calendars
-                const userDocRef = firebase
-                    .firestore()
+                const userDocRef = firestore
                     .collection('users')
                     .doc(user.uid);
                 const userDoc = await userDocRef.get();
@@ -37,8 +36,7 @@ const HomePage = () => {
                 // Go through calendars and build full events list
                 let allEvents = [];
                 for (const calendar of calendars) {
-                    const eventsRef = firebase
-                        .firestore()
+                    const eventsRef = firestore
                         .collection('calendars')
                         .doc(calendar.id)
                         .collection('events');

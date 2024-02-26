@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import firebase from '../resources/firebase';
+import { firebase } from '../resources/firebase';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import { Link } from 'react-router-dom';
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import firebase from '../resources/firebase';
+import { firebase, firestore } from '../resources/firebase';
 import 'firebase/compat/firestore';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useUser } from '../resources/UserContext';
@@ -22,7 +22,6 @@ const ViewCalendar = () => {
     const [showSavedPopup, setShowSavedPopup] = useState(false);
     const [usersInfo, setUsersInfo] = useState([]);
 
-    const firestore = firebase.firestore();
     const navigate = useNavigate();
 
     useEffect(() => {

@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import firebase from './firebase'; // Import your firebase.js file
+import { firebase, firestore } from '../resources/firebase'; // Import your firebase.js file
 import { PacmanLoader } from 'react-spinners';
 
 const UserContext = createContext();
@@ -14,8 +14,7 @@ export function UserProvider({ children }) {
             .onAuthStateChanged(async (authUser) => {
                 try {
                     if (authUser) {
-                        const userDocRef = firebase
-                            .firestore()
+                        const userDocRef = firestore
                             .collection('users')
                             .doc(authUser.uid);
                         const userDocSnapshot = await userDocRef.get();
