@@ -4,6 +4,8 @@ import 'firebase/compat/firestore';
 import { useNavigate } from 'react-router-dom';
 
 const Form = () => {
+    const navigate = useNavigate();
+
     // Method to handle the Input Change
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -12,7 +14,7 @@ const Form = () => {
             [name]: value,
         }));
     };
-    const navigate = useNavigate();
+    
     // Method to handle the submission of a form
     const handleSubmit = (event) => {
         event.preventDefault(); // Prevent the form from actually submitting (which would refresh the page)
@@ -31,8 +33,6 @@ const Form = () => {
         password: '',
         userName: '',
     });
-
-    // Assuming formData is defined somewhere in your code
 
     const signUp = async () => {
         try {
