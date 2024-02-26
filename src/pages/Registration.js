@@ -4,9 +4,6 @@ import 'firebase/compat/firestore';
 import { useNavigate } from 'react-router-dom';
 
 const Form = () => {
-    // Create instance of firestore database
-    const db = firebase.firestore();
-
     // Method to handle the Input Change
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -35,45 +32,43 @@ const Form = () => {
         userName: '',
     });
 
+    // Assuming formData is defined somewhere in your code
+
     const signUp = async () => {
-        formData.userName = formData.email.split('@')[0]; // Use part before @ in email address as default userName
-        console.log('Username: ', formData.userName);
+        try {
+            // Use part before @ in email address as default userName
+            formData.userName = formData.email.split('@')[0];
 
-        // Add new user through authenticator to get a uid
-        firebase
-            .auth()
-            .createUserWithEmailAndPassword(formData.email, formData.password)
-            .then((userCredential) => {
-                // Signed in
-                const userUid = userCredential.user.uid;
-                console.log('Printing from signup:', userUid);
+            // Add new user through authenticator to get a uid
+            const userCredential = await firebase
+                .auth()
+                .createUserWithEmailAndPassword(
+                    formData.email,
+                    formData.password,
+                );
+            const userUid = userCredential.user.uid;
 
-                console.log('starting to add doc ', userUid);
+            // Use uid as document id in firestore database
+            const docRef = firebase
+                .firestore()
+                .collection('users')
+                .doc(userUid);
 
-                // Use uid as document id in firestore database
-                const docRef = db.collection('users').doc(userUid);
+            // Add a new document to Firestore
+            await docRef.set(formData);
 
-                // Add a new document to Firestore
-                docRef
-                    .set(formData)
-                    .then(() => {
-                        if (userUid) {
-                            // alert when registration is successful
-                            alert('Register Successfully');
-                        } else {
-                            alert('Error Occurred');
-                        }
-                        console.log('Document written with ID: ', docRef.id);
-                    })
-                    .catch((error) => {
-                        console.error('Error adding document: ', error);
-                    });
-            })
-            .catch((error) => {
-                var errorCode = error.code;
-                var errorMessage = error.message;
-                console.error('Error: ', errorCode, errorMessage);
-            });
+            // Check if userUid exists to confirm successful registration
+            if (userUid) {
+                alert('Register Successfully');
+            } else {
+                alert('Error Occurred');
+            }
+
+            console.log('Document written with ID: ', userUid); // Using userUid since it's the doc ID
+        } catch (error) {
+            console.error('Error adding document or creating user: ', error);
+            alert('Registration Failed: ' + error.message);
+        }
     };
 
     return (
