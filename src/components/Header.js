@@ -10,10 +10,9 @@ const Header = () => {
             try {
                 const user = auth.currentUser;
                 if (user) {
-                    const userUid = user.uid;
                     const userDocRef = firestore
                         .collection('users')
-                        .doc(userUid);
+                        .doc(user.uid);
                     const userDoc = await userDocRef.get();
                     if (userDoc.exists) {
                         const userData = userDoc.data();

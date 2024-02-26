@@ -58,7 +58,6 @@ function MyProfile() {
                             type: 'image/png',
                             lastModified: Date.now(),
                         });
-                        console.log(file);
                         setImage(file);
                     },
                     'image/jpeg',
