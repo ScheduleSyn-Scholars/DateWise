@@ -271,7 +271,7 @@ const NewCalendar = () => {
                     <input
                         placeholder="       Calendar Title"
                         type="text"
-                        className="mb-[5vh] ml-[28vh] mt-[0vh] rounded-[15px] border border-solid border-[#ccc] border-[none] p-[5px] font-times-new-roman text-[35px] text-xl font-bold text-[#696969] underline no-underline"
+                        className="mb-[5vh] ml-[28vh] mt-[0vh] rounded-[15px] border border-solid border-[#ccc] border-[none] p-[5px] font-times-new-roman text-[35px] text-xl font-bold text-[#696969] underline"
                         id="CalendarTitle"></input>
                     <div className="ml-[20vh] mt-[0vh] rounded-[15px] border border-solid border-[#ccc] border-[none] font-times-new-roman text-xl font-medium text-[gray] no-underline">
                         <input
