@@ -22,15 +22,6 @@ const NewCalendar = () => {
 
     const user = useUser();
 
-    if (user.imageURL == null) {
-        user.image = './Screenshot 2023-09-15 at 1.46 1.png';
-        console.log('Printing from image addition');
-    } else {
-        user.image = user.imageURL;
-        console.log('Amount of entered users: ', amountOfEnteredUsers);
-        console.log('Printing from successful image addition: ');
-    }
-
     const handleInputValueChange = (e) => {
         const value = e.target.value;
         setInputValue(value);

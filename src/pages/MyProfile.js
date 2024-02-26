@@ -11,15 +11,7 @@ function MyProfile() {
     const hiddenFileInput = useRef(null);
     const [newProfileName, setNewProfileName] = useState('');
     const user = useUser();
-    const uuid = user.uid;
 
-    if (user.imageURL == null) {
-        console.log('Printing from image addition My Profile');
-        user.image = './Screenshot 2023-09-15 at 1.46 1.png';
-    } else {
-        user.image = user.imageURL;
-        //console.log("Printing from successful image addition My Profile: ", user.imageURL)
-    }
     console.log('user : ', user.uid);
 
     // function to save the name information to the database
@@ -30,7 +22,7 @@ function MyProfile() {
         try {
             firestore
                 .collection('users')
-                .doc(uuid)
+                .doc(user.uid)
                 .update({ userName: newProfileName });
             console.log(user.userName);
             console.log('Document successfully updated!');
