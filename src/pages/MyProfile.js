@@ -1,10 +1,10 @@
 import React from 'react';
 import { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import firebase from '../config/firebase'; // Import your firebase.js file
+import firebase from '../resources/firebase'; // Import your firebase.js file
 import 'firebase/compat/firestore';
 import 'firebase/compat/storage';
-import { useUser } from './UserContext';
+import { useUser } from '../resources/UserContext';
 
 function MyProfile() {
     const [image, setImage] = useState('');

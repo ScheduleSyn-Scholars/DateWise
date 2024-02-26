@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import firebase from '../config/firebase';
+import firebase from '../resources/firebase';
 import 'firebase/compat/firestore';
 import { Link, useParams, useNavigate } from 'react-router-dom';
-import { useUser } from './UserContext';
+import { useUser } from '../resources/UserContext';
 import AvailabilityForm from '../components/Calendar/AvailabilityForm';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';

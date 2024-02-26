@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import firebase from '../config/firebase'; // Import your firebase.js file
+import firebase from './firebase'; // Import your firebase.js file
 import { PacmanLoader } from 'react-spinners';
 
 const UserContext = createContext();

@@ -7,7 +7,7 @@ import Registration from './pages/Registration';
 import Homepage from './pages/HomePage';
 import MyProfile from './pages/MyProfile';
 import NewCalendar from './pages/NewCalendar';
-import { UserProvider } from './pages/UserContext';
+import { UserProvider } from './resources/UserContext';
 
 function App() {
     return (

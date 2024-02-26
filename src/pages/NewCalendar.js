@@ -1,9 +1,9 @@
 import React from 'react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import firebase from '../config/firebase';
+import firebase from '../resources/firebase';
 import 'firebase/compat/firestore';
-import { useUser } from './UserContext';
+import { useUser } from '../resources/UserContext';
 import { useNavigate } from 'react-router-dom';
 const NewCalendar = () => {
     const [inputValue, setInputValue] = useState('');

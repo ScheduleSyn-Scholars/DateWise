@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import firebase from '../config/firebase';
+import firebase from '../resources/firebase.js';
 import { Link } from 'react-router-dom';
 import 'firebase/compat/firestore';
-import { useUser } from './UserContext';
+import { useUser } from '../resources/UserContext.js';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import CustomEventComponent from '../components/Calendar/CustomEvent';
