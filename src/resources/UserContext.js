@@ -9,40 +9,39 @@ export function UserProvider({ children }) {
     const [loading, setLoading] = useState(true); // Add loading state
 
     useEffect(() => {
-        const unsubscribe = auth
-            .onAuthStateChanged(async (authUser) => {
-                try {
-                    if (authUser) {
-                        const userDocRef = firestore
-                            .collection('users')
-                            .doc(authUser.uid);
-                        const userDocSnapshot = await userDocRef.get();
+        const unsubscribe = auth.onAuthStateChanged(async (authUser) => {
+            try {
+                if (authUser) {
+                    const userDocRef = firestore
+                        .collection('users')
+                        .doc(authUser.uid);
+                    const userDocSnapshot = await userDocRef.get();
 
-                        if (userDocSnapshot.exists) {
-                            const userData = userDocSnapshot.data();
-                            setUser({
-                                uid: authUser.uid,
-                                email: userData.emailAddress,
-                                firstName: userData.firstName,
-                                lastName: userData.lastName,
-                                userName: userData.userName,
-                                imageURL: userData.imageURL,
-                                id: userData.id,
-                            });
-                        } else {
-                            console.error('User not Found');
-                            setUser(null);
-                        }
+                    if (userDocSnapshot.exists) {
+                        const userData = userDocSnapshot.data();
+                        setUser({
+                            uid: authUser.uid,
+                            email: userData.emailAddress,
+                            firstName: userData.firstName,
+                            lastName: userData.lastName,
+                            userName: userData.userName,
+                            imageURL: userData.imageURL,
+                            id: userData.id,
+                        });
                     } else {
+                        console.error('User not Found');
                         setUser(null);
                     }
-                    setLoading(false); // Set loading state to false once user status is determined
-                } catch (error) {
-                    console.error('Error fetching user data:', error);
+                } else {
                     setUser(null);
-                    setLoading(false);
                 }
-            });
+                setLoading(false); // Set loading state to false once user status is determined
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+                setUser(null);
+                setLoading(false);
+            }
+        });
 
         return () => unsubscribe();
     }, []);

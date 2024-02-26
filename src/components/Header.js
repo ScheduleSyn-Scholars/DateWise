@@ -11,7 +11,9 @@ const Header = () => {
                 const user = auth.currentUser;
                 if (user) {
                     const userUid = user.uid;
-                    const userDocRef = firestore.collection('users').doc(userUid);
+                    const userDocRef = firestore
+                        .collection('users')
+                        .doc(userUid);
                     const userDoc = await userDocRef.get();
                     if (userDoc.exists) {
                         const userData = userDoc.data();

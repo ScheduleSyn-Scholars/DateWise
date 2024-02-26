@@ -34,7 +34,7 @@ const ViewCalendar = () => {
                 fetchTeamAvailabilityOnCommonDays(teamAvailabilityData);
             }
         };
-    
+
         fetchData();
     }, [calendarId, user]);
 
@@ -232,11 +232,17 @@ const ViewCalendar = () => {
 
     const fetchUsersInfo = async (calendarId) => {
         try {
-            const calendarDoc = await firestore.collection('calendars').doc(calendarId).get();
+            const calendarDoc = await firestore
+                .collection('calendars')
+                .doc(calendarId)
+                .get();
             if (calendarDoc.exists) {
                 const usersIds = calendarDoc.data().users || [];
                 const usersInfoPromises = usersIds.map(async (userId) => {
-                    const userDoc = await firestore.collection('users').doc(userId).get();
+                    const userDoc = await firestore
+                        .collection('users')
+                        .doc(userId)
+                        .get();
                     if (userDoc.exists) {
                         const userData = userDoc.data();
                         return {
@@ -245,12 +251,14 @@ const ViewCalendar = () => {
                             imageURL: userData.imageURL,
                         };
                     } else {
-                        console.error(`User with ID ${userId} not found in the 'users' collection.`);
+                        console.error(
+                            `User with ID ${userId} not found in the 'users' collection.`,
+                        );
                         return null;
                     }
                 });
                 const usersInfoData = await Promise.all(usersInfoPromises);
-                setUsersInfo(usersInfoData.filter(user => user !== null));
+                setUsersInfo(usersInfoData.filter((user) => user !== null));
             } else {
                 console.error(`Calendar with ID ${calendarId} not found.`);
             }
@@ -445,19 +453,19 @@ const ViewCalendar = () => {
     };
 
     return (
-        <div className="flex flex-col h-screen">
+        <div className="flex h-screen flex-col">
             <Header />
             <div className="mt-10vh text-center text-5xl font-medium text-gray-600">
                 {calendarName}
             </div>
 
-            <div className="flex flex-col sm:flex-row justify-center items-center mt-5vh">
-                <div className="flex flex-col items-center mb-5 sm:mb-0 sm:mr-10">
+            <div className="mt-5vh flex flex-col items-center justify-center sm:flex-row">
+                <div className="mb-5 flex flex-col items-center sm:mb-0 sm:mr-10">
                     <AvailabilityForm
                         availability={availability}
                         onAvailabilityChange={handleAvailabilityChange}
                     />
-                    <div className='flex flex-row'>
+                    <div className="flex flex-row">
                         <button
                             className="mt-2 h-10 w-32 rounded-full border-none bg-green-800 text-white"
                             type="button"
@@ -476,9 +484,17 @@ const ViewCalendar = () => {
                             <p>Best Time to Meet:</p>
                             <p>Day: {bestTime.day}</p>
                             <p>
-                                Time: {bestTime.start !== undefined ? convertTo12HourFormat(bestTime.start) : ''}{' '}
-                                {bestTime.start !== undefined && bestTime.end !== undefined ? '-' : ''}{' '}
-                                {bestTime.end !== undefined ? convertTo12HourFormat(bestTime.end) : ''}
+                                Time:{' '}
+                                {bestTime.start !== undefined
+                                    ? convertTo12HourFormat(bestTime.start)
+                                    : ''}{' '}
+                                {bestTime.start !== undefined &&
+                                bestTime.end !== undefined
+                                    ? '-'
+                                    : ''}{' '}
+                                {bestTime.end !== undefined
+                                    ? convertTo12HourFormat(bestTime.end)
+                                    : ''}
                             </p>
                         </div>
                     )}
@@ -488,20 +504,24 @@ const ViewCalendar = () => {
                         </div>
                     )}
                 </div>
-                <div className="flex flex-col items-center h-full border-r border-gray-500 pr-5">
-
-                Users:
-                <div className="flex flex-col items-center mt-5vh">
-    {usersInfo.map(user => (
-        <div key={user.uid} className="flex flex-col items-center mb-5">
-            <img src={user.imageURL} alt="User" className="rounded-full w-20 h-20 mb-2" />
-            <p>{user.emailAddress}</p>
-        </div>
-    ))}
-</div>
-                
+                <div className="flex h-full flex-col items-center border-r border-gray-500 pr-5">
+                    Users:
+                    <div className="mt-5vh flex flex-col items-center">
+                        {usersInfo.map((user) => (
+                            <div
+                                key={user.uid}
+                                className="mb-5 flex flex-col items-center">
+                                <img
+                                    src={user.imageURL}
+                                    alt="User"
+                                    className="mb-2 h-20 w-20 rounded-full"
+                                />
+                                <p>{user.emailAddress}</p>
+                            </div>
+                        ))}
+                    </div>
                 </div>
-                <div className="mt-5 sm:mt-0 flex flex-col items-center pl-5">
+                <div className="mt-5 flex flex-col items-center pl-5 sm:mt-0">
                     <DatePicker
                         selected={selectedDateTime}
                         onChange={(date) => setSelectedDateTime(date)}
@@ -510,14 +530,14 @@ const ViewCalendar = () => {
                         dateFormat="Pp"
                     />
                     <button
-                        className="h-10 w-32 items center rounded-full border-none bg-green-800 text-white"
+                        className="items center h-10 w-32 rounded-full border-none bg-green-800 text-white"
                         type="button"
                         onClick={handleCreateEvent}>
                         Submit Event
                     </button>
                 </div>
             </div>
-            <div className="flex justify-center mt-5">
+            <div className="mt-5 flex justify-center">
                 <Link to="/HomePage" className="ml-5">
                     <button className="h-10 w-40 rounded-full border-none bg-green-800 text-white">
                         Homepage

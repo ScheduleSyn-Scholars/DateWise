@@ -14,7 +14,7 @@ const Form = () => {
             [name]: value,
         }));
     };
-    
+
     // Method to handle the submission of a form
     const handleSubmit = (event) => {
         event.preventDefault(); // Prevent the form from actually submitting (which would refresh the page)
@@ -40,17 +40,14 @@ const Form = () => {
             formData.userName = formData.email.split('@')[0];
 
             // Add new user through authenticator to get a uid
-            const userCredential = await auth
-                .createUserWithEmailAndPassword(
-                    formData.email,
-                    formData.password,
-                );
+            const userCredential = await auth.createUserWithEmailAndPassword(
+                formData.email,
+                formData.password,
+            );
             const userUid = userCredential.user.uid;
 
             // Use uid as document id in firestore database
-            const docRef = firestore
-                .collection('users')
-                .doc(userUid);
+            const docRef = firestore.collection('users').doc(userUid);
 
             // Add a new document to Firestore
             await docRef.set(formData);
