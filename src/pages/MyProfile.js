@@ -1,7 +1,7 @@
 import React from 'react';
 import { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { firebase, firestore } from '../resources/firebase'; // Import your firebase.js file
+import { firestore, storage } from '../resources/firebase'; // Import your firebase.js file
 import 'firebase/compat/firestore';
 import 'firebase/compat/storage';
 import { useUser } from '../resources/UserContext';
@@ -77,7 +77,7 @@ function MyProfile() {
     };
 
     // Create a root reference
-    const storageRef = firebase.storage().ref();
+    const storageRef = storage.ref();
 
     const uploadImage = () => {
         const imageInput = document.getElementById('image-upload-input');

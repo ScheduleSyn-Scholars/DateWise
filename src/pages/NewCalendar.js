@@ -1,10 +1,10 @@
 import React from 'react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { firebase, firestore } from '../resources/firebase';
-import 'firebase/compat/firestore';
+import { auth, firestore } from '../resources/firebase';
 import { useUser } from '../resources/UserContext';
 import { useNavigate } from 'react-router-dom';
+
 const NewCalendar = () => {
     const [inputValue, setInputValue] = useState('');
     const [invitees, setInvitees] = useState([]);
@@ -210,7 +210,7 @@ const NewCalendar = () => {
         const calendarTitleValue = calendarTitleInput.value;
 
         // Include the creator of the calendar in the list of users
-        const creatorUid = firebase.auth().currentUser.uid;
+        const creatorUid = auth.currentUser.uid;
         const updatedAmountOfEnteredUsers = new Set([
             ...Array.from(amountOfEnteredUsers),
             creatorUid,

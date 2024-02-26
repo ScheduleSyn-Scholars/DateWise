@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { firebase, firestore } from '../resources/firebase';
+import { auth, firestore } from '../resources/firebase';
 
 const Header = () => {
     const [profilePictureUrl, setProfilePictureUrl] = useState(null);
@@ -8,7 +8,7 @@ const Header = () => {
     useEffect(() => {
         const fetchProfilePicture = async () => {
             try {
-                const user = firebase.auth().currentUser;
+                const user = auth.currentUser;
                 if (user) {
                     const userUid = user.uid;
                     const userDocRef = firestore.collection('users').doc(userUid);

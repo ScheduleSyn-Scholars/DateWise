@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { firebase, firestore } from '../resources/firebase'; // Import your firebase.js file
+import { auth, firestore } from '../resources/firebase'; // Import your firebase.js file
 import { PacmanLoader } from 'react-spinners';
 
 const UserContext = createContext();
@@ -9,8 +9,7 @@ export function UserProvider({ children }) {
     const [loading, setLoading] = useState(true); // Add loading state
 
     useEffect(() => {
-        const unsubscribe = firebase
-            .auth()
+        const unsubscribe = auth
             .onAuthStateChanged(async (authUser) => {
                 try {
                     if (authUser) {

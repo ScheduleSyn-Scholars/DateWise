@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { firebase } from '../resources/firebase';
+import { auth } from '../resources/firebase';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import { Link } from 'react-router-dom';
 
@@ -13,7 +13,7 @@ const Login = () => {
 
     const handleSignIn = async () => {
         try {
-            await firebase.auth().signInWithEmailAndPassword(email, password);
+            await auth.signInWithEmailAndPassword(email, password);
             setSuccessMessage('Sign-in successful!');
 
             // Use navigate to redirect to the homepage

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { firebase, firestore } from '../resources/firebase';
+import { auth, firestore } from '../resources/firebase';
 import 'firebase/compat/firestore';
 import { useNavigate } from 'react-router-dom';
 
@@ -40,8 +40,7 @@ const Form = () => {
             formData.userName = formData.email.split('@')[0];
 
             // Add new user through authenticator to get a uid
-            const userCredential = await firebase
-                .auth()
+            const userCredential = await auth
                 .createUserWithEmailAndPassword(
                     formData.email,
                     formData.password,
