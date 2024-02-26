@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { auth, firestore } from '../resources/firebase';
+import { firestore } from '../resources/firebase';
 import { useUser } from '../resources/UserContext';
 
 const Header = () => {
@@ -28,7 +28,7 @@ const Header = () => {
         };
 
         fetchProfilePicture();
-    }, []);
+    }, [user]);
 
     return (
         <header className="flex w-full items-center bg-green-800 px-2 py-2 text-white">
