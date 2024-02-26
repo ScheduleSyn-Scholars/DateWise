@@ -12,102 +12,76 @@ const localizer = momentLocalizer(moment);
 
 const HomePage = () => {
     const user = useUser();
-    const [userCalendars, setUserCalendars] = useState([]);
+    const [calendars, setUserCalendars] = useState([]);
     const [loading, setLoading] = useState(true);
     const [events, setEvents] = useState([]);
 
-    if (user.imageURL == null) {
-        console.log('Printing from image addition My Profile');
-        user.image = './Screenshot 2023-09-15 at 1.46 1.png';
-    } else {
-        user.image = user.imageURL;
-    }
-
     useEffect(() => {
-        const loadUserCalendars = async () => {
+        const loadUserData = async () => {
             try {
-                const userUid = firebase.auth().currentUser.uid;
+                // Load and set user calendars
                 const userDocRef = firebase
                     .firestore()
                     .collection('users')
-                    .doc(userUid);
-
+                    .doc(user.uid);
                 const userDoc = await userDocRef.get();
-                if (userDoc.exists) {
-                    const userData = userDoc.data();
-                    const calendars = userData.calendars || []; // Assuming calendars is an array in user's document
-                    setUserCalendars(calendars);
+
+                if (!userDoc.exists) {
+                    throw new Error('User doc does not exist.');
                 }
-                setLoading(false);
-            } catch (error) {
-                console.error('Error loading user calendars:', error);
-            }
-        };
 
-        loadUserCalendars();
+                const userData = userDoc.data();
+                const calendars = userData.calendars || [];
+                setUserCalendars(calendars);
 
-        const fetchEvents = async () => {
-            try {
-                const userUid = firebase.auth().currentUser.uid;
-                const userDocRef = firebase
-                    .firestore()
-                    .collection('users')
-                    .doc(userUid);
+                // Go through calendars and build full events list
+                let allEvents = [];
+                for (const calendar of calendars) {
+                    const eventsRef = firebase
+                        .firestore()
+                        .collection('calendars')
+                        .doc(calendar.id)
+                        .collection('events');
+                    const eventsSnapshot = await eventsRef.get();
 
-                const userDoc = await userDocRef.get();
-                if (userDoc.exists) {
-                    const userData = userDoc.data();
-                    const calendars = userData.calendars || [];
-
-                    const eventsPromises = calendars.map(async (calendar) => {
-                        const eventsRef = firebase
-                            .firestore()
-                            .collection('calendars')
-                            .doc(calendar.id)
-                            .collection('events');
-
-                        const eventsSnapshot = await eventsRef.get();
-                        const calendarEvents = eventsSnapshot.docs.map(
-                            (doc) => {
-                                const data = doc.data();
-                                const startDateTime = data.dateTime.toDate();
-                                const formattedTime =
-                                    startDateTime.toLocaleTimeString([], {
-                                        hour: '2-digit',
-                                        minute: '2-digit',
-                                    });
-                                const title = `${calendar.calendarName}\n${formattedTime.replace(/\s+/g, '')}`;
-
-                                return {
-                                    ...data,
-                                    id: doc.id,
-                                    title: title,
-                                    start: data.dateTime.toDate(), // Convert Timestamp to Date
-                                    end: data.dateTime.toDate(), // Convert Timestamp to Date
-                                };
+                    for (const doc of eventsSnapshot.docs()) {
+                        const docData = doc.data();
+                        const startDateTime = docData.dateTime.toDate();
+                        const formattedTime = startDateTime.toLocaleTimeString(
+                            [],
+                            {
+                                hour: '2-digit',
+                                minute: '2-digit',
                             },
                         );
-
-                        return calendarEvents;
-                    });
-
-                    const allEvents = await Promise.all(eventsPromises);
-                    const flattenedEvents = [].concat(...allEvents);
-
-                    setEvents(flattenedEvents);
+                        const title = `${calendar.calendarName}\n${formattedTime.replace(/\s+/g, '')}`;
+                        allEvents = [
+                            ...allEvents,
+                            {
+                                ...docData,
+                                id: doc.id,
+                                title: title,
+                                start: docData.dateTime.toDate(),
+                                end: docData.dateTime.toDate(),
+                            },
+                        ];
+                    }
                 }
+                setEvents(allEvents);
             } catch (error) {
                 console.error('Error loading user calendars:', error);
             }
         };
-        fetchEvents();
-    }, []);
+
+        loadUserData();
+        setLoading(false);
+    }, [user]);
 
     return (
         <div className="flex h-full w-full flex-col">
             <Header />
             <div class="flex h-fit w-full">
-                <div className="items-center justify-center w-full border-r border-gray-500">
+                <div className="w-full items-center justify-center border-r border-gray-500">
                     <Calendar
                         localizer={localizer}
                         events={events}
@@ -122,14 +96,16 @@ const HomePage = () => {
                         }}
                     />
                 </div>
-        
+
                 <div className="flex w-1/4 flex-col items-center justify-between">
-                    <div className="text-2xl text-gray-700 font-bold mt-10">Shared Calendars</div>
+                    <div className="mt-10 text-2xl font-bold text-gray-700">
+                        Shared Calendars
+                    </div>
                     {loading ? (
                         <p>Loading Calendars... </p>
                     ) : (
-                        <div className="flex flex-col items-center overflow-y-scroll h-4/5">
-                            {userCalendars.map((calendar) => (
+                        <div className="flex h-4/5 flex-col items-center overflow-y-scroll">
+                            {calendars.map((calendar) => (
                                 <Link
                                     key={calendar.id}
                                     to={`/ViewCalendar/${calendar.id}/${encodeURIComponent(calendar.calendarName)}`}>
@@ -140,7 +116,7 @@ const HomePage = () => {
                             ))}
                         </div>
                     )}
-                    
+
                     <Link to="/NewCalendar">
                         <button className="h-10 w-32 rounded-full border-none bg-green-800 text-white">
                             New Calendar
