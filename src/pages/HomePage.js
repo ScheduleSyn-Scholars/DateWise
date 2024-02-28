@@ -40,7 +40,7 @@ const HomePage = () => {
                         .collection('events');
                     const eventsSnapshot = await eventsRef.get();
 
-                    for (const doc of eventsSnapshot.docs()) {
+                    for (const doc of eventsSnapshot.docs) {
                         const docData = doc.data();
                         const startDateTime = docData.dateTime.toDate();
                         const formattedTime = startDateTime.toLocaleTimeString(
