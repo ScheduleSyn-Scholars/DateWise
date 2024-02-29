@@ -21,7 +21,7 @@ export function UserProvider({ children }) {
                         const userData = userDocSnapshot.data();
                         setUser({
                             uid: authUser.uid,
-                            email: userData.emailAddress,
+                            email: userData.email,
                             firstName: userData.firstName,
                             lastName: userData.lastName,
                             userName: userData.userName,
@@ -58,10 +58,14 @@ export function UserProvider({ children }) {
 }
 
 export function useUser() {
-    const user = useContext(UserContext);
-    if (user === null) {
-        // Handle the case where the user is not authenticated or data is not yet available
-        throw new Error('User not authenticated or data not available');
+    try {
+        const user = useContext(UserContext);
+        if (user === null) {
+            // Handle the case where the user is not authenticated or data is not yet available
+            throw new Error('User not authenticated or data not available');
+        }
+        return user;
+    } catch (error) {
+        console.error(error);
     }
-    return user;
 }

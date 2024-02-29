@@ -247,7 +247,7 @@ const ViewCalendar = () => {
                         const userData = userDoc.data();
                         return {
                             uid: userId,
-                            emailAddress: userData.emailAddress,
+                            emailAddress: userData.email,
                             imageURL: userData.imageURL,
                         };
                     } else {
@@ -516,7 +516,7 @@ const ViewCalendar = () => {
                                     alt="User"
                                     className="mb-2 h-20 w-20 rounded-full"
                                 />
-                                <p>{user.emailAddress}</p>
+                                <p>{user.email}</p>
                             </div>
                         ))}
                     </div>
