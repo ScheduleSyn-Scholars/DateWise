@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { auth, firestore } from '../resources/firebase';
 import 'firebase/compat/firestore';
 import { useNavigate } from 'react-router-dom';
+import { sendMessageNotification } from '../resources/NotificationService';
 
 const Form = () => {
     const navigate = useNavigate();
@@ -51,6 +52,8 @@ const Form = () => {
 
             // Add a new document to Firestore
             await docRef.set(formData);
+
+            sendMessageNotification(formData.email, 'These are your notifications! Accept or decline them below.');
 
             // Check if userUid exists to confirm successful registration
             if (userUid) {

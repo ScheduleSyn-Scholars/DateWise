@@ -1,0 +1,89 @@
+import useNotifications from '../resources/Notification';
+import { useUser } from '../resources/UserContext';
+import { firestore } from '../resources/firebase';
+import { ReactComponent as BellIcon } from './bell-filled.svg';
+import { useNavigate } from 'react-router-dom';
+import firebase from 'firebase/compat/app';
+
+const NotificationBell = () => {
+    const notifications = useNotifications();
+    const user = useUser();
+    const navigate = useNavigate();
+
+    const acceptNotification = async (notification) => {
+        if (notification.eventId) {
+            // Add the user to the event attendees
+            const eventDocRef = firestore.collection('calendars').doc(notification.calendarId).collection('events').doc(notification.eventId);
+            eventDocRef.update({
+                attendees: firebase.firestore.FieldValue.arrayUnion(user.uid)
+            });
+        } else if (notification.calendarId) {
+            // Add the user to the calendar
+            const docRef = firestore.collection('calendars').doc(notification.calendarId);
+            docRef.update({
+                users: firebase.firestore.FieldValue.arrayUnion(user.uid)
+            });
+
+            // Adds the calendar to the users calendars
+            const userDocRef = firestore.collection('users').doc(user.uid);
+            userDocRef.update({
+                calendars: firebase.firestore.FieldValue.arrayUnion({
+                    calendarName: notification.calendarName,
+                    id: notification.calendarId
+                })
+            });
+        }
+        // Delete the user's notification
+        await deleteNotification(notification)
+
+    }
+
+    const deleteNotification = async (notification) => {
+        try {
+            await firestore.collection('users')
+                .doc(user.uid)
+                .collection('notifications')
+                .doc(notification.notificationId)
+                .delete();
+        } catch (error) {
+            console.error(`Error removing notification: ${error}`)
+        }
+    }
+
+    if (notifications.length === 0) {
+        return (
+            <div className='dropdown dropdown-end'>
+                <BellIcon tabIndex="0" role='button' className='cursor-pointer'/>
+                <div className='dropdown-content z-[1] w-72 p-6 shadow bg-neutral text-primary-content text-center font-bold'>
+                    <p>No Notifications!</p>
+                </div>
+            </div>
+        )
+    }
+    
+    return (
+        <div className="dropdown dropdown-end indicator">
+            <span className="indicator-item badge badge-secondary cursor-pointer">{notifications.length}</span>
+            <BellIcon tabIndex="0" role='button' className='cursor-pointer'/>
+            <div className='dropdown-content z-[1] w-96 p-2 rounded shadow bg-neutral text-black space-y-1'>
+                <p className='text-center text-white text-xl'>Notifications</p>
+                {notifications.map( (notification, index) => (
+                    <div key={index} className='collapse collapse-arrow bg-base-200 p-4'>
+                        <input type="radio" name="my-accordion-2" /> 
+                        <div className="collapse-title text-xl font-medium">
+                            {notification.message || notification.calendarName || notification.eventName}
+                        </div>
+                        <div className="collapse-content"> 
+                            <div className='flex space-x-6 justify-center'>
+                                <button className="btn btn-primary" onClick={() => acceptNotification(notification)}>Accept</button>
+                                <button className="btn btn-error" onClick={() => deleteNotification(notification)}>Decline</button>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    )
+}
+
+export default NotificationBell;
