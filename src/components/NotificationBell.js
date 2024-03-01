@@ -1,4 +1,4 @@
-import useNotifications from '../resources/Notification';
+import useNotifications from '../resources/NotificationProvider';
 import { useUser } from '../resources/UserContext';
 import { firestore } from '../resources/firebase';
 import { ReactComponent as BellIcon } from './bell-filled.svg';
@@ -11,6 +11,10 @@ const NotificationBell = () => {
     const navigate = useNavigate();
 
     const acceptNotification = async (notification) => {
+        if (notification.message) {
+            await deleteNotification(notification);
+            return;
+        }
         if (notification.eventId) {
             // Add the user to the event attendees
             const eventDocRef = firestore.collection('calendars').doc(notification.calendarId).collection('events').doc(notification.eventId);
@@ -35,7 +39,7 @@ const NotificationBell = () => {
         }
         // Delete the user's notification
         await deleteNotification(notification)
-
+        navigate(`/ViewCalendar/${notification.calendarId}/${encodeURIComponent(notification.calendarName)}`)
     }
 
     const deleteNotification = async (notification) => {
