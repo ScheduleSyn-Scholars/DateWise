@@ -17,7 +17,10 @@ function App() {
                 <div className="flex h-screen w-screen flex-col">
                     <Routes>
                         (/* todo delete testPage */)
-                        <Route path='/testPage' element={<ComponentTestPage/>} />
+                        <Route
+                            path="/testPage"
+                            element={<ComponentTestPage />}
+                        />
                         <Route path="/" element={<Login />} />
                         <Route path="/sign-up" element={<Registration />} />
                         <Route path="/homepage" element={<Homepage />} />

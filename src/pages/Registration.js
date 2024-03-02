@@ -53,7 +53,10 @@ const Form = () => {
             // Add a new document to Firestore
             await docRef.set(formData);
 
-            sendMessageNotification(formData.email, 'These are your notifications! Accept or decline them below.');
+            sendMessageNotification(
+                formData.email,
+                'These are your notifications! Accept or decline them below.',
+            );
 
             // Check if userUid exists to confirm successful registration
             if (userUid) {

@@ -17,15 +17,21 @@ const NotificationBell = () => {
         }
         if (notification.eventId) {
             // Add the user to the event attendees
-            const eventDocRef = firestore.collection('calendars').doc(notification.calendarId).collection('events').doc(notification.eventId);
+            const eventDocRef = firestore
+                .collection('calendars')
+                .doc(notification.calendarId)
+                .collection('events')
+                .doc(notification.eventId);
             eventDocRef.update({
-                attendees: firebase.firestore.FieldValue.arrayUnion(user.uid)
+                attendees: firebase.firestore.FieldValue.arrayUnion(user.uid),
             });
         } else if (notification.calendarId) {
             // Add the user to the calendar
-            const docRef = firestore.collection('calendars').doc(notification.calendarId);
+            const docRef = firestore
+                .collection('calendars')
+                .doc(notification.calendarId);
             docRef.update({
-                users: firebase.firestore.FieldValue.arrayUnion(user.uid)
+                users: firebase.firestore.FieldValue.arrayUnion(user.uid),
             });
 
             // Adds the calendar to the users calendars
@@ -33,61 +39,86 @@ const NotificationBell = () => {
             userDocRef.update({
                 calendars: firebase.firestore.FieldValue.arrayUnion({
                     calendarName: notification.calendarName,
-                    id: notification.calendarId
-                })
+                    id: notification.calendarId,
+                }),
             });
         }
         // Delete the user's notification
-        await deleteNotification(notification)
-        navigate(`/ViewCalendar/${notification.calendarId}/${encodeURIComponent(notification.calendarName)}`)
-    }
+        await deleteNotification(notification);
+        navigate(
+            `/ViewCalendar/${notification.calendarId}/${encodeURIComponent(notification.calendarName)}`,
+        );
+    };
 
     const deleteNotification = async (notification) => {
         try {
-            await firestore.collection('users')
+            await firestore
+                .collection('users')
                 .doc(user.uid)
                 .collection('notifications')
                 .doc(notification.notificationId)
                 .delete();
         } catch (error) {
-            console.error(`Error removing notification: ${error}`)
+            console.error(`Error removing notification: ${error}`);
         }
-    }
+    };
 
     if (notifications.length === 0) {
         return (
-            <div className='dropdown dropdown-end'>
-                <BellIcon tabIndex="0" role='button' className='cursor-pointer'/>
-                <div className='dropdown-content z-[1] w-72 p-6 shadow bg-neutral text-primary-content text-center font-bold'>
+            <div className="dropdown dropdown-end">
+                <BellIcon
+                    tabIndex="0"
+                    role="button"
+                    className="cursor-pointer"
+                />
+                <div className="dropdown-content z-[1] w-72 bg-neutral p-6 text-center font-bold text-primary-content shadow">
                     <p>No Notifications!</p>
                 </div>
             </div>
-        )
+        );
     }
-    
+
     return (
         <div className="dropdown dropdown-end indicator">
-            <span className="indicator-item badge badge-secondary cursor-pointer">{notifications.length}</span>
-            <BellIcon tabIndex="0" role='button' className='cursor-pointer'/>
-            <div className='dropdown-content z-[1] w-96 p-2 rounded shadow bg-neutral text-black space-y-1'>
-                <p className='text-center text-white text-xl'>Notifications</p>
-                {notifications.map( (notification, index) => (
-                    <div key={index} className='collapse collapse-arrow bg-base-200 p-4'>
-                        <input type="radio" name="my-accordion-2" /> 
+            <span className="badge indicator-item badge-secondary cursor-pointer">
+                {notifications.length}
+            </span>
+            <BellIcon tabIndex="0" role="button" className="cursor-pointer" />
+            <div className="dropdown-content z-[1] w-96 space-y-1 rounded bg-neutral p-2 text-black shadow">
+                <p className="text-center text-xl text-white">Notifications</p>
+                {notifications.map((notification, index) => (
+                    <div
+                        key={index}
+                        className="collapse collapse-arrow bg-base-200 p-4">
+                        <input type="radio" name="my-accordion-2" />
                         <div className="collapse-title text-xl font-medium">
-                            {notification.message || notification.calendarName || notification.eventName}
+                            {notification.message ||
+                                notification.calendarName ||
+                                notification.eventName}
                         </div>
-                        <div className="collapse-content"> 
-                            <div className='flex space-x-6 justify-center'>
-                                <button className="btn btn-primary" onClick={() => acceptNotification(notification)}>Accept</button>
-                                <button className="btn btn-error" onClick={() => deleteNotification(notification)}>Decline</button>
+                        <div className="collapse-content">
+                            <div className="flex justify-center space-x-6">
+                                <button
+                                    className="btn btn-primary"
+                                    onClick={() =>
+                                        acceptNotification(notification)
+                                    }>
+                                    Accept
+                                </button>
+                                <button
+                                    className="btn btn-error"
+                                    onClick={() =>
+                                        deleteNotification(notification)
+                                    }>
+                                    Decline
+                                </button>
                             </div>
                         </div>
                     </div>
                 ))}
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default NotificationBell;

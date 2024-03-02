@@ -76,8 +76,10 @@ const HomePage = () => {
     return (
         <div className="flex h-full w-full flex-col">
             {/* todo delete test page */}
-            <Link to='/testPage'>
-                <button className='bg-error p-10 absolute top-1/2 left-0'>Test Page here</button>
+            <Link to="/testPage">
+                <button className="absolute left-0 top-1/2 bg-error p-10">
+                    Test Page here
+                </button>
             </Link>
             <Header />
             <div className="flex h-fit w-full">

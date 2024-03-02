@@ -17,7 +17,7 @@ export const sendCalendarInvite = async (sender, targetEmail, calendarId) => {
         // get the calendar data
         const calendarDocRef = firestore
             .collection('calendars')
-            .doc(calendarId)
+            .doc(calendarId);
         const calendarDoc = await calendarDocRef.get();
         const calendarData = calendarDoc.data();
 
@@ -94,7 +94,6 @@ export const sendEventInvite = async (
         console.error(`Error sending event invite: ${error}`);
     }
 };
-
 
 /**
  * Function for adding a message to notifications
