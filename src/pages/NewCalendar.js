@@ -11,8 +11,6 @@ const NewCalendar = () => {
     const [errorMessage, setErrorMessage] = useState('');
     const [invitedList, setInvitedList] = useState([]);
     const [successMessage, setSuccessMessage] = useState('');
-    const shakingInputClass =
-        'font-times-new-roman text-3xl border-0 text-gray-500 bg-transparent outline-none';
     const user = useUser();
     const navigate = useNavigate();
 
