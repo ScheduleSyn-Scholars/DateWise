@@ -126,7 +126,6 @@ const NewCalendar = () => {
                     Create
                 </button>
                 <Link to="/HomePage">
-                    {' '}
                     <button className="btn btn-primary cursor-pointer text-center font-times-new-roman text-[25px] font-medium text-[white]">
                         Homepage
                     </button>{' '}
