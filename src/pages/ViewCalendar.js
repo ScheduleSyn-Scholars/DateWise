@@ -7,6 +7,7 @@ import AvailabilityForm from '../components/Calendar/AvailabilityForm';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import Header from '../components/Header';
+import { sendEventInvite } from '../resources/NotificationService';
 
 const ViewCalendar = () => {
     const { calendarId, calendarName } = useParams();
@@ -29,7 +30,7 @@ const ViewCalendar = () => {
             if (user) {
                 await fetchUserAvailability(calendarId, user.uid);
                 const teamAvailabilityData =
-                    await fetchTeamAvailability(calendarId);
+                await fetchTeamAvailability(calendarId);
                 await fetchUsersInfo(calendarId); // Await the fetchUsersInfo function here
                 fetchTeamAvailabilityOnCommonDays(teamAvailabilityData);
             }
@@ -247,7 +248,7 @@ const ViewCalendar = () => {
                         const userData = userDoc.data();
                         return {
                             uid: userId,
-                            emailAddress: userData.email,
+                            email: userData.email,
                             imageURL: userData.imageURL,
                         };
                     } else {
@@ -365,8 +366,8 @@ const ViewCalendar = () => {
                 .doc(calendarId)
                 .collection('events');
 
-            await eventsRef.add(eventData);
-
+            const newEventRef = await eventsRef.add(eventData);
+            sendEventInvites(newEventRef.id);
             console.log('Event created successfully!');
         } catch (error) {
             console.error('Error creating event:', error);
@@ -387,6 +388,13 @@ const ViewCalendar = () => {
             console.error('Error in handleCreateEvent:', error);
         }
     };
+
+    // Sends each calendar member a notification for the event
+    const sendEventInvites = async (newEventId) => {
+        for (const userInfo of usersInfo) {
+            await sendEventInvite(user, userInfo.email, calendarId, newEventId);
+        }
+    }
 
     const convertTo12HourFormat = (time) => {
         const hour = parseInt(time, 10);
