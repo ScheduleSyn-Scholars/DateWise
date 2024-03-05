@@ -23,6 +23,7 @@ export const sendCalendarInvite = async (sender, targetEmail, calendarId) => {
 
         // Build the notification to be sent to user
         const newNotification = {
+            notificationType: 'calendar',
             timeStamp: new Date().toLocaleString(),
             fromUid: sender.uid,
             fromName: `${sender.firstName} ${sender.lastName}`,
@@ -74,6 +75,7 @@ export const sendEventInvite = async (
 
         // Build the notification to be sent to user
         const newNotification = {
+            notificationType: 'event',
             timeStamp: new Date().toLocaleString(),
             fromUid: sender.uid,
             fromName: `${sender.firstName} ${sender.lastName}`,
@@ -110,6 +112,7 @@ export const sendMessageNotification = async (targetEmail, message) => {
 
         // Build message notification
         const newNotification = {
+            notificationType: 'message',
             timeStamp: new Date().toLocaleString(),
             message,
         };
