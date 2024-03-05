@@ -21,7 +21,7 @@ const Header = () => {
                         if (userData && userData.imageURL) {
                             setProfilePictureUrl(userData.imageURL);
                         } else {
-                            setProfilePictureUrl('Screenshot 2023-09-15 at 1.46 1.png');
+                            setProfilePictureUrl('/Screenshot 2023-09-15 at 1.46 1.png');
                         }
                     }
                 }
