@@ -130,7 +130,20 @@ const NotificationBell = () => {
                                     </div>
                                     <div className="collapse-content">
                                         <div className="flex justify-center space-x-6">
-                                            
+                                            <button
+                                                    className="btn btn-primary"
+                                                    onClick={() =>
+                                                        acceptNotification(notification)
+                                                    }>
+                                                    Accept
+                                            </button>
+                                            <button
+                                                className="btn btn-error"
+                                                onClick={() =>
+                                                    deleteNotification(notification)
+                                                }>
+                                                Decline
+                                            </button>
                                         </div>
                                     </div>
                                 </div>

@@ -21,11 +21,22 @@ const useNotifications = () => {
                 });
 
                 // Sort notifications by timestamp
-                notifications.sort((a, b) => {
+                newNotifications.sort((a, b) => {
                     let dateA = new Date(a.timeStamp),
                         dateB = new Date(b.timeStamp);
                     return dateA - dateB;
                 });
+
+                const oldNotificationIds = notifications.map(n => n.notificationId);
+                const newNotification = newNotifications.find(n => !oldNotificationIds.includes(n.notificationId));
+    
+                if (newNotification) {
+                    const notificationSound = new Audio('/pristine-609.mp3');
+                    notificationSound.play().catch(error => {
+                        console.log('Notification playback prevented', error);
+                    });
+                }
+                
                 setNotifications(newNotifications);
             });
 
