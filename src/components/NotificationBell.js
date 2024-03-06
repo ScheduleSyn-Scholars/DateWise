@@ -30,7 +30,7 @@ const NotificationBell = () => {
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
-    }, []);
+    }, [isOpen]);
 
     const acceptNotification = async (notification) => {
         switch (notification.notificationType) {
