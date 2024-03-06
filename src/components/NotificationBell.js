@@ -108,7 +108,7 @@ const NotificationBell = () => {
                                     className='collapse collapse-arrow bg-base-200 p-4'
                                 >
                                     <input type='radio' name='my-accordion-2' />
-                                    <div classNAme='collapse-title text-xl font-medium'>
+                                    <div className='collapse-title text-xl font-medium'>
                                         {notification.message}
                                     </div>
                                     <div className='collapse-content'>
