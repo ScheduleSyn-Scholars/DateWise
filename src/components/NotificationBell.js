@@ -4,11 +4,33 @@ import { firestore } from '../resources/firebase';
 import { ReactComponent as BellIcon } from './bell-filled.svg';
 import { useNavigate } from 'react-router-dom';
 import firebase from 'firebase/compat/app';
+import { useEffect, useRef, useState } from 'react';
 
 const NotificationBell = () => {
+    const [isOpen, setIsOpen] = useState(false);
+    const toggleRef = useRef(null);
+    const dropdownRef = useRef(null);
+
     const notifications = useNotifications();
     const user = useUser();
     const navigate = useNavigate();
+
+    const toggleDropdown = () => {
+        setIsOpen(!isOpen);
+    }
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target) && !toggleRef.current.contains(event.target)) {
+                setIsOpen(false);
+            }
+        }
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
 
     const acceptNotification = async (notification) => {
         switch (notification.notificationType) {
@@ -92,12 +114,13 @@ const NotificationBell = () => {
     }
 
     return (
-        <div className="dropdown dropdown-end indicator">
-            <span className="badge indicator-item badge-secondary cursor-pointer">
-                {notifications.length}
-            </span>
-            <BellIcon tabIndex="0" role="button" className="cursor-pointer" />
-            <div className="dropdown-content z-[1] w-96 space-y-1 rounded bg-neutral p-2 text-black shadow">
+        <div className='dropdown dropdown-bottom dropdown-end' ref={dropdownRef}>
+            <div ref={toggleRef} tabIndex={0} role='button' className='indicator' onClick={toggleDropdown}>
+                <span className='indicator-item badge badge-secondary'>{notifications.length}</span>
+                <BellIcon/>
+            </div>
+            {isOpen && (
+            <ul tabIndex={0} className='dropdown-content w-96 space-y-1 rounded bg-neutral p-2 text-black shadow'>
                 <p className="text-center text-xl text-white">Notifications</p>
                 {notifications.map((notification, index) => {
                     switch(notification.notificationType) {
@@ -185,7 +208,8 @@ const NotificationBell = () => {
                             return null;
                     }
                 })}
-            </div>
+            </ul>
+            )}
         </div>
     );
 };
