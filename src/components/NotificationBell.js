@@ -119,8 +119,7 @@ const NotificationBell = () => {
                 <span className='indicator-item badge badge-secondary'>{notifications.length}</span>
                 <BellIcon/>
             </div>
-            {isOpen && (
-            <ul tabIndex={0} className='dropdown-content w-96 space-y-1 rounded bg-neutral p-2 text-black shadow'>
+            <ul tabIndex={0} className={`dropdown-content w-96 space-y-1 rounded-xl bg-neutral p-2 text-black shadow ${isOpen ? '' : 'hidden'}`}>
                 <p className="text-center text-xl text-white">Notifications</p>
                 {notifications.map((notification, index) => {
                     switch(notification.notificationType) {
@@ -209,7 +208,6 @@ const NotificationBell = () => {
                     }
                 })}
             </ul>
-            )}
         </div>
     );
 };
