@@ -119,15 +119,15 @@ const NotificationBell = () => {
                 <span className='indicator-item badge badge-secondary'>{notifications.length}</span>
                 <BellIcon/>
             </div>
-            <ul tabIndex={0} className={`dropdown-content w-96 space-y-1 rounded-xl bg-neutral p-2 text-black shadow ${isOpen ? '' : 'hidden'}`}>
-                <p className="text-center text-xl text-white">Notifications</p>
+            <ul tabIndex={0} className='dropdown-content w-96 space-y-1 rounded-xl bg-neutral p-2 text-black shadow'>
+                <p className={`text-center text-xl text-white ${isOpen ? '' : 'hidden'}`}>Notifications</p>
                 {notifications.map((notification, index) => {
                     switch(notification.notificationType) {
                         case 'message':
                             return (
                                 <div
                                     key={index}
-                                    className='collapse collapse-arrow bg-base-200 p-4'
+                                    className={`collapse collapse-arrow bg-base-200 p-4 ${isOpen ? '' : 'hidden'}`}
                                 >
                                     <input type='radio' name='my-accordion-2' />
                                     <div className='collapse-title text-xl font-medium'>
@@ -144,7 +144,7 @@ const NotificationBell = () => {
                             return (
                                 <div 
                                     key={index}
-                                    className='collapse collapse-arrow bg-base-200 p-4'
+                                    className={`collapse collapse-arrow bg-base-200 p-4 ${isOpen ? '' : 'hidden'}`}
                                 >
                                     <input type='radio' name='my-accordion-2' />
                                     <div className='collapse-title text-xk font-medium'>
@@ -174,7 +174,7 @@ const NotificationBell = () => {
                             return (
                                 <div
                                     key={index}
-                                    className='collapse collapse-arrow bg-base-200 p-4'
+                                    className={`collapse collapse-arrow bg-base-200 p-4 ${isOpen ? '' : 'hidden'}`}
                                 >
                                     <input type='radio' name='my-accordion-2' />
                                     <div className='collapse-title text-xl font-medium'>
