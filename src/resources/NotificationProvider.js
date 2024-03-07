@@ -1,11 +1,13 @@
 import { useUser } from './UserContext';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { firestore } from './firebase';
 
 // A react hook for accessing user notifications in realtime
 const useNotifications = () => {
     const [notifications, setNotifications] = useState([]);
     const user = useUser();
+
+    const initialRender = useRef(true);
 
     useEffect(() => {
         const unsubscribe = firestore
@@ -30,11 +32,15 @@ const useNotifications = () => {
                 const oldNotificationIds = notifications.map(n => n.notificationId);
                 const newNotification = newNotifications.find(n => !oldNotificationIds.includes(n.notificationId));
     
-                if (newNotification) {
+                if (newNotification && !initialRender.current) {
                     const notificationSound = new Audio('/pristine-609.mp3');
                     notificationSound.play().catch(error => {
                         console.log('Notification playback prevented', error);
                     });
+                }
+
+                if (initialRender.current) {
+                    initialRender.current = false;
                 }
                 
                 setNotifications(newNotifications);
