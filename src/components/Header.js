@@ -21,7 +21,9 @@ const Header = () => {
                         if (userData && userData.imageURL) {
                             setProfilePictureUrl(userData.imageURL);
                         } else {
-                            setProfilePictureUrl('/Screenshot 2023-09-15 at 1.46 1.png');
+                            setProfilePictureUrl(
+                                '/Screenshot 2023-09-15 at 1.46 1.png',
+                            );
                         }
                     }
                 }
@@ -43,13 +45,10 @@ const Header = () => {
             <NotificationBell />
 
             <Link to="/MyProfile">
-                <div className="pr-4 w-24">
+                <div className="w-24 pr-4">
                     {profilePictureUrl ? (
-                        <div className='flex items-center justify-center mt-2 h-24 w-24 rounded-full bg-gray-300'>
-                            <img
-                                alt="User profile"
-                                src={profilePictureUrl}
-                            />
+                        <div className="mt-2 flex h-24 w-24 items-center justify-center rounded-full bg-gray-300">
+                            <img alt="User profile" src={profilePictureUrl} />
                         </div>
                     ) : (
                         <div className="h-24 w-24 rounded-full bg-gray-300"></div>

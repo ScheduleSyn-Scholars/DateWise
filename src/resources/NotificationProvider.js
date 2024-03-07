@@ -29,12 +29,16 @@ const useNotifications = () => {
                     return dateA - dateB;
                 });
 
-                const oldNotificationIds = notifications.map(n => n.notificationId);
-                const newNotification = newNotifications.find(n => !oldNotificationIds.includes(n.notificationId));
-    
+                const oldNotificationIds = notifications.map(
+                    (n) => n.notificationId,
+                );
+                const newNotification = newNotifications.find(
+                    (n) => !oldNotificationIds.includes(n.notificationId),
+                );
+
                 if (newNotification && !initialRender.current) {
                     const notificationSound = new Audio('/pristine-609.mp3');
-                    notificationSound.play().catch(error => {
+                    notificationSound.play().catch((error) => {
                         console.log('Notification playback prevented', error);
                     });
                 }
@@ -42,7 +46,7 @@ const useNotifications = () => {
                 if (initialRender.current) {
                     initialRender.current = false;
                 }
-                
+
                 setNotifications(newNotifications);
             });
 

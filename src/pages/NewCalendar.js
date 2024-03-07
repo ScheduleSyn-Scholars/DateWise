@@ -26,7 +26,9 @@ const NewCalendar = () => {
         const emailToAdd = emailInput.value;
         emailInput.value = '';
         // check the email exists in the db
-        const query = firestore.collection('users').where('email', '==', emailToAdd);
+        const query = firestore
+            .collection('users')
+            .where('email', '==', emailToAdd);
         const querySnapshot = await query.get();
 
         if (querySnapshot.docs.length === 0) {
@@ -36,13 +38,13 @@ const NewCalendar = () => {
             const userToAddDoc = querySnapshot.docs[0];
             const userToAddData = userToAddDoc.data();
             const name = userToAddData.firstName + ' ' + userToAddData.lastName;
-            // Add the email 
+            // Add the email
             setInvitedList([...invitedList, { name, emailToAdd }]);
 
             setErrorMessage('');
             setSuccessMessage('User successfully added');
         }
-    }
+    };
 
     const handleCreate = async () => {
         // Get the input calendar title, shows error if blank
@@ -71,8 +73,8 @@ const NewCalendar = () => {
                     calendarName: calendarTitleValue,
                     id: calendarDocRef.id,
                 }),
-            });        
-            
+            });
+
             for (const invited of invitedList) {
                 sendCalendarInvite(user, invited.emailToAdd, calendarDocRef.id);
             }
@@ -85,29 +87,29 @@ const NewCalendar = () => {
 
     const removeInvited = (email) => {
         const updatedInvitedList = invitedList.filter((invited) => {
-            return invited.emailToAdd !== email
+            return invited.emailToAdd !== email;
         });
         setInvitedList(updatedInvitedList);
-    }
+    };
 
     return (
-        <div className="h-full w-full bg-white flex">
-            <div className='w-1/2 h-full flex flex-col items-center justify-center space-y-6'>
+        <div className="flex h-full w-full bg-white">
+            <div className="flex h-full w-1/2 flex-col items-center justify-center space-y-6">
                 <input
                     placeholder="Calendar Title"
                     type="text"
                     className="input input-bordered w-full max-w-xs font-times-new-roman text-[#696969]"
                     id="CalendarTitle"
                 />
-                <div className='flex justify-between'>
+                <div className="flex justify-between">
                     <input
-                        id='email'
+                        id="email"
                         type="text"
                         placeholder="Enter email to invite"
                         onKeyDown={handleInputKeyDown}
-                        className='input input-bordered w-full max-w-xs'
+                        className="input input-bordered w-full max-w-xs"
                     />
-                    <button className='btn btn-primary' onClick={addEmail}>
+                    <button className="btn btn-primary" onClick={addEmail}>
                         Add
                     </button>
                 </div>
@@ -116,12 +118,12 @@ const NewCalendar = () => {
                         {errorMessage}
                     </div>
                 ) : (
-                    <div className='text-4xl font-semibold text-green-500'>
+                    <div className="text-4xl font-semibold text-green-500">
                         {successMessage}
                     </div>
                 )}
                 <button
-                    className="cursor-pointer btn btn-primary items-center justify-center rounded-[15px] border-[none] bg-[#0e724c] p-2.5 text-center font-times-new-roman text-[25px] font-medium text-[white] hover:bg-[#4caf50]"
+                    className="btn btn-primary cursor-pointer items-center justify-center rounded-[15px] border-[none] bg-[#0e724c] p-2.5 text-center font-times-new-roman text-[25px] font-medium text-[white] hover:bg-[#4caf50]"
                     onClick={handleCreate}>
                     Create
                 </button>
@@ -131,34 +133,33 @@ const NewCalendar = () => {
                     </button>{' '}
                 </Link>
             </div>
-            <div className='flex w-1/2 items-center justify-center'>
-                
+            <div className="flex w-1/2 items-center justify-center">
                 {invitedList.length === 0 ? (
-                    <p className='text-4xl font-bold'>Add an email on the left!</p>
+                    <p className="text-4xl font-bold">
+                        Add an email on the left!
+                    </p>
                 ) : (
-                    <div className='overflow-x-auto'>
-                        <div className='table'>
+                    <div className="overflow-x-auto">
+                        <div className="table">
                             <thead>
                                 <tr>
-                                    <th>
-                                        Name
-                                    </th>
-                                    <th>
-                                        Email
-                                    </th>
+                                    <th>Name</th>
+                                    <th>Email</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {invitedList.map((invited, index) => (
                                     <tr>
+                                        <td>{invited.name}</td>
+                                        <td>{invited.emailToAdd}</td>
                                         <td>
-                                            {invited.name}
-                                        </td>
-                                        <td>
-                                            {invited.emailToAdd}
-                                        </td>
-                                        <td>
-                                            <button className='btn btn-secondary' onClick={() => removeInvited(invited.emailToAdd)}>
+                                            <button
+                                                className="btn btn-secondary"
+                                                onClick={() =>
+                                                    removeInvited(
+                                                        invited.emailToAdd,
+                                                    )
+                                                }>
                                                 Remove
                                             </button>
                                         </td>

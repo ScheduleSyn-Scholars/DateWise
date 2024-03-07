@@ -17,18 +17,22 @@ const NotificationBell = () => {
 
     const toggleDropdown = () => {
         setIsOpen(!isOpen);
-    }
+    };
 
     useEffect(() => {
         const handleClickOutside = (event) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target) && !toggleRef.current.contains(event.target)) {
+            if (
+                dropdownRef.current &&
+                !dropdownRef.current.contains(event.target) &&
+                !toggleRef.current.contains(event.target)
+            ) {
                 setIsOpen(false);
             }
-        }
+        };
 
-        document.addEventListener("mousedown", handleClickOutside);
+        document.addEventListener('mousedown', handleClickOutside);
         return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
+            document.removeEventListener('mousedown', handleClickOutside);
         };
     }, [isOpen]);
 
@@ -114,55 +118,79 @@ const NotificationBell = () => {
     }
 
     return (
-        <div className='dropdown dropdown-bottom dropdown-end' ref={dropdownRef}>
-            <div ref={toggleRef} tabIndex={0} role='button' className='indicator' onClick={toggleDropdown}>
-                <span className='indicator-item badge badge-secondary'>{notifications.length}</span>
-                <BellIcon/>
+        <div
+            className="dropdown dropdown-end dropdown-bottom"
+            ref={dropdownRef}>
+            <div
+                ref={toggleRef}
+                tabIndex={0}
+                role="button"
+                className="indicator"
+                onClick={toggleDropdown}>
+                <span className="badge indicator-item badge-secondary">
+                    {notifications.length}
+                </span>
+                <BellIcon />
             </div>
-            <ul tabIndex={0} className='dropdown-content w-96 space-y-1 rounded-xl bg-neutral p-2 text-black shadow'>
-                <p className={`text-center text-xl text-white ${isOpen ? '' : 'hidden'}`}>Notifications</p>
+            <ul
+                tabIndex={0}
+                className="dropdown-content w-96 space-y-1 rounded-xl bg-neutral p-2 text-black shadow">
+                <p
+                    className={`text-center text-xl text-white ${isOpen ? '' : 'hidden'}`}>
+                    Notifications
+                </p>
                 {notifications.map((notification, index) => {
-                    switch(notification.notificationType) {
+                    switch (notification.notificationType) {
                         case 'message':
                             return (
                                 <div
                                     key={index}
-                                    className={`collapse collapse-arrow bg-base-200 p-4 ${isOpen ? '' : 'hidden'}`}
-                                >
-                                    <input type='radio' name='my-accordion-2' />
-                                    <div className='collapse-title text-xl font-medium'>
+                                    className={`collapse collapse-arrow bg-base-200 p-4 ${isOpen ? '' : 'hidden'}`}>
+                                    <input type="radio" name="my-accordion-2" />
+                                    <div className="collapse-title text-xl font-medium">
                                         {notification.message}
                                     </div>
-                                    <div className='collapse-content'>
-                                        <div className='flex justify-center items-center'>
-                                            <button className='btn btn-primary' onClick={() => acceptNotification(notification)} />    
+                                    <div className="collapse-content">
+                                        <div className="flex items-center justify-center">
+                                            <button
+                                                className="btn btn-primary"
+                                                onClick={() =>
+                                                    acceptNotification(
+                                                        notification,
+                                                    )
+                                                }
+                                            />
                                         </div>
                                     </div>
                                 </div>
                             );
                         case 'calendar':
                             return (
-                                <div 
+                                <div
                                     key={index}
-                                    className={`collapse collapse-arrow bg-base-200 p-4 ${isOpen ? '' : 'hidden'}`}
-                                >
-                                    <input type='radio' name='my-accordion-2' />
-                                    <div className='collapse-title text-xk font-medium'>
-                                        {notification.fromName} has invited you to join {notification.calendarName}
+                                    className={`collapse collapse-arrow bg-base-200 p-4 ${isOpen ? '' : 'hidden'}`}>
+                                    <input type="radio" name="my-accordion-2" />
+                                    <div className="text-xk collapse-title font-medium">
+                                        {notification.fromName} has invited you
+                                        to join {notification.calendarName}
                                     </div>
                                     <div className="collapse-content">
                                         <div className="flex justify-center space-x-6">
                                             <button
-                                                    className="btn btn-primary"
-                                                    onClick={() =>
-                                                        acceptNotification(notification)
-                                                    }>
-                                                    Accept
+                                                className="btn btn-primary"
+                                                onClick={() =>
+                                                    acceptNotification(
+                                                        notification,
+                                                    )
+                                                }>
+                                                Accept
                                             </button>
                                             <button
                                                 className="btn btn-error"
                                                 onClick={() =>
-                                                    deleteNotification(notification)
+                                                    deleteNotification(
+                                                        notification,
+                                                    )
                                                 }>
                                                 Decline
                                             </button>
@@ -174,28 +202,40 @@ const NotificationBell = () => {
                             return (
                                 <div
                                     key={index}
-                                    className={`collapse collapse-arrow bg-base-200 p-4 ${isOpen ? '' : 'hidden'}`}
-                                >
-                                    <input type='radio' name='my-accordion-2' />
-                                    <div className='collapse-title text-xl font-medium'>
-                                        {notification.fromName} has invited you to an event!
+                                    className={`collapse collapse-arrow bg-base-200 p-4 ${isOpen ? '' : 'hidden'}`}>
+                                    <input type="radio" name="my-accordion-2" />
+                                    <div className="collapse-title text-xl font-medium">
+                                        {notification.fromName} has invited you
+                                        to an event!
                                     </div>
-                                    <div className='collapse-content flex flex-col items-center justify-center'>
-                                        <p>Calendar: {notification.calendarName}</p>
+                                    <div className="collapse-content flex flex-col items-center justify-center">
+                                        <p>
+                                            Calendar:{' '}
+                                            {notification.calendarName}
+                                        </p>
                                         <p>Event: {notification.eventName}</p>
-                                        <p>Time: {notification.dateTime.toDate().toLocaleString()}</p>
-                                        <div className='flex justify-center space-x-6'>
+                                        <p>
+                                            Time:{' '}
+                                            {notification.dateTime
+                                                .toDate()
+                                                .toLocaleString()}
+                                        </p>
+                                        <div className="flex justify-center space-x-6">
                                             <button
-                                                    className="btn btn-primary"
-                                                    onClick={() =>
-                                                        acceptNotification(notification)
-                                                    }>
-                                                    Accept
+                                                className="btn btn-primary"
+                                                onClick={() =>
+                                                    acceptNotification(
+                                                        notification,
+                                                    )
+                                                }>
+                                                Accept
                                             </button>
                                             <button
                                                 className="btn btn-error"
                                                 onClick={() =>
-                                                    deleteNotification(notification)
+                                                    deleteNotification(
+                                                        notification,
+                                                    )
                                                 }>
                                                 Decline
                                             </button>

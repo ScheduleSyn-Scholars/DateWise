@@ -30,7 +30,7 @@ const ViewCalendar = () => {
             if (user) {
                 await fetchUserAvailability(calendarId, user.uid);
                 const teamAvailabilityData =
-                await fetchTeamAvailability(calendarId);
+                    await fetchTeamAvailability(calendarId);
                 await fetchUsersInfo(calendarId); // Await the fetchUsersInfo function here
                 fetchTeamAvailabilityOnCommonDays(teamAvailabilityData);
             }
@@ -394,7 +394,7 @@ const ViewCalendar = () => {
         for (const userInfo of usersInfo) {
             await sendEventInvite(user, userInfo.email, calendarId, newEventId);
         }
-    }
+    };
 
     const convertTo12HourFormat = (time) => {
         const hour = parseInt(time, 10);
