@@ -7,7 +7,6 @@ import Registration from './pages/Registration';
 import Homepage from './pages/HomePage';
 import MyProfile from './pages/MyProfile';
 import NewCalendar from './pages/NewCalendar';
-import ComponentTestPage from './pages/ComponentTestPage';
 import { UserProvider } from './resources/UserContext';
 
 function App() {
@@ -16,11 +15,6 @@ function App() {
             <UserProvider>
                 <div className="flex h-screen w-screen flex-col">
                     <Routes>
-                        (/* todo delete testPage */)
-                        <Route
-                            path="/testPage"
-                            element={<ComponentTestPage />}
-                        />
                         <Route path="/" element={<Login />} />
                         <Route path="/sign-up" element={<Registration />} />
                         <Route path="/homepage" element={<Homepage />} />

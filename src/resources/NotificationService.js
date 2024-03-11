@@ -25,6 +25,7 @@ export const sendCalendarInvite = async (sender, targetEmail, calendarId) => {
         const newNotification = {
             notificationType: 'calendar',
             timeStamp: new Date().toLocaleString(),
+            fromEmail: sender.email,
             fromUid: sender.uid,
             fromName: `${sender.firstName} ${sender.lastName}`,
             calendarId: calendarId,
@@ -78,6 +79,7 @@ export const sendEventInvite = async (
             notificationType: 'event',
             timeStamp: new Date().toLocaleString(),
             fromUid: sender.uid,
+            fromEmail: sender.email,
             fromName: `${sender.firstName} ${sender.lastName}`,
             calendarId: calendarId,
             eventId: eventId,
@@ -99,8 +101,11 @@ export const sendEventInvite = async (
 
 /**
  * Function for adding a message to notifications
+ * @param sender the current user object from useUser()
+ * @param targetEmail
+ * @param message string
  */
-export const sendMessageNotification = async (targetEmail, message) => {
+export const sendMessageNotification = async (sender, targetEmail, message) => {
     try {
         console.log(`Sending message notification to ${targetEmail}`);
 
@@ -113,6 +118,7 @@ export const sendMessageNotification = async (targetEmail, message) => {
         // Build message notification
         const newNotification = {
             notificationType: 'message',
+            fromEmail: sender.email,
             timeStamp: new Date().toLocaleString(),
             message,
         };

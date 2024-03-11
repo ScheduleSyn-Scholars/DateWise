@@ -42,19 +42,24 @@ const Header = () => {
             <p className="font m1-auto text-5xl">DateWise</p>
 
             <div className="flex-grow"></div>
-            <NotificationBell />
+            <div class="flex items-center space-x-5">
+                <NotificationBell />
 
-            <Link to="/MyProfile">
-                <div className="w-24 pr-4">
-                    {profilePictureUrl ? (
-                        <div className="mt-2 flex h-24 w-24 items-center justify-center rounded-full bg-gray-300">
-                            <img alt="User profile" src={profilePictureUrl} />
-                        </div>
-                    ) : (
-                        <div className="h-24 w-24 rounded-full bg-gray-300"></div>
-                    )}
-                </div>
-            </Link>
+                <Link to="/MyProfile">
+                    <div className="w-24 pr-4">
+                        {profilePictureUrl ? (
+                            <div className="mt-2 flex h-24 w-24 items-center justify-center rounded-full bg-gray-300">
+                                <img
+                                    alt="User profile"
+                                    src={profilePictureUrl}
+                                />
+                            </div>
+                        ) : (
+                            <div className="h-24 w-24 rounded-full bg-gray-300"></div>
+                        )}
+                    </div>
+                </Link>
+            </div>
         </header>
     );
 };

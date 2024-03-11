@@ -75,12 +75,6 @@ const HomePage = () => {
 
     return (
         <div className="flex h-full w-full flex-col">
-            {/* todo delete test page */}
-            <Link to="/testPage">
-                <button className="absolute left-0 top-1/2 bg-error p-10">
-                    Test Page here
-                </button>
-            </Link>
             <Header />
             <div className="flex h-fit w-full">
                 <div className="w-full items-center justify-center border-r border-gray-500">

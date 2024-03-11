@@ -5,6 +5,7 @@ import { ReactComponent as BellIcon } from './bell-filled.svg';
 import { useNavigate } from 'react-router-dom';
 import firebase from 'firebase/compat/app';
 import { useEffect, useRef, useState } from 'react';
+import { sendMessageNotification } from '../resources/NotificationService';
 
 const NotificationBell = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -37,55 +38,93 @@ const NotificationBell = () => {
     }, [isOpen]);
 
     const acceptNotification = async (notification) => {
-        switch (notification.notificationType) {
-            case 'message:':
-                await deleteNotification(notification);
-                break;
-            case 'event':
-                // Add the user to the event attendees
-                const eventDocRef = firestore
-                    .collection('calendars')
-                    .doc(notification.calendarId)
-                    .collection('events')
-                    .doc(notification.eventId);
-                eventDocRef.update({
-                    attendees: firebase.firestore.FieldValue.arrayUnion(
-                        user.uid,
-                    ),
-                });
-                await deleteNotification(notification);
-                break;
-            case 'calendar':
-                // Add the user to the calendar
-                const docRef = firestore
-                    .collection('calendars')
-                    .doc(notification.calendarId);
-                docRef.update({
-                    users: firebase.firestore.FieldValue.arrayUnion(user.uid),
-                });
+        try {
+            switch (notification.notificationType) {
+                case 'message:':
+                    await deleteNotification(notification);
+                    break;
+                case 'event':
+                    // Add the user to the event attendees
+                    const eventDocRef = firestore
+                        .collection('calendars')
+                        .doc(notification.calendarId)
+                        .collection('events')
+                        .doc(notification.eventId);
+                    eventDocRef.update({
+                        attendees: firebase.firestore.FieldValue.arrayUnion(
+                            user.uid,
+                        ),
+                    });
+                    await deleteNotification(notification);
+                    break;
+                case 'calendar':
+                    // Add the user to the calendar
+                    const docRef = firestore
+                        .collection('calendars')
+                        .doc(notification.calendarId);
+                    docRef.update({
+                        users: firebase.firestore.FieldValue.arrayUnion(
+                            user.uid,
+                        ),
+                    });
 
-                // Adds the calendar to the users calendars
-                const userDocRef = firestore.collection('users').doc(user.uid);
-                userDocRef.update({
-                    calendars: firebase.firestore.FieldValue.arrayUnion({
-                        calendarName: notification.calendarName,
-                        id: notification.calendarId,
-                    }),
-                });
-                await deleteNotification(notification);
-                break;
-            default:
-                console.error('Notification type is not set.');
+                    // Adds the calendar to the users calendars
+                    const userDocRef = firestore
+                        .collection('users')
+                        .doc(user.uid);
+                    userDocRef.update({
+                        calendars: firebase.firestore.FieldValue.arrayUnion({
+                            calendarName: notification.calendarName,
+                            id: notification.calendarId,
+                        }),
+                    });
+                    await deleteNotification(notification);
+                    break;
+                default:
+                    console.error('Notification type is not set.');
+            }
+
+            // If relevant, navigate to the calendar page
+            if (
+                notification.notificationType === 'event' ||
+                notification.notificationType === 'calendar'
+            ) {
+                navigate(
+                    `/ViewCalendar/${notification.calendarId}/${encodeURIComponent(notification.calendarName)}`,
+                );
+            }
+        } catch (error) {
+            console.error('Error accepting notification.', error);
         }
+    };
 
-        // If relevant, navigate to the calendar page
-        if (
-            notification.notificationType === 'event' ||
-            notification.notificationType === 'calendar'
-        ) {
-            navigate(
-                `/ViewCalendar/${notification.calendarId}/${encodeURIComponent(notification.calendarName)}`,
-            );
+    const declineNotification = async (notification) => {
+        try {
+            switch (notification.notificationType) {
+                case 'message':
+                    await deleteNotification(notification);
+                    break;
+                case 'calendar':
+                    await sendMessageNotification(
+                        user,
+                        notification.fromEmail,
+                        `${user.firstName} ${user.lastName} has declined your invite to ${notification.calendarName}`,
+                    );
+                    await deleteNotification(notification);
+                    break;
+                case 'event':
+                    await sendMessageNotification(
+                        user,
+                        notification.fromEmail,
+                        `${user.firstName} ${user.lastName} has declined your invite to ${notification.eventName}`,
+                    );
+                    await deleteNotification(notification);
+                    break;
+                default:
+                    break;
+            }
+        } catch (error) {
+            console.error('Error declining notification.', error);
         }
     };
 
@@ -153,13 +192,14 @@ const NotificationBell = () => {
                                     <div className="collapse-content">
                                         <div className="flex items-center justify-center">
                                             <button
-                                                className="btn btn-primary"
+                                                className="btn btn-info"
                                                 onClick={() =>
-                                                    acceptNotification(
+                                                    declineNotification(
                                                         notification,
                                                     )
-                                                }
-                                            />
+                                                }>
+                                                Delete Notification
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -188,7 +228,7 @@ const NotificationBell = () => {
                                             <button
                                                 className="btn btn-error"
                                                 onClick={() =>
-                                                    deleteNotification(
+                                                    declineNotification(
                                                         notification,
                                                     )
                                                 }>
@@ -233,7 +273,7 @@ const NotificationBell = () => {
                                             <button
                                                 className="btn btn-error"
                                                 onClick={() =>
-                                                    deleteNotification(
+                                                    declineNotification(
                                                         notification,
                                                     )
                                                 }>
