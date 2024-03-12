@@ -76,7 +76,7 @@ const HomePage = () => {
     return (
         <div className="flex h-full w-full flex-col">
             <Header />
-            <div class="flex h-fit w-full">
+            <div className="flex h-fit w-full">
                 <div className="w-full items-center justify-center border-r border-gray-500">
                     <Calendar
                         localizer={localizer}

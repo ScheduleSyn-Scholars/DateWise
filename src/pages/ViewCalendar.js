@@ -7,6 +7,7 @@ import AvailabilityForm from '../components/Calendar/AvailabilityForm';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import Header from '../components/Header';
+import { sendEventInvite } from '../resources/NotificationService';
 
 const ViewCalendar = () => {
     const { calendarId, calendarName } = useParams();
@@ -247,7 +248,7 @@ const ViewCalendar = () => {
                         const userData = userDoc.data();
                         return {
                             uid: userId,
-                            emailAddress: userData.emailAddress,
+                            email: userData.email,
                             imageURL: userData.imageURL,
                         };
                     } else {
@@ -365,8 +366,8 @@ const ViewCalendar = () => {
                 .doc(calendarId)
                 .collection('events');
 
-            await eventsRef.add(eventData);
-
+            const newEventRef = await eventsRef.add(eventData);
+            sendEventInvites(newEventRef.id);
             console.log('Event created successfully!');
         } catch (error) {
             console.error('Error creating event:', error);
@@ -385,6 +386,13 @@ const ViewCalendar = () => {
             await createEvent(eventData);
         } catch (error) {
             console.error('Error in handleCreateEvent:', error);
+        }
+    };
+
+    // Sends each calendar member a notification for the event
+    const sendEventInvites = async (newEventId) => {
+        for (const userInfo of usersInfo) {
+            await sendEventInvite(user, userInfo.email, calendarId, newEventId);
         }
     };
 
@@ -516,7 +524,7 @@ const ViewCalendar = () => {
                                     alt="User"
                                     className="mb-2 h-20 w-20 rounded-full"
                                 />
-                                <p>{user.emailAddress}</p>
+                                <p>{user.email}</p>
                             </div>
                         ))}
                     </div>
