@@ -1,17 +1,21 @@
-import React from 'react';
-import { useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { firestore, storage } from '../resources/firebase'; // Import your firebase.js file
-import 'firebase/compat/firestore';
-import 'firebase/compat/storage';
+import React, { useRef, useState, useEffect } from 'react';
+import {firestore, storage, auth} from '../resources/firebase';
 import { useUser } from '../resources/UserContext';
 
-function MyProfile() {
+function UserProfileModal() {
     const [image, setImage] = useState('');
     const hiddenFileInput = useRef(null);
     const [newProfileName, setNewProfileName] = useState('');
     const user = useUser();
+    const uuid = user.uid;
 
+    if (user.imageURL == null) {
+        console.log('Printing from image addition My Profile');
+        user.image = './Screenshot 2023-09-15 at 1.46 1.png';
+    } else {
+        user.image = user.imageURL;
+        //console.log("Printing from successful image addition My Profile: ", user.imageURL)
+    }
     console.log('user : ', user.uid);
 
     // function to save the name information to the database
@@ -22,7 +26,7 @@ function MyProfile() {
         try {
             firestore
                 .collection('users')
-                .doc(user.uid)
+                .doc(uuid)
                 .update({ userName: newProfileName });
             console.log(user.userName);
             console.log('Document successfully updated!');
@@ -58,7 +62,10 @@ function MyProfile() {
                             type: 'image/png',
                             lastModified: Date.now(),
                         });
+                        console.log(file);
                         setImage(file);
+                        // Update the preview of the image in the modal
+                        document.getElementById('preview-image').src = URL.createObjectURL(file);
                     },
                     'image/jpeg',
                     0.8,
@@ -69,6 +76,7 @@ function MyProfile() {
 
     // Create a root reference
     const storageRef = storage.ref();
+    const db = firestore;
 
     const uploadImage = () => {
         const imageInput = document.getElementById('image-upload-input');
@@ -87,7 +95,7 @@ function MyProfile() {
                         .getDownloadURL()
                         .then((url) => {
                             // Update the Firestore document for the user
-                            const userDocRef = firestore
+                            const userDocRef = db
                                 .collection('users')
                                 .doc(user.uid);
                             userDocRef
@@ -117,32 +125,59 @@ function MyProfile() {
         }
     };
 
+    const [profilePictureUrl, setProfilePictureUrl] = useState(null);
+
+    useEffect(() => {
+        const fetchProfilePicture = async () => {
+            try {
+                const user = auth.currentUser;
+                if (user) {
+                    const userUid = user.uid;
+                    const userDocRef = firestore.collection('users').doc(userUid);
+                    const userDoc = await userDocRef.get();
+                    if (userDoc.exists) {
+                        const userData = userDoc.data();
+                        if (userData && userData.imageURL) {
+                            setProfilePictureUrl(userData.imageURL);
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Error fetching profile picture:', error);
+            }
+        };
+
+        fetchProfilePicture();
+    }, [user.imageURL]);
+
     return (
-        <div className="justify-betweenshadow-[3px_4px_4px_rgba(0,0,0,0.25)] w-[1600px]">
-            <div className="center-panel">
-                <div className="mr-[20vh] flex items-center justify-center p-[2.6rem]">
-                    <div className="ml-[15%] flex w-[500px] flex-col items-center justify-center p-[5px]">
-                        <label
-                            htmlFor="image-upload-input"
-                            className="mb-4 cursor-pointer font-[bold] text-2xl">
-                            {image ? image.name : ''}
-                        </label>
-                        <div
-                            onClick={handleImageClick}
-                            style={{ cursor: 'pointer' }}>
-                            {image ? (
-                                <img
-                                    src={user.image}
-                                    alt="user update"
-                                    className="h-[200px] w-[200px] rounded-[100%]"
-                                />
-                            ) : (
-                                <img
-                                    src={user.image}
-                                    alt="default"
-                                    className="ml-[35px] h-[200px] w-[200px] rounded-[100%]"
-                                />
-                            )}
+        <>
+            <button>
+                <div className="pr-4" onClick={() => document.getElementById('userProfile').showModal()}>
+                    {profilePictureUrl ? (
+                        <img
+                            alt="User profile"
+                            src={profilePictureUrl}
+                            className="mt-2 h-24 w-24 rounded-full bg-gray-300" />
+                    ) : (
+                        <div className="h-24 w-24 rounded-full bg-gray-300"></div>
+                    )}
+                </div>
+            </button>
+            <dialog id="userProfile" className="modal">
+                <div className="modal-box flex justify-center items-center">
+                    <form method="dialog">
+                        <button className="btn btn-sm btn-circle absolute right-2 top-2">✕</button>
+                    </form>
+                    <div className="text-center">
+                        <label htmlFor="image-upload-input">{image ? image.name : ''}</label>
+                        <div onClick={handleImageClick} style={{ cursor: 'pointer' }}>
+                            <img
+                                id="preview-image"
+                                src={profilePictureUrl || user.image}
+                                alt="User update"
+                                className="h-[200px] rounded-[100%]"
+                            />
                             <input
                                 id="image-upload-input"
                                 type="file"
@@ -151,44 +186,32 @@ function MyProfile() {
                                 style={{ display: 'none' }}
                             />
                         </div>
-
-                        <button
-                            className="mt-[2vh] h-[35px] w-[150px] flex-row rounded-[15px] border-[none] bg-[#0e724c] text-center font-times-new-roman text-xl font-medium text-[white] hover:bg-[#3e8e41]"
-                            onClick={uploadImage}>
+    
+                        <button className="btn bg-green-700 text-white" onClick={uploadImage}>
                             Upload
                         </button>
-
-                        <div className="mt-[5px] rounded-[15px] p-[5px] text-center text-[35px] text-xl font-medium text-[#7b7b7b]">
-                            Email: {user.email}
-                        </div>
-
-                        <div className="mb-2.5 mt-[4vh] items-center border-[none] font-times-new-roman text-3xl text-[35px] font-medium text-[gray] no-underline">
+    
+                        <div className="text-black">Email: {user.email}</div>
+    
+                        <div className="text-black">
                             Profile Name:
-                            <input
-                                defaultValue={user.userName}
-                                type="text"
-                                onChange={handleProfileNameChange}
-                            />
+                            <input defaultValue={user.userName} type="text" onChange={handleProfileNameChange} />
                         </div>
                         <div>
                             <button
-                                className="ml-[18vh] mt-[10vh] h-[35px] w-[150px] cursor-pointer flex-row rounded-[15px] border-[none] bg-[#0e724c] p-0 text-center font-times-new-roman text-xl font-medium text-[white] hover:bg-[#4caf50]"
+                                className="btn bg-green-700 text-white"
                                 type="button"
-                                onClick={handleSaveName}>
+                                onClick={handleSaveName}
+                            >
                                 Save
                             </button>
-                            <Link to="/HomePage">
-                                {' '}
-                                <button className="ml-[18vh] mt-[5vh] h-[35px] w-[150px] cursor-pointer flex-row rounded-[15px] border-[none] bg-[#0e724c] p-0 text-center font-times-new-roman text-xl font-medium text-[white] hover:bg-[#4caf50]">
-                                    Homepage
-                                </button>{' '}
-                            </Link>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
+            </dialog>
+        </>
     );
 }
+    
 
-export default MyProfile;
+export default UserProfileModal;

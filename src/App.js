@@ -5,8 +5,6 @@ import Login from './pages/Login';
 import ViewCalendar from './pages/ViewCalendar';
 import Registration from './pages/Registration';
 import Homepage from './pages/HomePage';
-import MyProfile from './pages/MyProfile';
-import NewCalendar from './pages/NewCalendar';
 import { UserProvider } from './resources/UserContext';
 
 function App() {
@@ -18,12 +16,10 @@ function App() {
                         <Route path="/" element={<Login />} />
                         <Route path="/sign-up" element={<Registration />} />
                         <Route path="/homepage" element={<Homepage />} />
-                        <Route path="/MyProfile" element={<MyProfile />} />
                         <Route
                             path="/ViewCalendar/:calendarId/:calendarName"
                             element={<ViewCalendar />}
                         />
-                        <Route path="/NewCalendar" element={<NewCalendar />} />
                     </Routes>
                     <Footer />
                 </div>

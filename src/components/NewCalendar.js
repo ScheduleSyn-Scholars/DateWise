@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import firebase from 'firebase/compat/app';
 import { sendCalendarInvite } from '../resources/NotificationService';
 
-const NewCalendar = () => {
+const NewCalendarModal = ({isOpen,setIsOpen,closeModalAndRefresh}) => {
     const [errorMessage, setErrorMessage] = useState('');
     const [invitedList, setInvitedList] = useState([]);
     const [successMessage, setSuccessMessage] = useState('');
@@ -79,7 +79,8 @@ const NewCalendar = () => {
                 sendCalendarInvite(user, invited.emailToAdd, calendarDocRef.id);
             }
 
-            navigate('/homepage'); // Navigate after completing the process
+            setIsOpen(false);
+            closeModalAndRefresh();
         } catch (error) {
             console.error('Error creating calendar: ', error);
         }
@@ -93,7 +94,12 @@ const NewCalendar = () => {
     };
 
     return (
-        <div className="flex h-full w-full bg-white">
+        <><button className="btn bg-green-800 text-white" onClick={() => document.getElementById('newCal').showModal()}>New Calendar</button><dialog id="newCal" className="modal">
+        <div className="modal-box">
+        <form method="dialog">
+      {/* if there is a button in form, it will close the modal */}
+      <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+    </form>
             <div className="flex h-full w-1/2 flex-col items-center justify-center space-y-6">
                 <input
                     placeholder="Calendar Title"
@@ -171,7 +177,8 @@ const NewCalendar = () => {
                 )}
             </div>
         </div>
+        </dialog></>
     );
 };
 
-export default NewCalendar;
+export default NewCalendarModal;
