@@ -32,6 +32,7 @@ const NewCalendarModal = ({ isOpen, setIsOpen, closeModalAndRefresh }) => {
     };
 
     const handleCreate = async () => {
+        // Get the input calendar title, shows error if blank
         const calendarTitleInput = document.getElementById('CalendarTitle');
         const calendarTitleValue = calendarTitleInput.value;
         if (calendarTitleValue === '') {
@@ -39,29 +40,33 @@ const NewCalendarModal = ({ isOpen, setIsOpen, closeModalAndRefresh }) => {
             return;
         }
 
-        try {
-            const calendarDocRef = await firestore.collection('calendars').add({
-                calendarName: calendarTitleValue,
-                users: [user.uid],
-                creatorId: user.uid,
-            });
+        const calendarData = {
+            calendarName: calendarTitleValue,
+            users: [user.uid],
+            creatorId: user.uid,
+        };
 
-            await firestore.collection('users').doc(user.uid).update({
+        try {
+            const calendarDocRef = await firestore
+                .collection('calendars')
+                .add(calendarData); // Wait for the addition and get the reference
+
+            // Add the calendar to the creator's calendars' field
+            const userDocRef = firestore.collection('users').doc(user.uid);
+            await userDocRef.update({
                 calendars: firebase.firestore.FieldValue.arrayUnion({
                     calendarName: calendarTitleValue,
                     id: calendarDocRef.id,
                 }),
             });
 
-            invitedList.forEach(invited => {
-                sendCalendarInvite(user, invited.email, calendarDocRef.id);
-            });
+            await Promise.all(invitedList.map(invited => sendCalendarInvite(user, invited.email, calendarDocRef.id)));
 
+    
             setIsOpen(false);
             closeModalAndRefresh();
         } catch (error) {
-            console.error('Error creating calendar:', error);
-            setErrorMessage('Failed to create calendar');
+            console.error('Error creating calendar: ', error);
         }
     };
 

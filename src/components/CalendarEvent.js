@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import { firestore } from "../resources/firebase";
 import { useUser } from "../resources/UserContext";
@@ -11,6 +11,54 @@ const CalendarEventModal = ({ isOpen, setIsOpen }) => {
     const { calendarName, calendarId } = useParams();
     const user = useUser();
     const [usersInfo, setUsersInfo] = useState([]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            if (user) {
+                await fetchUsersInfo(calendarId); 
+                
+            }
+        };
+        fetchData();
+    }, [calendarId, user]);
+
+
+    const fetchUsersInfo = async (calendarId) => {
+        try {
+            const calendarDoc = await firestore
+                .collection('calendars')
+                .doc(calendarId)
+                .get();
+            if (calendarDoc.exists) {
+                const usersIds = calendarDoc.data().users || [];
+                const usersInfoPromises = usersIds.map(async (userId) => {
+                    const userDoc = await firestore
+                        .collection('users')
+                        .doc(userId)
+                        .get();
+                    if (userDoc.exists) {
+                        const userData = userDoc.data();
+                        return {
+                            uid: userId,
+                            email: userData.email,
+                            imageURL: userData.imageURL,
+                        };
+                    } else {
+                        console.error(
+                            `User with ID ${userId} not found in the 'users' collection.`,
+                        );
+                        return null;
+                    }
+                });
+                const usersInfoData = await Promise.all(usersInfoPromises);
+                setUsersInfo(usersInfoData.filter((user) => user !== null));
+            } else {
+                console.error(`Calendar with ID ${calendarId} not found.`);
+            }
+        } catch (error) {
+            console.error('Error fetching users info:', error);
+        }
+    };
 
     const handleCreateEvent = async () => {
         try {
