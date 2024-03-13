@@ -4,10 +4,10 @@ import 'firebase/compat/firestore';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useUser } from '../resources/UserContext';
 import AvailabilityForm from '../components/Calendar/AvailabilityForm';
-import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import Header from '../components/Header';
 import { sendEventInvite } from '../resources/NotificationService';
+import CalendarEventModal from '../components/CalendarEvent';
 
 const ViewCalendar = () => {
     const { calendarId, calendarName } = useParams();
@@ -22,6 +22,7 @@ const ViewCalendar = () => {
     const [selectedDateTime, setSelectedDateTime] = useState(new Date());
     const [showSavedPopup, setShowSavedPopup] = useState(false);
     const [usersInfo, setUsersInfo] = useState([]);
+    const [isOpen, setIsOpen] = useState(false);
 
     const navigate = useNavigate();
 
@@ -460,6 +461,10 @@ const ViewCalendar = () => {
         }
     };
 
+    const closeModal = () => {
+        setIsOpen(false);
+    };
+
     return (
         <div className="flex h-screen flex-col">
             <Header />
@@ -529,22 +534,9 @@ const ViewCalendar = () => {
                         ))}
                     </div>
                 </div>
-                <div className="mt-5 flex flex-col items-center pl-5 sm:mt-0">
-                    <DatePicker
-                        selected={selectedDateTime}
-                        onChange={(date) => setSelectedDateTime(date)}
-                        inline
-                        showTimeSelect
-                        dateFormat="Pp"
-                    />
-                    <button
-                        className="items center h-10 w-32 rounded-full border-none bg-green-800 text-white"
-                        type="button"
-                        onClick={handleCreateEvent}>
-                        Submit Event
-                    </button>
-                </div>
+                <CalendarEventModal isOpen={isOpen} setIsOpen={setIsOpen} closeModal={closeModal}/>
             </div>
+            
             <div className="mt-5 flex justify-center">
                 <Link to="/HomePage" className="ml-5">
                     <button className="h-10 w-40 rounded-full border-none bg-green-800 text-white">
