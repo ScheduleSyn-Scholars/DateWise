@@ -7,6 +7,7 @@ import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import CustomEventComponent from '../components/Calendar/CustomEvent';
 import Header from '../components/Header.js';
+import NewCalendarModal from '../components/NewCalendar.js';
 
 const localizer = momentLocalizer(moment);
 
@@ -15,6 +16,7 @@ const HomePage = () => {
     const [calendars, setUserCalendars] = useState([]);
     const [loading, setLoading] = useState(true);
     const [events, setEvents] = useState([]);
+    const [isOpen, setIsOpen] = useState(false);
 
     useEffect(() => {
         const loadUserData = async () => {
@@ -73,6 +75,11 @@ const HomePage = () => {
         setLoading(false);
     }, [user]);
 
+    const closeModalAndRefresh = () => {
+        setIsOpen(false);
+        window.location.reload(); // Refresh the page
+    };
+
     return (
         <div className="flex h-full w-full flex-col">
             <Header />
@@ -100,7 +107,7 @@ const HomePage = () => {
                     {loading ? (
                         <p>Loading Calendars... </p>
                     ) : (
-                        <div className="flex h-4/5 flex-col items-center overflow-y-scroll">
+                        <div className="flex flex-col items-center h-4/5">
                             {calendars.map((calendar) => (
                                 <Link
                                     key={calendar.id}
@@ -113,13 +120,9 @@ const HomePage = () => {
                         </div>
                     )}
 
-                    <Link to="/NewCalendar">
-                        <button className="h-10 w-32 rounded-full border-none bg-green-800 text-white">
-                            New Calendar
-                        </button>
-                    </Link>
+                    <NewCalendarModal isOpen={isOpen} setIsOpen={setIsOpen} closeModalAndRefresh={closeModalAndRefresh} />
                     <Link to="/">
-                        <button className="mt-5 h-10 w-32 rounded-full border-none bg-gray-500 text-white">
+                        <button className="btn bg-red-400 text-white mt-5">
                             Logout
                         </button>
                     </Link>
