@@ -465,6 +465,11 @@ const ViewCalendar = () => {
         setIsOpen(false);
     };
 
+    const handleSaveAndUpdate = async () => {
+        await updateAvailability(); // Wait until updateAvailability completes
+        handleShowBestTime(); // Then call handleShowBestTime
+    };
+
     return (
         <div className="flex h-screen flex-col">
             <Header />
@@ -480,17 +485,12 @@ const ViewCalendar = () => {
                     />
                     <div className="flex flex-row">
                         <button
-                            className="mt-2 h-10 w-32 rounded-full border-none bg-green-800 text-white"
+                            className="btn bg-green-800 text-white"
                             type="button"
-                            onClick={() => updateAvailability()}>
+                            onClick={handleSaveAndUpdate}>
                             Save
                         </button>
-                        <button
-                            className="mt-2 h-10 w-40 rounded-full border-none bg-green-800 text-white"
-                            type="button"
-                            onClick={handleShowBestTime}>
-                            Show Best Time
-                        </button>
+                      
                     </div>
                     {bestTime && (
                         <div className="mt-5">
@@ -516,8 +516,10 @@ const ViewCalendar = () => {
                             <p>Availability saved!</p>
                         </div>
                     )}
+
+<CalendarEventModal isOpen={isOpen} setIsOpen={setIsOpen} closeModal={closeModal}/>
                 </div>
-                <div className="flex h-full flex-col items-center border-r border-gray-500 pr-5">
+                <div className="ml-10 flex h-full flex-col items-center pr-5">
                     Users:
                     <div className="mt-5vh flex flex-col items-center">
                         {usersInfo.map((user) => (
@@ -533,21 +535,23 @@ const ViewCalendar = () => {
                             </div>
                         ))}
                     </div>
-                </div>
-                <CalendarEventModal isOpen={isOpen} setIsOpen={setIsOpen} closeModal={closeModal}/>
-            </div>
-            
-            <div className="mt-5 flex justify-center">
-                <Link to="/HomePage" className="ml-5">
-                    <button className="h-10 w-40 rounded-full border-none bg-green-800 text-white">
-                        Homepage
-                    </button>
-                </Link>
-                <button
+                    <button
                     onClick={handleLeaveGroup}
-                    className="ml-5 h-10 w-40 rounded-full border-none bg-green-800 text-white">
+                    className="btn mt-5 ml-5 h-10 w-40  border-none bg-green-800 text-white">
                     Leave Group
                 </button>
+                </div>
+                
+            </div>
+            
+            <div className="mt-5 flex">
+                <Link to="/HomePage" className="ml-5">
+                    <button className="btn bg-green-800 text-white">
+                        Home
+                    </button>
+                </Link>
+               
+                
             </div>
         </div>
     );
