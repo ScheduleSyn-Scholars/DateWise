@@ -21,7 +21,6 @@ const HomePage = () => {
     useEffect(() => {
         const loadUserData = async () => {
             try {
-                // Load and set user calendars
                 const userDocRef = firestore.collection('users').doc(user.uid);
                 const userDoc = await userDocRef.get();
 
@@ -33,7 +32,6 @@ const HomePage = () => {
                 const calendars = userData.calendars || [];
                 setUserCalendars(calendars);
 
-                // Go through calendars and build full events list
                 let allEvents = [];
                 for (const calendar of calendars) {
                     const eventsRef = firestore
@@ -81,10 +79,10 @@ const HomePage = () => {
     };
 
     return (
-        <div className="flex h-full w-full flex-col">
+        <div className="flex flex-col h-screen">
             <Header />
-            <div className="flex h-fit w-full">
-                <div className="w-full h-fit items-center justify-center border-r border-gray-500">
+            <div className="flex flex-1">
+                <div className="flex-1 flex items-center justify-center border-r border-gray-500">
                     <Calendar
                         localizer={localizer}
                         events={events}
@@ -100,14 +98,14 @@ const HomePage = () => {
                     />
                 </div>
 
-                <div className="flex w-1/4 flex-col items-center justify-between">
+                <div className="flex flex-col w-1/4 items-center justify-between">
                     <div className="mt-10 text-2xl font-bold text-gray-700">
                         Shared Calendars
                     </div>
                     {loading ? (
                         <p>Loading Calendars... </p>
                     ) : (
-                        <div className="flex flex-col items-center h-4/5">
+                        <div className="flex flex-col items-center h-4/5 overflow-y-auto">
                             {calendars.map((calendar) => (
                                 <Link
                                     key={calendar.id}
@@ -133,3 +131,4 @@ const HomePage = () => {
 };
 
 export default HomePage;
+
