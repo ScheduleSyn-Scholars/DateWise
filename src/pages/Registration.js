@@ -59,7 +59,7 @@ const Form = () => {
         <div className="flex justify-center items-center h-full">
             <div className="form rounded-md bg-gray-200 p-8">
                 <form onSubmit={handleSubmit}>
-                    <div className="mb-4">
+                    <div className="mb-4 flex flex-col">
                         <label htmlFor="id">Id:</label>
                         <input
                             type="text"
@@ -70,7 +70,7 @@ const Form = () => {
                             className="input"
                         />
                     </div>
-                    <div className="mb-4">
+                    <div className="mb-4 flex flex-col">
                         <label htmlFor="firstName">First Name:</label>
                         <input
                             type="text"
@@ -81,7 +81,7 @@ const Form = () => {
                             className="input"
                         />
                     </div>
-                    <div className="mb-4">
+                    <div className="mb-4 flex flex-col">
                         <label htmlFor="lastName">Last Name:</label>
                         <input
                             type="text"
@@ -92,7 +92,7 @@ const Form = () => {
                             className="input"
                         />
                     </div>
-                    <div className="mb-4">
+                    <div className="mb-4 flex flex-col">
                         <label htmlFor="email">Email:</label>
                         <input
                             type="email"
@@ -103,7 +103,7 @@ const Form = () => {
                             className="input"
                         />
                     </div>
-                    <div className="mb-4">
+                    <div className="mb-4 flex flex-col">
                         <label htmlFor="password">Password:</label>
                         <input
                             type="password"
@@ -114,9 +114,11 @@ const Form = () => {
                             className="input"
                         />
                     </div>
-                    <button type="submit" className="btn">
-                        Sign Up
-                    </button>
+                    <div className="flex justify-center">
+                        <button type="submit" className="btn">
+                            Sign Up
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>
