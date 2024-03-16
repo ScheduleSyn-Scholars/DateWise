@@ -1,86 +1,127 @@
 import React, { useState } from 'react';
-import { auth } from '../resources/firebase';
+import { auth, firestore } from '../resources/firebase';
+import 'firebase/compat/firestore';
 import { useNavigate } from 'react-router-dom';
-import { Link } from 'react-router-dom';
+import { sendMessageNotification } from '../resources/NotificationService';
 
-const Login = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState(null);
-    const [successMessage, setSuccessMessage] = useState(null);
+const Form = () => {
     const navigate = useNavigate();
 
-    const handleSignIn = async () => {
+    const [formData, setFormData] = useState({
+        id: '',
+        firstName: '',
+        lastName: '',
+        email: '',
+        password: '',
+        userName: '',
+    });
+
+    const handleInputChange = (event) => {
+        const { name, value } = event.target;
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+    };
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
         try {
-            await auth.signInWithEmailAndPassword(email, password);
-            setSuccessMessage('Sign-in successful!');
-            navigate('/homepage');
+            formData.userName = formData.email.split('@')[0];
+            const userCredential = await auth.createUserWithEmailAndPassword(
+                formData.email,
+                formData.password
+            );
+            const userUid = userCredential.user.uid;
+
+            const docRef = firestore.collection('users').doc(userUid);
+
+            await docRef.set(formData);
+
+            sendMessageNotification(
+                formData.email,
+                'These are your notifications! Accept or decline them below.'
+            );
+
+            if (userUid) {
+                alert('Registered Successfully');
+                navigate('/'); // Redirect to home page after successful registration
+            } else {
+                alert('Error Occurred');
+            }
         } catch (error) {
-            setError(error.message);
+            console.error('Error adding document or creating user: ', error);
+            alert('Registration Failed: ' + error.message);
         }
     };
 
     return (
-        <div className="flex h-screen">
-            <div className="flex-1 flex items-center justify-center">
-                <div className="w-72 flex flex-col items-center">
-                    <img
-                        className="mb-6 h-72 w-72"
-                        src="/BearLogo.png"
-                        alt="Bear Logo"
-                    />
-                    <h2 className="text-teal-700">Login</h2>
-                    <form className="w-full flex flex-col items-center">
-                        <label className="mb-2" htmlFor="email">
-                            Email:
-                        </label>
+        <div className="flex justify-center items-center h-full">
+            <div className="form rounded-md bg-gray-200 p-8">
+                <form onSubmit={handleSubmit}>
+                    <div className="mb-4">
+                        <label htmlFor="id">Id:</label>
                         <input
-                            className="w-full rounded-2xl border-none bg-gray-300 p-2 outline-none"
+                            type="text"
+                            id="id"
+                            name="id"
+                            value={formData.id}
+                            onChange={handleInputChange}
+                            className="input"
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <label htmlFor="firstName">First Name:</label>
+                        <input
+                            type="text"
+                            id="firstName"
+                            name="firstName"
+                            value={formData.firstName}
+                            onChange={handleInputChange}
+                            className="input"
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <label htmlFor="lastName">Last Name:</label>
+                        <input
+                            type="text"
+                            id="lastName"
+                            name="lastName"
+                            value={formData.lastName}
+                            onChange={handleInputChange}
+                            className="input"
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <label htmlFor="email">Email:</label>
+                        <input
                             type="email"
                             id="email"
                             name="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
+                            value={formData.email}
+                            onChange={handleInputChange}
+                            className="input"
                         />
-                        <label className="mb-2" htmlFor="password">
-                            Password:
-                        </label>
+                    </div>
+                    <div className="mb-4">
+                        <label htmlFor="password">Password:</label>
                         <input
-                            className="w-full rounded-2xl border-none bg-gray-300 p-2 outline-none"
                             type="password"
                             id="password"
                             name="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
+                            value={formData.password}
+                            onChange={handleInputChange}
+                            className="input"
                         />
-                        {error && <p className="error-message">{error}</p>}
-                        {successMessage && (
-                            <p className="success-message">{successMessage}</p>
-                        )}
-                        <div className="mt-5 flex justify-between">
-                            <button
-                                className="w-24 cursor-pointer rounded-2xl border-none bg-green-700 p-2.5 text-white"
-                                type="button"
-                                onClick={handleSignIn}>
-                                Login
-                            </button>
-                            <Link to="/sign-up">
-                                <button
-                                    className="w-24 cursor-pointer rounded-2xl border-none bg-green-700 p-2.5 text-white"
-                                    type="button">
-                                    Sign-Up
-                                </button>
-                            </Link>
-                        </div>
-                    </form>
-                </div>
+                    </div>
+                    <button type="submit" className="btn">
+                        Sign Up
+                    </button>
+                </form>
             </div>
-            <div className="flex-1 bg-left-center bg-cover" style={{ backgroundImage: `url('/GGCLibrary.jpg')` }}></div>
         </div>
     );
 };
 
-export default Login;
+export default Form;
 
