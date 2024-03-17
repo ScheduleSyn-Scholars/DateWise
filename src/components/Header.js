@@ -1,7 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { firestore } from '../resources/firebase';
-import { useUser } from '../resources/UserContext';
+import React, { useState } from 'react';
 import NotificationBell from './NotificationBell';
 import UserProfileModal from './UserProfile.js';
 
