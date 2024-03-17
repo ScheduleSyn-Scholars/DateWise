@@ -12,7 +12,7 @@ function UserProfileModal({ isOpen, setIsOpen }) {
     useEffect(() => {
         if (user) {
             setNewProfileName(user.userName || '');
-            setImage(user.imageURL || './default-profile.png'); // Assuming you have a default profile image
+            setImage(user.imageURL || '/default-profile.png'); // Assuming you have a default profile image
         }
     }, [user]);
 
