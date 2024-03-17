@@ -60,17 +60,6 @@ const Form = () => {
             <div className="form rounded-md bg-gray-200 p-8">
                 <form onSubmit={handleSubmit}>
                     <div className="mb-4 flex flex-col">
-                        <label htmlFor="id">Id:</label>
-                        <input
-                            type="text"
-                            id="id"
-                            name="id"
-                            value={formData.id}
-                            onChange={handleInputChange}
-                            className="input"
-                        />
-                    </div>
-                    <div className="mb-4 flex flex-col">
                         <label htmlFor="firstName">First Name:</label>
                         <input
                             type="text"
