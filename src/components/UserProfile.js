@@ -59,7 +59,7 @@ function UserProfileModal({ isOpen, setIsOpen }) {
                 <img
                     src={image || './default-profile.png'} // Use the updated state or a default image
                     alt="User profile"
-                    className="h-20 w-20 rounded-full"
+                    className="h-16 w-16 rounded-full"
                 />
             </button>
             {isOpen && (
