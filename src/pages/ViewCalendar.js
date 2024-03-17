@@ -546,7 +546,7 @@ const ViewCalendar = () => {
             
             <div className="mt-5 flex">
                 <Link to="/HomePage" className="ml-5">
-                    <button className="btn bg-green-800 text-white">
+                    <button className="btn mt-32 bg-green-800 text-white">
                         Home
                     </button>
                 </Link>
