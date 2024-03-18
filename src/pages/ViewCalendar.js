@@ -31,7 +31,6 @@ const ViewCalendar = () => {
     const [usersInfo, setUsersInfo] = useState([]);
     const [isOpen, setIsOpen] = useState(false);
 
-  const firestore = firebase.firestore();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -40,7 +39,7 @@ const ViewCalendar = () => {
         await fetchUserAvailability(calendarId, user.uid);
         await fetchUser2(calendarId);
         const teamAvailabilityData = await fetchTeamAvailability(calendarId);
-                await fetchUsersInfo(calendarId); // Await the fetchUsersInfo function here
+        await fetchUsersInfo(calendarId); // Await the fetchUsersInfo function here
         fetchTeamAvailabilityOnCommonDays(teamAvailabilityData);
       }
     };
@@ -65,50 +64,16 @@ const ViewCalendar = () => {
         .collection('availability')
         .doc(uid);
 
+
       const availabilitySnapshot = await availabilityRef.get();
-
-            if (availabilitySnapshot.exists) {
-                const availabilityData = availabilitySnapshot.data();
-                setAvailability(availabilityData);
-            }
-        } catch (error) {
-            console.error('Error fetching user availability:', error);
-        }
+      if (availabilitySnapshot.exists) {
+        const availabilityData = availabilitySnapshot.data();
+        setAvailability(availabilityData);
+      }
+    } catch (error) {
+      console.error('Error fetching user availability:', error);
+    }
     };
-
-  // const fetchUser = async (calendarId) => {
-  //   try{
-  //     //get calendar reference
-  //     const usersDataArray = [];
-  //     //const propertyData = ['emailAddress', 'firstName', 'imageURL', 'lastName'];
-  //     const calendarRef = firestore.collection('calendars').doc(calendarId);
-
-  //     const calendarSnapshot = await calendarRef.get();
-  //     //gets Users from calendar reference and assigns to useState
-  //     if(calendarSnapshot.exists){
-  //       const userIds = calendarSnapshot.get('users');
-
-  //       //2nd database call to get the actual user data by their user id
-  //       for(const userId of userIds){
-  //         try{
-  //           const userData = await firestore.collection('users').doc(userId).get();
-  //           if(userData.exists){
-  //             const {emailAddress, firstName, imageURL, lastName} = userData.data();
-  //             const userObject = {userId,emailAddress, firstName, imageURL, lastName};
-  //             usersDataArray.push(userObject);
-  //           }
-  //         }catch(Exception){
-  //           console.log("Error while trying to retrieve user data");
-  //         }
-  //       }
-  //       setUsers(usersDataArray);
-  //       //setUsers(userData);
-  //     }
-
-  //   }catch(error){
-  //     console.error('Error fetching user', error);
-  //   }
-  // };
 
   const fetchUser2 = async () => {
     //fetch all users from the users collection
@@ -494,7 +459,7 @@ const ViewCalendar = () => {
       const calSnapshot = await calRef.get();
       if (calSnapshot.exists) {
         await calRef.update({
-          users: firebase.firestore.FieldValue.arrayUnion(userEmail)
+          users: firestore.FieldValue.arrayUnion(userEmail)
         })
       }
       setUserAdded(true);
@@ -513,6 +478,12 @@ const ViewCalendar = () => {
     }
    
   };
+  // Sends each calendar member a notification for the event
+  const sendEventInvites = async (newEventId) => {
+    for (const userInfo of usersInfo) {
+        await sendEventInvite(user, userInfo.email, calendarId, newEventId);
+    }
+};
 
   const convertTo12HourFormat = (time) => {
     const hour = parseInt(time, 10);
@@ -588,31 +559,27 @@ const ViewCalendar = () => {
     };
 
   return (
-    <div className="flex h-screen w-screen flex-col">
-      <Header />
-      <div className="mt-[0vh]e relative ml-[0vh] text-center text-[50px] font-medium text-[#696969]">
-        {calendarName}
-      </div>
+    <div className="flex h-screen flex-col">
+            <Header />
+            <div className="mt-10vh text-center text-5xl font-medium text-gray-600">
+                {calendarName}
+            </div>
 
-      <div className="relative ml-[50vh] mt-[0vh]">
-        <div className="relative ml-[13vh] mt-0">
-          <AvailabilityForm
-            availability={availability}
-            onAvailabilityChange={handleAvailabilityChange}
-          />
-          <button
-            className="relative ml-[15vh] mt-[0vh] h-[35px] w-[100px] cursor-pointer rounded-[40px] border-[none] bg-[#0e724c] text-center font-times-new-roman text-xl font-medium text-[white]"
-            type="button"
-            onClick={() => updateAvailability()}>
-            Save
-          </button>
-          <button
-            className="relative ml-[3vh] mt-[0vh] h-[35px] w-[150px] cursor-pointer rounded-[40px] border-[none] bg-[#0e724c] text-center font-times-new-roman text-xl font-medium text-[white]"
-            type="button"
-            onClick={handleShowBestTime}>
-            Show Best Time
-          </button>
-
+            <div className="mt-5vh flex flex-col items-center justify-center sm:flex-row">
+                <div className="mb-5 flex flex-col items-center sm:mb-0 sm:mr-10">
+                    <AvailabilityForm
+                        availability={availability}
+                        onAvailabilityChange={handleAvailabilityChange}
+                    />
+                    <div className="flex flex-row">
+                        <button
+                            className="btn bg-green-800 text-white"
+                            type="button"
+                            onClick={handleSaveAndUpdate}>
+                            Save
+                        </button>
+                      
+                    </div>
                     {bestTime && (
                         <div className="mt-5">
                             <p>Best Time to Meet:</p>
@@ -637,8 +604,7 @@ const ViewCalendar = () => {
                             <p>Availability saved!</p>
                         </div>
                     )}
-
-<CalendarEventModal isOpen={isOpen} setIsOpen={setIsOpen} closeModal={closeModal}/>
+          <CalendarEventModal isOpen={isOpen} setIsOpen={setIsOpen} closeModal={closeModal}/>
                 </div>
                 <div className="ml-10 flex h-full flex-col items-center pr-5">
                     Users:
@@ -661,43 +627,47 @@ const ViewCalendar = () => {
                     className="btn mt-5 ml-5 h-10 w-40  border-none bg-green-800 text-white">
                     Leave Group
                 </button>
-                
-          <input className="input input-bordered w-full md:max-w-md input-sm" onChange={filterSuggestion} type="text" placeholder='Type here' value={searchInput}></input>
-          {filteredUsers.length > 0 &&!exactMatchFound && (
-          <div  className="dropdown-content bg-base-200 top-14 max-h-96 overflow-auto flex-col rounded-md w-full md:max-w-md">
-          <ul  className="menu menu-compact ">
-            {filteredUsers.map(user => (
-              <li className="border-b border-b-base-content/10 w-full" key={user.id}> <button onClick={() => handleNewUser(user)}>{user.firstName} {user.lastName}</button></li>
-            ))}
-          </ul>
-          </div>
-          )}
-          
-          <button className="btn btn-active btn-accent btn-sm" type="button" onClick={addUser}>
-            Add User
-          </button>
-        </div>
-        {userAdded && !error && (
-          <div role="alert" className="alert alert-success relative">
-            <span>User has been added to Calendar!</span>
-          </div>
-        )}
-        {error && (
-          <div role="alert" className="alert alert-error alert-sm">
-            <span>Error occured while trying to add user!</span>
-          </div>)}
-        <Link to="/HomePage">
-          {' '}
-          <button className="relative mb-[5px] ml-[35vh] mt-[2vh] h-[35px] w-[120px] cursor-pointer rounded-[40px] border-[none] bg-[#0e724c] text-center font-times-new-roman text-xl font-medium text-[white]">
-            Homepage
-          </button>{' '}
-        </Link>
+          <div className='flex flex-col justify-center items-center space-y-4'>
+            <input className="input input-bordered w-full md:max-w-md input-sm" onChange={filterSuggestion} type="text" placeholder='Type here' value={searchInput}></input>
+            {filteredUsers.length > 0 && !exactMatchFound && (
+              <div className="dropdown-content bg-base-200 top-14 max-h-96 overflow-auto flex-col rounded-md w-full md:max-w-md">
+                <ul className="menu menu-compact ">
+                  {filteredUsers.map(user => (
+                    <li className="border-b border-b-base-content/10 w-full" key={user.id}> <button onClick={() => handleNewUser(user)}>{user.firstName} {user.lastName}</button></li>
+                  ))}
+                </ul>
+              </div>
+            )}
 
-        <button onClick={handleLeaveGroup} className="btn">
-          Leave Group
-        </button>
+            <button className="btn btn-active btn-accent btn-sm" type="button" onClick={addUser}>
+              Add User
+            </button>
+            {userAdded && !error && (
+              <div role="alert" className="alert alert-success relative">
+                <span>User has been added to Calendar!</span>
+              </div>
+            )}
+            {error && (
+              <div role="alert" className="alert alert-error alert-sm">
+                <span>Error occured while trying to add user!</span>
+              </div>)}
+          </div>
+                </div>
+                
+                
+            </div>
+            <div className="mt-20 flex">
+                <Link to="/HomePage" className="ml-5">
+                    <button className="btn bg-green-800 text-white">
+                        Home
+                    </button>
+                </Link>
+               
+                
+            </div>
+      
+        
       </div>
-    </div>
   );
 };
 

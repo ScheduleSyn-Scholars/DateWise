@@ -31,6 +31,7 @@ const CalendarEventModal = ({ isOpen, setIsOpen }) => {
                 .get();
             if (calendarDoc.exists) {
                 const usersIds = calendarDoc.data().users || [];
+                console.log(usersIds);
                 const usersInfoPromises = usersIds.map(async (userId) => {
                     const userDoc = await firestore
                         .collection('users')
