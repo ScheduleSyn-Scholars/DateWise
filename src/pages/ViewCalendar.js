@@ -18,7 +18,7 @@ const ViewCalendar = () => {
   const [searchInput, setSearchInput] = useState(""); //input based on input tag value
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [exactMatchFound, setExactMatchFound] = useState(false);
-  const [error, setError] = useState();
+  const [error, setError] = useState(false);
     const [availability, setAvailability] = useState({
         selectedDays: [],
         times: {},
@@ -131,14 +131,13 @@ const ViewCalendar = () => {
   const filterSuggestion = (input) => {
     let validatedInput = input.target.value.toLowerCase();
     let match = 0;
-    if (input.target.value === "") {
+    if (input.target.value === "" || input.target.value.trim() === '') {
       setFilteredUsers([]);
       setSearchInput("");
+      setUserEmail('');
       setExactMatchFound(false);
       return;
     } else {
-      console.log(input.target.value);
-      console.log(users);
       setSearchInput(input.target.value);
       const filtered = users.filter(user =>{
         //
@@ -169,7 +168,6 @@ const ViewCalendar = () => {
   const handleNewUser= (user) => {
     setSearchInput(`${user.firstName} ${user.lastName}`);
     setExactMatchFound(true);
-    console.log(user);
     setUserEmail(user.email);
   }
 
@@ -488,6 +486,10 @@ const ViewCalendar = () => {
   //code for adding user to a calendar
   const addUser = async () => {
     try {
+      console.log(userEmail);
+      if(userEmail === ''){
+        throw new Error("Please add a user");
+      }
       const calRef = firestore.collection('calendars').doc(calendarId);
       const calSnapshot = await calRef.get();
       if (calSnapshot.exists) {
@@ -495,16 +497,21 @@ const ViewCalendar = () => {
           users: firebase.firestore.FieldValue.arrayUnion(userEmail)
         })
       }
+      setUserAdded(true);
+      setSearchInput('');
+      setError(false);
+      setTimeout(() => {
+        setUserAdded(false);
+      }, 3000);
 
     } catch (error) {
       setError(true);
-      console.error('Error while trying to add user', error);
+      console.error('Error while trying to add user');
+      setTimeout(() => {
+        setError(false);
+      }, 3000);
     }
-    setUserAdded(true);
-    setError(false);
-    setTimeout(() => {
-      setUserAdded(false);
-    }, 3000)
+   
   };
 
   const convertTo12HourFormat = (time) => {
@@ -655,9 +662,9 @@ const ViewCalendar = () => {
                     Leave Group
                 </button>
                 
-          <input className="input input-bordered" onChange={filterSuggestion} type="text" placeholder='Type here' value={searchInput}></input>
+          <input className="input input-bordered w-full md:max-w-md input-sm" onChange={filterSuggestion} type="text" placeholder='Type here' value={searchInput}></input>
           {filteredUsers.length > 0 &&!exactMatchFound && (
-          <div  className="dropdown-content bg-base-200 top-14 max-h-96 overflow-auto flex-col rounded-md">
+          <div  className="dropdown-content bg-base-200 top-14 max-h-96 overflow-auto flex-col rounded-md w-full md:max-w-md">
           <ul  className="menu menu-compact ">
             {filteredUsers.map(user => (
               <li className="border-b border-b-base-content/10 w-full" key={user.id}> <button onClick={() => handleNewUser(user)}>{user.firstName} {user.lastName}</button></li>
@@ -666,8 +673,7 @@ const ViewCalendar = () => {
           </div>
           )}
           
-          <br></br>
-          <button className="btn btn-active btn-accent" type="button" onClick={addUser}>
+          <button className="btn btn-active btn-accent btn-sm" type="button" onClick={addUser}>
             Add User
           </button>
         </div>
@@ -677,7 +683,7 @@ const ViewCalendar = () => {
           </div>
         )}
         {error && (
-          <div role="alert" className="alert alert-error">
+          <div role="alert" className="alert alert-error alert-sm">
             <span>Error occured while trying to add user!</span>
           </div>)}
         <Link to="/HomePage">
