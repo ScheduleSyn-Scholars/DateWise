@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { firestore } from '../resources/firebase';
 import { useUser } from '../resources/UserContext';
 import firebase from 'firebase/compat/app';
