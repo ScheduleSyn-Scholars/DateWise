@@ -10,14 +10,14 @@ import { sendEventInvite } from '../resources/NotificationService';
 import CalendarEventModal from '../components/CalendarEvent';
 
 const ViewCalendar = () => {
-    const { calendarId, calendarName } = useParams();
-    const user = useUser();
-  const [users, setUsers] = useState([]);
-  const [userAdded, setUserAdded] = useState(false);
-  const [userEmail, setUserEmail] = useState();
-  const [userInput, setUserInput] = useState();
-  const [searchInput, setSearchInput] = useState();
+  const { calendarId, calendarName } = useParams();
+  const user = useUser();
+  const [users, setUsers] = useState([]);  //list of users from the database
+  const [userAdded, setUserAdded] = useState(false); //functionality to add user to database
+  const [userEmail, setUserEmail] = useState();      //value to CRUD with database 
+  const [searchInput, setSearchInput] = useState(""); //input based on input tag value
   const [filteredUsers, setFilteredUsers] = useState([]);
+  const [exactMatchFound, setExactMatchFound] = useState(false);
   const [error, setError] = useState();
     const [availability, setAvailability] = useState({
         selectedDays: [],
@@ -118,8 +118,8 @@ const ViewCalendar = () => {
       const userSnapshot = await userRef.get();
       userSnapshot.forEach((doc) => {
         const id = doc.id;
-        const { emailAddress, firstName, imageURL, lastName } = doc.data();
-        const userObject = { id, emailAddress, firstName, imageURL, lastName };
+        const { email, firstName, imageURL, lastName } = doc.data();
+        const userObject = { id, email, firstName, imageURL, lastName };
         usersDataArray.push(userObject);
       });
       setUsers(usersDataArray);
@@ -133,6 +133,8 @@ const ViewCalendar = () => {
     let match = 0;
     if (input.target.value === "") {
       setFilteredUsers([]);
+      setSearchInput("");
+      setExactMatchFound(false);
       return;
     } else {
       console.log(input.target.value);
@@ -146,16 +148,29 @@ const ViewCalendar = () => {
         }
       });
       //if match < 10, then put the filtered option
-      setFilteredUsers(filtered);
+      // Check if exact match is found
+      const exactMatch = users.find(user => {
+        return (user.firstName?.toLowerCase() === validatedInput || user.lastName?.toLowerCase() === validatedInput);
+      });
+
+      // If exact match found, set exactMatchFound to true and clear filtered list
+      if (exactMatch) {
+        setExactMatchFound(true);
+        setFilteredUsers([]);
+      } else {
+        setExactMatchFound(false);
+        setFilteredUsers(filtered);
+      }
+      //setFilteredUsers(filtered);
     }
 
   }
   //Button that handles Adding User to Calendar
-  function handleNewUser(event) {
-    setFilteredUsers([]);
-    setSearchInput(user.firstName)
-    console.log(event.target.value);
-    setUserEmail(event.target.value);
+  const handleNewUser= (user) => {
+    setSearchInput(`${user.firstName} ${user.lastName}`);
+    setExactMatchFound(true);
+    console.log(user);
+    setUserEmail(user.email);
   }
 
   const fetchTeamAvailability = async (calendarId) => {
@@ -641,13 +656,15 @@ const ViewCalendar = () => {
                 </button>
                 
           <input className="input input-bordered" onChange={filterSuggestion} type="text" placeholder='Type here' value={searchInput}></input>
+          {filteredUsers.length > 0 &&!exactMatchFound && (
           <div  className="dropdown-content bg-base-200 top-14 max-h-96 overflow-auto flex-col rounded-md">
           <ul  className="menu menu-compact ">
             {filteredUsers.map(user => (
-              <li className="border-b border-b-base-content/10 w-full" key={user.id} onClick={() =>}> <button>{user.firstName} {user.lastName}</button></li>
+              <li className="border-b border-b-base-content/10 w-full" key={user.id}> <button onClick={() => handleNewUser(user)}>{user.firstName} {user.lastName}</button></li>
             ))}
           </ul>
           </div>
+          )}
           
           <br></br>
           <button className="btn btn-active btn-accent" type="button" onClick={addUser}>
