@@ -15,7 +15,7 @@ const Header = () => {
             <p className="font m1-auto text-5xl">DateWise</p>
 
             <div className="flex-grow"></div>
-            <div class="flex items-center space-x-5">
+            <div className="flex items-center space-x-5">
                 <NotificationBell />
                 <UserProfileModal isOpen={isProfileOpen} setIsOpen={setIsProfileOpen}/>
             </div>
