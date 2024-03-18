@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { firestore } from '../resources/firebase';
+import { firestore, FieldValue } from '../resources/firebase';
 import 'firebase/compat/firestore';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useUser } from '../resources/UserContext';
@@ -14,7 +14,7 @@ const ViewCalendar = () => {
   const user = useUser();
   const [users, setUsers] = useState([]);  //list of users from the database
   const [userAdded, setUserAdded] = useState(false); //functionality to add user to database
-  const [userEmail, setUserEmail] = useState();      //value to CRUD with database 
+  const [userId, setUserId] = useState();      //value to CRUD with database 
   const [searchInput, setSearchInput] = useState(""); //input based on input tag value
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [exactMatchFound, setExactMatchFound] = useState(false);
@@ -99,7 +99,7 @@ const ViewCalendar = () => {
     if (input.target.value === "" || input.target.value.trim() === '') {
       setFilteredUsers([]);
       setSearchInput("");
-      setUserEmail('');
+      setUserId('');
       setExactMatchFound(false);
       return;
     } else {
@@ -133,7 +133,7 @@ const ViewCalendar = () => {
   const handleNewUser= (user) => {
     setSearchInput(`${user.firstName} ${user.lastName}`);
     setExactMatchFound(true);
-    setUserEmail(user.email);
+    setUserId(user.id);
   }
 
   const fetchTeamAvailability = async (calendarId) => {
@@ -451,15 +451,14 @@ const ViewCalendar = () => {
   //code for adding user to a calendar
   const addUser = async () => {
     try {
-      console.log(userEmail);
-      if(userEmail === ''){
+      if(userId === ''){
         throw new Error("Please add a user");
       }
       const calRef = firestore.collection('calendars').doc(calendarId);
       const calSnapshot = await calRef.get();
       if (calSnapshot.exists) {
         await calRef.update({
-          users: firestore.FieldValue.arrayUnion(userEmail)
+          users: FieldValue.arrayUnion(userId)
         })
       }
       setUserAdded(true);
@@ -471,7 +470,7 @@ const ViewCalendar = () => {
 
     } catch (error) {
       setError(true);
-      console.error('Error while trying to add user');
+      console.error('Error while trying to add user',error);
       setTimeout(() => {
         setError(false);
       }, 3000);
