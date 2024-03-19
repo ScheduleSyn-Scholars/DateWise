@@ -56,8 +56,9 @@ const Form = () => {
     };
 
     return (
-        <div className="flex justify-center items-center h-full">
-            <div className="form rounded-md bg-gray-200 p-8">
+        <div className="flex h-screen">
+            <div className="flex-1 flex items-center justify-center">
+                <div className="form rounded-md bg-gray-200 p-8">
                 <form onSubmit={handleSubmit}>
                     <div className="mb-4 flex flex-col">
                         <label htmlFor="firstName">First Name:</label>
@@ -104,12 +105,15 @@ const Form = () => {
                         />
                     </div>
                     <div className="flex justify-center">
-                        <button type="submit" className="btn">
+                        <button type="submit" className="btn bg-green-800 text-white">
                             Sign Up
                         </button>
                     </div>
                 </form>
             </div>
+        </div>  
+            <div className="flex-1 bg-left-center bg-cover" style={{ backgroundImage: `url('/GGCLibrary.jpg')` }}></div>
+    
         </div>
     );
 };

@@ -29,7 +29,6 @@ const Login = () => {
                         src="/BearLogo.png"
                         alt="Bear Logo"
                     />
-                    <h2 className="text-teal-700">Login</h2>
                     <form className="w-full flex flex-col items-center">
                         <label className="mb-2" htmlFor="email">
                             Email:
@@ -59,21 +58,18 @@ const Login = () => {
                         {successMessage && (
                             <p className="success-message">{successMessage}</p>
                         )}
-                        <div className="mt-5 flex justify-between">
+                        <div className="mt-5 flex w-full justify-evenly">
                             <button
-                                className="w-24 cursor-pointer rounded-2xl border-none bg-green-700 p-2.5 text-white"
+                                className="btn bg-green-800 text-white"
                                 type="button"
                                 onClick={handleSignIn}>
                                 Login
                             </button>
-                            <Link to="/sign-up">
-                                <button
-                                    className="w-24 cursor-pointer rounded-2xl border-none bg-green-700 p-2.5 text-white"
-                                    type="button">
-                                    Sign-Up
-                                </button>
-                            </Link>
                         </div>
+                        <p className='mt-5'>Don't have an account?</p>
+                        <Link to="/sign-up">
+                                <p className='text-blue-800'>Register</p>
+                            </Link>
                     </form>
                 </div>
             </div>

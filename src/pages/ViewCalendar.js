@@ -621,11 +621,6 @@ const ViewCalendar = () => {
                             </div>
                         ))}
                     </div>
-                    <button
-                    onClick={handleLeaveGroup}
-                    className="btn mt-5 ml-5 h-10 w-40  border-none bg-green-800 text-white">
-                    Leave Group
-                </button>
           <div className='flex flex-col justify-center items-center space-y-4'>
             <input className="input input-bordered w-full md:max-w-md input-sm" onChange={filterSuggestion} type="text" placeholder='Type here' value={searchInput}></input>
             {filteredUsers.length > 0 && !exactMatchFound && (
@@ -638,7 +633,7 @@ const ViewCalendar = () => {
               </div>
             )}
 
-            <button className="btn btn-active btn-accent btn-sm" type="button" onClick={addUser}>
+            <button className="btn bg-green-800 text-white" type="button" onClick={addUser}>
               Add User
             </button>
             {userAdded && !error && (
@@ -651,11 +646,16 @@ const ViewCalendar = () => {
                 <span>Error occured while trying to add user!</span>
               </div>)}
           </div>
+          <button
+                    onClick={handleLeaveGroup}
+                    className="btn mt-5 bg-green-800 text-white">
+                    Leave Group
+                </button>
                 </div>
                 
                 
             </div>
-            <div className="mt-20 flex">
+            <div className="flex">
                 <Link to="/HomePage" className="ml-5">
                     <button className="btn bg-green-800 text-white">
                         Home
