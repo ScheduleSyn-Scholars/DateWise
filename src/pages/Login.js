@@ -58,21 +58,18 @@ const Login = () => {
                         {successMessage && (
                             <p className="success-message">{successMessage}</p>
                         )}
-                        <div className="mt-5 flex justify-between">
+                        <div className="mt-5 flex w-full justify-evenly">
                             <button
                                 className="btn bg-green-800 text-white"
                                 type="button"
                                 onClick={handleSignIn}>
                                 Login
                             </button>
-                            <Link to="/sign-up">
-                                <button
-                                    className="btn bg-green-800 text-white"
-                                    type="button">
-                                    Sign-Up
-                                </button>
-                            </Link>
                         </div>
+                        <p className='mt-5'>Don't have an account?</p>
+                        <Link to="/sign-up">
+                                <p className='text-blue-800'>Register</p>
+                            </Link>
                     </form>
                 </div>
             </div>

@@ -95,7 +95,7 @@ const NewCalendarModal = ({ isOpen, setIsOpen, closeModalAndRefresh }) => {
                                     className="input input-bordered"
                                     onKeyDown={(e) => e.key === 'Enter' && addEmail()}
                                 />
-                                <button className="btn btn-primary" onClick={addEmail}>Add</button>
+                                <button className="btn bg-green-800 text-white" onClick={addEmail}>Add</button>
                             </div>
                             {errorMessage && <div className="text-red-500">{errorMessage}</div>}
                             {successMessage && <div className="text-green-500">{successMessage}</div>}
