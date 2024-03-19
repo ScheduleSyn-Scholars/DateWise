@@ -12,7 +12,7 @@ function UserProfileModal({ isOpen, setIsOpen }) {
     useEffect(() => {
         if (user) {
             setNewProfileName(user.userName || '');
-            setImage(user.imageURL || './default-profile.png'); // Assuming you have a default profile image
+            setImage(user.imageURL || '/default-profile.png'); // Assuming you have a default profile image
         }
     }, [user]);
 
@@ -59,20 +59,20 @@ function UserProfileModal({ isOpen, setIsOpen }) {
                 <img
                     src={image || './default-profile.png'} // Use the updated state or a default image
                     alt="User profile"
-                    className="h-20 w-20 rounded-full"
+                    className="h-16 w-16 rounded-full"
                 />
             </button>
             {isOpen && (
-                <div className="modal modal-open">
+                <div className="modal modal-open" style={{ marginLeft: '0px' }}>
                     <div className="modal-box flex justify-center items-center relative">
                         <button className="btn btn-sm btn-circle absolute right-2 top-2" onClick={() => setIsOpen(false)}>✕</button>
                         <div className="text-center">
-                            <div onClick={handleImageClick} style={{ cursor: 'pointer' }}>
+                            <div onClick={handleImageClick} style={{ cursor: 'pointer' }} className="flex justify-center items-center h-full">
                                 <img
                                     id="preview-image"
                                     src={image}
                                     alt="User update"
-                                    className="h-[200px] rounded-[100%] mb-4"
+                                    className="h-[200px] rounded-[100%] mb-4 align-middle margin-auto object-cover w-[200px]"
                                 />
                                 <input
                                     id="image-upload-input"
