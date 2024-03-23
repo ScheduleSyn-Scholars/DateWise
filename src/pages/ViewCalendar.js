@@ -19,6 +19,7 @@ const ViewCalendar = () => {
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [exactMatchFound, setExactMatchFound] = useState(false);
   const [error, setError] = useState(false);
+  const [description, setDescription] = useState(''); // Define description state variable
     const [availability, setAvailability] = useState({
         selectedDays: [],
         times: {},
@@ -54,6 +55,11 @@ const ViewCalendar = () => {
       times: newAvailability.times || {},
     };
     setAvailability(updatedAvailability);
+  };
+
+  // Function to check if user's availability exists
+  const userAvailabilityExists = (userId) => {
+    return teamAvailability.some(member => member.uid === userId);
   };
 
   const fetchUserAvailability = async (calendarId, uid) => {
@@ -551,117 +557,143 @@ const ViewCalendar = () => {
         handleShowBestTime(); // Then call handleShowBestTime
     };
 
-  return (
-    <div className="flex h-screen flex-col">
-            <Header />
-            <div className="mt-10vh text-center text-5xl font-medium text-gray-600">
-                {calendarName}
+    return (
+      <div className="flex h-screen flex-col">
+        <Header />
+        <div className="mt-10vh text-center text-5xl font-medium text-gray-600">
+          {calendarName}
+        </div>
+    
+        <div className="mt-5vh flex flex-col items-center justify-center sm:flex-row">
+          <div className="mb-5 flex flex-col items-center sm:mb-0 sm:mr-10">
+            <AvailabilityForm
+              availability={availability}
+              onAvailabilityChange={handleAvailabilityChange}
+            />
+            <div className="flex flex-row">
+              <button
+                className="btn bg-green-800 text-white"
+                type="button"
+                onClick={handleSaveAndUpdate}
+              >
+                Save
+              </button>
             </div>
-
-            <div className="mt-5vh flex flex-col items-center justify-center sm:flex-row">
-                <div className="mb-5 flex flex-col items-center sm:mb-0 sm:mr-10">
-                    <AvailabilityForm
-                        availability={availability}
-                        onAvailabilityChange={handleAvailabilityChange}
-                    />
-                    <div className="flex flex-row">
-                        <button
-                            className="btn bg-green-800 text-white"
-                            type="button"
-                            onClick={handleSaveAndUpdate}>
-                            Save
-                        </button>
-                      
-                    </div>
-                    {bestTime && (
-                        <div className="mt-5">
-                            <p>Best Time to Meet:</p>
-                            <p>Day: {bestTime.day}</p>
-                            <p>
-                                Time:{' '}
-                                {bestTime.start !== undefined
-                                    ? convertTo12HourFormat(bestTime.start)
-                                    : ''}{' '}
-                                {bestTime.start !== undefined &&
-                                bestTime.end !== undefined
-                                    ? '-'
-                                    : ''}{' '}
-                                {bestTime.end !== undefined
-                                    ? convertTo12HourFormat(bestTime.end)
-                                    : ''}
-                            </p>
-                        </div>
-                    )}
-                    {showSavedPopup && (
-                        <div className="mt-5">
-                            <p>Availability saved!</p>
-                        </div>
-                    )}
-          <CalendarEventModal isOpen={isOpen} setIsOpen={setIsOpen} closeModal={closeModal}/>
-                </div>
-                <div className="ml-10 flex h-full flex-col items-center pr-5">
-                    Users:
-                    <div className="mt-5vh flex flex-col items-center">
-                        {usersInfo.map((user) => (
-                            <div
-                                key={user.uid}
-                                className="mb-5 flex flex-col items-center">
-                                <img
-                                    src={user.imageURL}
-                                    alt="User"
-                                    className="mb-2 h-20 w-20 rounded-full"
-                                />
-                                <p>{user.email}</p>
-                            </div>
-                        ))}
-                    </div>
-          <div className='flex flex-col justify-center items-center space-y-4'>
-            <input className="input input-bordered w-full md:max-w-md input-sm" onChange={filterSuggestion} type="text" placeholder='Type here' value={searchInput}></input>
-            {filteredUsers.length > 0 && !exactMatchFound && (
-              <div className="dropdown-content bg-base-200 top-14 max-h-96 overflow-auto flex-col rounded-md w-full md:max-w-md">
-                <ul className="menu menu-compact ">
-                  {filteredUsers.map(user => (
-                    <li className="border-b border-b-base-content/10 w-full" key={user.id}> <button onClick={() => handleNewUser(user)}>{user.firstName} {user.lastName}</button></li>
-                  ))}
-                </ul>
+            {bestTime && (
+              <div className="mt-5">
+                <p>Best Time to Meet:</p>
+                <p>Day: {bestTime.day}</p>
+                <p>
+                  Time:{' '}
+                  {bestTime.start !== undefined
+                    ? convertTo12HourFormat(bestTime.start)
+                    : ''}{' '}
+                  {bestTime.start !== undefined &&
+                  bestTime.end !== undefined
+                    ? '-'
+                    : ''}{' '}
+                  {bestTime.end !== undefined
+                    ? convertTo12HourFormat(bestTime.end)
+                    : ''}
+                </p>
               </div>
             )}
-
-            <button className="btn bg-green-800 text-white" type="button" onClick={addUser}>
-              Add User
-            </button>
-            {userAdded && !error && (
-              <div role="alert" className="alert alert-success relative">
-                <span>User has been added to Calendar!</span>
+            {showSavedPopup && (
+              <div className="mt-5">
+                <p>Availability saved!</p>
               </div>
             )}
-            {error && (
-              <div role="alert" className="alert alert-error alert-sm">
-                <span>Error occured while trying to add user!</span>
-              </div>)}
+            <CalendarEventModal
+              isOpen={isOpen}
+              setIsOpen={setIsOpen}
+              closeModal={closeModal}
+            />
           </div>
-          <button
-                    onClick={handleLeaveGroup}
-                    className="btn mt-5 bg-green-800 text-white">
-                    Leave Group
-                </button>
+          <div className="ml-10 flex h-full flex-col items-center pr-5">
+            Users:
+            <div className="mt-5vh flex flex-col items-center">
+              {usersInfo.map((user) => (
+                <div
+                  key={user.uid}
+                  className="mb-5 flex flex-col items-center"
+                >
+                  <img
+                    src={user.imageURL}
+                    alt="User"
+                    className="mb-2 h-20 w-20 rounded-full"
+                  />
+                  <p>{user.email}</p>
+                  {/* Render a green dot if user's availability exists, otherwise render an orange dot */}
+{userAvailabilityExists(user.uid) ? (
+  <span className="h-2 w-2 bg-green-500 rounded-full inline-block"></span>
+) : (
+  <span className="h-2 w-2 bg-orange-500 rounded-full inline-block"></span>
+)}
+
                 </div>
-                
-                
+              ))}
             </div>
-            <div className="flex">
-                <Link to="/HomePage" className="ml-5">
-                    <button className="btn bg-green-800 text-white">
-                        Home
-                    </button>
-                </Link>
-               
-                
+            <div className="flex flex-col justify-center items-center space-y-4">
+              <input
+                className="input input-bordered w-full md:max-w-md input-sm"
+                onChange={filterSuggestion}
+                type="text"
+                placeholder="Type here"
+                value={searchInput}
+              ></input>
+              {filteredUsers.length > 0 && !exactMatchFound && (
+                <div className="dropdown-content bg-base-200 top-14 max-h-96 overflow-auto flex-col rounded-md w-full md:max-w-md">
+                  <ul className="menu menu-compact">
+                    {filteredUsers.map((user) => (
+                      <li
+                        className="border-b border-b-base-content/10 w-full"
+                        key={user.id}
+                      >
+                        {' '}
+                        <button onClick={() => handleNewUser(user)}>
+                          {user.firstName} {user.lastName}
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+    
+              <button
+                className="btn bg-green-800 text-white"
+                type="button"
+                onClick={addUser}
+              >
+                Add User
+              </button>
+              {userAdded && !error && (
+                <div role="alert" className="alert alert-success relative">
+                  <span>User has been added to Calendar!</span>
+                </div>
+              )}
+              {error && (
+                <div role="alert" className="alert alert-error alert-sm">
+                  <span>Error occurred while trying to add user!</span>
+                </div>
+              )}
             </div>
-      
-        
+            <button
+              onClick={handleLeaveGroup}
+              className="btn mt-5 bg-green-800 text-white"
+            >
+              Leave Group
+            </button>
+          </div>
+        </div>
+        <div className="flex">
+          <Link to="/HomePage" className="ml-5">
+            <button className="btn bg-green-800 text-white">Home</button>
+          </Link>
+        </div>
       </div>
-  );
+    );
+    
+    
 };
 
 export default ViewCalendar;

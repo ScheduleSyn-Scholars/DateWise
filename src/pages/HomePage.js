@@ -51,16 +51,14 @@ const HomePage = () => {
                             },
                         );
                         const title = `${calendar.calendarName}\n${formattedTime.replace(/\s+/g, '')}`;
-                        allEvents = [
-                            ...allEvents,
-                            {
-                                ...docData,
-                                id: doc.id,
-                                title: title,
-                                start: docData.dateTime.toDate(),
-                                end: docData.dateTime.toDate(),
-                            },
-                        ];
+                        allEvents.push({
+                            ...docData,
+                            id: doc.id,
+                            title: title,
+                            start: docData.dateTime.toDate(),
+                            end: docData.dateTime.toDate(),
+                            description: docData.description || "", // Include description field, or default to an empty string if not available
+                        });
                     }
                 }
                 setEvents(allEvents);
