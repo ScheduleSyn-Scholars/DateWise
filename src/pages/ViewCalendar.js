@@ -9,6 +9,7 @@ import Header from '../components/Header';
 import { sendEventInvite } from '../resources/NotificationService';
 import CalendarEventModal from '../components/CalendarEvent';
 
+
 const ViewCalendar = () => {
   const { calendarId, calendarName } = useParams();
   const user = useUser();
@@ -47,6 +48,17 @@ const ViewCalendar = () => {
 
     fetchData();
   }, [calendarId, user]);
+
+   // State to store the availability of the selected user
+   const [selectedUserAvailability, setSelectedUserAvailability] = useState(null);
+
+   // Function to handle clicking on a green dot
+   const handleDotClick = (userUid) => {
+     // Find the user with the corresponding UID
+     const selectedUser = usersInfo.find((user) => user.uid === userUid);
+     // Set the availability of the selected user
+     setSelectedUserAvailability(selectedUser.availability);
+   };
 
   const handleAvailabilityChange = (newAvailability) => {
     // Handle changes in availability form
@@ -563,7 +575,7 @@ const ViewCalendar = () => {
         <div className="mt-10vh text-center text-5xl font-medium text-gray-600">
           {calendarName}
         </div>
-    
+  
         <div className="mt-5vh flex flex-col items-center justify-center sm:flex-row">
           <div className="mb-5 flex flex-col items-center sm:mb-0 sm:mr-10">
             <AvailabilityForm
@@ -588,8 +600,7 @@ const ViewCalendar = () => {
                   {bestTime.start !== undefined
                     ? convertTo12HourFormat(bestTime.start)
                     : ''}{' '}
-                  {bestTime.start !== undefined &&
-                  bestTime.end !== undefined
+                  {bestTime.start !== undefined && bestTime.end !== undefined
                     ? '-'
                     : ''}{' '}
                   {bestTime.end !== undefined
@@ -613,27 +624,21 @@ const ViewCalendar = () => {
             Users:
             <div className="mt-5vh flex flex-col items-center">
               {usersInfo.map((user) => (
-                <div
-                  key={user.uid}
-                  className="mb-5 flex flex-col items-center"
-                >
-                  {/* User Profile Photo */}
+                <div key={user.uid} className="mb-5 flex flex-col items-center">
                   <img
                     src={user.imageURL}
                     alt="User"
                     className="mb-2 h-20 w-20 rounded-full"
                   />
-                  
-                  {/* Container for Email and Dot */}
                   <div className="flex items-center">
-                    {/* User Email */}
                     <p>{user.email}</p>
-                    
-                    {/* Dot */}
                     {userAvailabilityExists(user.uid) ? (
-                      <span className="h-2 w-2 bg-green-500 rounded-full ml-2"></span>
+                      <span
+                        className="h-3 w-3 bg-green-500 rounded-full ml-2 cursor-pointer"
+                        onClick={() => handleDotClick(user.uid)}
+                      ></span>
                     ) : (
-                      <span className="h-2 w-2 bg-orange-500 rounded-full ml-2"></span>
+                      <span className="h-3 w-3 bg-orange-500 rounded-full ml-2"></span>
                     )}
                   </div>
                 </div>
@@ -664,7 +669,7 @@ const ViewCalendar = () => {
                   </ul>
                 </div>
               )}
-    
+  
               <button
                 className="btn bg-green-800 text-white"
                 type="button"
@@ -696,11 +701,28 @@ const ViewCalendar = () => {
             <button className="btn bg-green-800 text-white">Home</button>
           </Link>
         </div>
+  
+        {selectedUserAvailability && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <div className="bg-white p-8 rounded-lg">
+              <h2 className="text-lg font-bold mb-4">User Availability</h2>
+              {/* Display availability information */}
+              {/* Example: */}
+              <p>Monday: {selectedUserAvailability.monday}</p>
+              <p>Tuesday: {selectedUserAvailability.tuesday}</p>
+              {/* Add more days as needed */}
+              <button
+                className="bg-blue-500 text-white px-4 py-2 rounded-md mt-4"
+                onClick={() => setSelectedUserAvailability(null)}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     );
-    
-    
-};
-
-export default ViewCalendar;
+  };
+  
+  export default ViewCalendar;
 
