@@ -617,19 +617,25 @@ const ViewCalendar = () => {
                   key={user.uid}
                   className="mb-5 flex flex-col items-center"
                 >
+                  {/* User Profile Photo */}
                   <img
                     src={user.imageURL}
                     alt="User"
                     className="mb-2 h-20 w-20 rounded-full"
                   />
-                  <p>{user.email}</p>
-                  {/* Render a green dot if user's availability exists, otherwise render an orange dot */}
-{userAvailabilityExists(user.uid) ? (
-  <span className="h-2 w-2 bg-green-500 rounded-full inline-block"></span>
-) : (
-  <span className="h-2 w-2 bg-orange-500 rounded-full inline-block"></span>
-)}
-
+                  
+                  {/* Container for Email and Dot */}
+                  <div className="flex items-center">
+                    {/* User Email */}
+                    <p>{user.email}</p>
+                    
+                    {/* Dot */}
+                    {userAvailabilityExists(user.uid) ? (
+                      <span className="h-2 w-2 bg-green-500 rounded-full ml-2"></span>
+                    ) : (
+                      <span className="h-2 w-2 bg-orange-500 rounded-full ml-2"></span>
+                    )}
+                  </div>
                 </div>
               ))}
             </div>
