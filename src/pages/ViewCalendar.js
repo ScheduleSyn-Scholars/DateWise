@@ -417,36 +417,30 @@ const ViewCalendar = () => {
     }
   };
 
-
   const createEvent = async (eventData) => {
     try {
-      const eventsRef = firestore
-        .collection('calendars')
-        .doc(calendarId)
-        .collection('events');
+        const eventsRef = firestore
+            .collection('calendars')
+            .doc(calendarId)
+            .collection('events');
 
-            const newEventRef = await eventsRef.add(eventData);
-            sendEventInvites(newEventRef.id);
-            console.log('Event created successfully!');
-        }  catch (error) {
-            console.error('Error creating event:', error);
-        }
-    };
+        const newEventData = {
+            name: calendarName, // Use calendarName directly
+            dateTime: selectedDateTime,
+            creator: user.uid,
+            attendees: [user.uid],
+            description: description, // Include the description in the event data
+        };
 
-  const handleCreateEvent = async () => {
-    try {
-      const eventData = {
-        name: calendarName, // Use calendarName directly
-        dateTime: selectedDateTime,
-        creator: user.uid,
-        attendees: [user.uid],
-      };
-      console.log('Event Data:', eventData);
-      await createEvent(eventData);
+        const newEventRef = await eventsRef.add(newEventData);
+        sendEventInvites(newEventRef.id);
+        console.log('Event created successfully!');
     } catch (error) {
-      console.error('Error in handleCreateEvent:', error);
+        console.error('Error creating event:', error);
     }
-  }
+};
+
+
 
   //code for adding user to a calendar
   const addUser = async () => {
