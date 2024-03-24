@@ -311,7 +311,8 @@ const ViewCalendar = () => {
 
         return start1 < end2 && end1 > start2;
     };
-
+    
+    //Used to fetch a users email, userName, and photo to show the list of users in a calendar
     const fetchUsersInfo = async (calendarId) => {
         try {
             const calendarDoc = await firestore
@@ -330,6 +331,7 @@ const ViewCalendar = () => {
                         return {
                             uid: userId,
                             email: userData.email,
+                            userName: userData.userName,
                             imageURL: userData.imageURL,
                         };
                     } else {
@@ -619,7 +621,34 @@ const handleDotClick = async (userUid) => {
           {calendarName}
         </div>
     
-        <div className="mt-5vh flex flex-col items-center justify-center sm:flex-row">
+        {/* Users Section */}
+        <div className="flex items-center justify-center mt-5">
+          {usersInfo.map((user) => (
+            <div key={user.uid} className="flex flex-col items-center mr-5">
+              <img
+                src={user.imageURL}
+                alt="User"
+                className="mb-2 h-20 w-20 rounded-full"
+              />
+            { /* <p className="mb-1">{user.email}</p> //removed since we just wanna see userName */ }
+              <div className="flex items-center">
+                <p>{user.userName}</p>
+                {userAvailabilityExists(user.uid) ? (
+                  <span
+                    className="h-3 w-3 bg-green-500 rounded-full ml-2 cursor-pointer"
+                    onClick={() => handleDotClick(user.uid)}
+                  ></span>
+                ) : (
+                  <span className="h-3 w-3 bg-orange-500 rounded-full ml-2"></span>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+    
+        {/* Rest of the content */}
+        <div className="mt-5 flex flex-col items-center justify-center sm:flex-row">
+          {/* Availability Form and Save Button */}
           <div className="mb-5 flex flex-col items-center sm:mb-0 sm:mr-10">
             <AvailabilityForm
               availability={availability}
@@ -663,29 +692,12 @@ const handleDotClick = async (userUid) => {
               closeModal={closeModal}
             />
           </div>
+    
+          {/* Calendar Events */}
           <div className="ml-10 flex h-full flex-col items-center pr-5">
             Users:
             <div className="mt-5vh flex flex-col items-center">
-              {usersInfo.map((user) => (
-                <div key={user.uid} className="mb-5 flex flex-col items-center">
-                  <img
-                    src={user.imageURL}
-                    alt="User"
-                    className="mb-2 h-20 w-20 rounded-full"
-                  />
-                  <div className="flex items-center">
-                    <p>{user.email}</p>
-                    {userAvailabilityExists(user.uid) ? (
-                      <span
-                        className="h-3 w-3 bg-green-500 rounded-full ml-2 cursor-pointer"
-                        onClick={() => handleDotClick(user.uid)}
-                      ></span>
-                    ) : (
-                      <span className="h-3 w-3 bg-orange-500 rounded-full ml-2"></span>
-                    )}
-                  </div>
-                </div>
-              ))}
+              {/* Users Section */}
             </div>
             <div className="flex flex-col justify-center items-center space-y-4">
               <input
@@ -739,43 +751,47 @@ const handleDotClick = async (userUid) => {
             </button>
           </div>
         </div>
+    
+        {/* Home Button */}
         <div className="flex">
           <Link to="/HomePage" className="ml-5">
             <button className="btn bg-green-800 text-white">Home</button>
           </Link>
         </div>
+    
+        {/* Modal for Selected User's Availability */}
         {selectedUserAvailability && (
-  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-    <div className="bg-white p-8 rounded-lg">
-      <h2 className="text-lg font-bold mb-4">User Availability</h2>
-      {/* Display availability information */}
-      {Object.entries(selectedUserAvailability).map(([day, times]) => (
-        <div key={day}>
-          {/* Removed the "times:" text */}
-          {Array.isArray(times) && times.map(time => (
-            <p key={time.start}>{time.start} - {time.end}</p>
-          ))}
-          {!Array.isArray(times) && Object.entries(times).map(([day, slots]) => (
-            <div key={day}>
-              <p>{day}:</p>
-              {slots.map(slot => (
-                <p key={slot.start}>{slot.start} - {slot.end}</p>
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <div className="bg-white p-8 rounded-lg">
+              <h2 className="text-lg font-bold mb-4">User Availability</h2>
+              {/* Display availability information */}
+              {Object.entries(selectedUserAvailability).map(([day, times]) => (
+                <div key={day}>
+                  {Array.isArray(times) && times.map(time => (
+                    <p key={time.start}>{time.start} - {time.end}</p>
+                  ))}
+                  {!Array.isArray(times) && Object.entries(times).map(([day, slots]) => (
+                    <div key={day}>
+                      <p>{day}:</p>
+                      {slots.map(slot => (
+                        <p key={slot.start}>{slot.start} - {slot.end}</p>
+                      ))}
+                    </div>
+                  ))}
+                </div>
               ))}
+              <button
+                className="bg-red-500 text-white px-4 py-2 rounded-md mt-4 mx-auto block"
+                onClick={() => setSelectedUserAvailability(null)}
+              >
+                Close
+              </button>
             </div>
-          ))}
-        </div>
-      ))}
-      <button
-        className="bg-red-500 text-white px-4 py-2 rounded-md mt-4 mx-auto block"
-        onClick={() => setSelectedUserAvailability(null)}
-      >
-        Close
-      </button>
-    </div>
-  </div>
-)}
+          </div>
+        )}
       </div>
     );
+    
        
   };
   
