@@ -52,13 +52,7 @@ const ViewCalendar = () => {
    // State to store the availability of the selected user
    const [selectedUserAvailability, setSelectedUserAvailability] = useState(null);
 
-   // Function to handle clicking on a green dot
-   const handleDotClick = (userUid) => {
-     // Find the user with the corresponding UID
-     const selectedUser = usersInfo.find((user) => user.uid === userUid);
-     // Set the availability of the selected user
-     setSelectedUserAvailability(selectedUser.availability);
-   };
+   
 
   const handleAvailabilityChange = (newAvailability) => {
     // Handle changes in availability form
@@ -458,6 +452,55 @@ const ViewCalendar = () => {
     }
 };
 
+//Retrieve user available times by clicking on the dot that turns green once they fill it out
+const handleDotClick = async (userUid) => {
+  try {
+    console.log('User UID:', userUid);
+
+    // Find the user with the corresponding UID
+    const selectedUser = usersInfo.find((user) => user.uid === userUid);
+    if (!selectedUser) {
+      console.log('User not found.');
+      return;
+    }
+
+    console.log('Selected user:', selectedUser);
+
+    // Fetch the availability of the selected user from the database
+    const availabilityRef = firestore
+      .collection('calendars')
+      .doc(calendarId)
+      .collection('availability')
+      .doc(userUid);
+      
+    const availabilitySnapshot = await availabilityRef.get();
+    console.log('Availability snapshot exists:', availabilitySnapshot.exists);
+
+    if (availabilitySnapshot.exists) {
+      const availabilityData = availabilitySnapshot.data();
+      console.log('Availability data:', availabilityData);
+      
+      // Extract selected days and times from availability data
+      const selectedDays = availabilityData.selectedDays || [];
+      const times = availabilityData.times || {};
+
+      // Display available days and times
+      console.log('Selected Days:', selectedDays);
+      console.log('Times:', times);
+
+      // Update the selected user's availability state
+      setSelectedUserAvailability({
+        times
+      });
+    } else {
+      console.log('Availability data does not exist for this user.');
+      // Reset the selected user's availability state
+      setSelectedUserAvailability(null);
+    }
+  } catch (error) {
+    console.error('Error fetching user availability:', error);
+  }
+};
 
 
   //code for adding user to a calendar
@@ -575,7 +618,7 @@ const ViewCalendar = () => {
         <div className="mt-10vh text-center text-5xl font-medium text-gray-600">
           {calendarName}
         </div>
-  
+    
         <div className="mt-5vh flex flex-col items-center justify-center sm:flex-row">
           <div className="mb-5 flex flex-col items-center sm:mb-0 sm:mr-10">
             <AvailabilityForm
@@ -669,7 +712,7 @@ const ViewCalendar = () => {
                   </ul>
                 </div>
               )}
-  
+    
               <button
                 className="btn bg-green-800 text-white"
                 type="button"
@@ -701,27 +744,39 @@ const ViewCalendar = () => {
             <button className="btn bg-green-800 text-white">Home</button>
           </Link>
         </div>
-  
         {selectedUserAvailability && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="bg-white p-8 rounded-lg">
-              <h2 className="text-lg font-bold mb-4">User Availability</h2>
-              {/* Display availability information */}
-              {/* Example: */}
-              <p>Monday: {selectedUserAvailability.monday}</p>
-              <p>Tuesday: {selectedUserAvailability.tuesday}</p>
-              {/* Add more days as needed */}
-              <button
-                className="bg-blue-500 text-white px-4 py-2 rounded-md mt-4"
-                onClick={() => setSelectedUserAvailability(null)}
-              >
-                Close
-              </button>
+  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+    <div className="bg-white p-8 rounded-lg">
+      <h2 className="text-lg font-bold mb-4">User Availability</h2>
+      {/* Display availability information */}
+      {Object.entries(selectedUserAvailability).map(([day, times]) => (
+        <div key={day}>
+          {/* Removed the "times:" text */}
+          {Array.isArray(times) && times.map(time => (
+            <p key={time.start}>{time.start} - {time.end}</p>
+          ))}
+          {!Array.isArray(times) && Object.entries(times).map(([day, slots]) => (
+            <div key={day}>
+              <p>{day}:</p>
+              {slots.map(slot => (
+                <p key={slot.start}>{slot.start} - {slot.end}</p>
+              ))}
             </div>
-          </div>
-        )}
+          ))}
+        </div>
+      ))}
+      <button
+        className="bg-red-500 text-white px-4 py-2 rounded-md mt-4 mx-auto block"
+        onClick={() => setSelectedUserAvailability(null)}
+      >
+        Close
+      </button>
+    </div>
+  </div>
+)}
       </div>
     );
+       
   };
   
   export default ViewCalendar;
