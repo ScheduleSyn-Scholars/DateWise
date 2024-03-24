@@ -564,8 +564,8 @@ const ViewCalendar = () => {
                 {calendarName}
             </div>
 
-            <div className="mt-5vh flex flex-col items-center justify-center sm:flex-row">
-                <div className="mb-5 flex flex-col items-center sm:mb-0 sm:mr-10">
+            <div className="mt-5vh flex flex-col items-center justify-center sm:flex-row sm:">
+                <div className="mb-5 flex flex-col items-center sm:mb-0 sm: sm:w-7/10">
                     <AvailabilityForm
                         availability={availability}
                         onAvailabilityChange={handleAvailabilityChange}
@@ -605,7 +605,7 @@ const ViewCalendar = () => {
                     )}
           <CalendarEventModal isOpen={isOpen} setIsOpen={setIsOpen} closeModal={closeModal}/>
                 </div>
-                <div className="ml-10 flex h-full flex-col items-center pr-5">
+                <div className="flex h-full flex-col items-center pr-5 sm:w-3/10  p-5">
                     Users:
                     <div className="mt-5vh flex flex-col items-center">
                         {usersInfo.map((user) => (
@@ -656,11 +656,6 @@ const ViewCalendar = () => {
                 
             </div>
             <div className="flex">
-                <Link to="/HomePage" className="ml-5">
-                    <button className="btn bg-green-800 text-white">
-                        Home
-                    </button>
-                </Link>
                
                 
             </div>
