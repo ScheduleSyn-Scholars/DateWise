@@ -3,13 +3,10 @@ import { firestore } from '../resources/firebase.js';
 import { Link } from 'react-router-dom';
 import 'firebase/compat/firestore';
 import { useUser } from '../resources/UserContext.js';
-import { Calendar, momentLocalizer } from 'react-big-calendar';
-import moment from 'moment';
-import CustomEventComponent from '../components/Calendar/CustomEvent';
 import Header from '../components/Header.js';
 import NewCalendarModal from '../components/NewCalendar.js';
+import BigCalendar from '../components/BigCalendar.js';
 
-const localizer = momentLocalizer(moment);
 
 const HomePage = () => {
     const user = useUser();
@@ -51,16 +48,21 @@ const HomePage = () => {
                             },
                         );
                         const title = `${calendar.calendarName}\n${formattedTime.replace(/\s+/g, '')}`;
-                        allEvents = [
-                            ...allEvents,
-                            {
-                                ...docData,
-                                id: doc.id,
-                                title: title,
-                                start: docData.dateTime.toDate(),
-                                end: docData.dateTime.toDate(),
-                            },
-                        ];
+                        // Only add the event if the user is attending the event
+                        if (docData.attendees.includes(user.uid)) {
+                            allEvents = [
+                                ...allEvents,
+                                {
+                                    ...docData,
+                                    id: doc.id,
+                                    title: title,
+                                    start: docData.dateTime.toDate(),
+                                    end: docData.dateTime.toDate(),
+                                    calendarId: calendar.id,
+                                    calendarName: calendar.calendarName,
+                                },
+                            ];
+                        }
                     }
                 }
                 setEvents(allEvents);
@@ -83,21 +85,9 @@ const HomePage = () => {
             <Header />
 
             <div className="flex h-fit w-full">
-                <div className="hidden md:flex w-full h-fit items-center justify-center border-r border-gray-500">
-
-                    <Calendar
-                        localizer={localizer}
-                        events={events}
-                        startAccessor="start"
-                        endAccessor="end"
-                        toolbar={true}
-                        onSelectEvent={(event) => console.log(event)}
-                        onSelectSlot={(slotInfo) => console.log(slotInfo)}
-                        timezone="America/New_York"
-                        components={{
-                            event: CustomEventComponent,
-                        }}
-                    />
+                <div className="relative hidden md:flex w-full h-fit items-center justify-center border-r border-gray-500">
+                    <BigCalendar events={events} />
+                    
                 </div>
 
                 <div className="flex flex-col w-1/4 items-center justify-between">
