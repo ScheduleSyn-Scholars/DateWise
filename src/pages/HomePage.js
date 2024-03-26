@@ -83,12 +83,12 @@ const HomePage = () => {
         <div className="flex h-screen flex-col">
             <Header />
 
-            <div className="flex h-full w-full sm:h-fit">
+            <div className="flex sm:flex-row flex-col h-full w-full sm:h-fit">
                 <div className="relative flex h-full w-full justify-center sm:h-fit sm:items-center sm:border-r sm:border-gray-500">
                     <BigCalendar events={events} />
                 </div>
 
-                <div className="hidden w-1/4 flex-col items-center justify-between sm:flex">
+                <div className="w-1/4 flex-col items-center justify-between sm:flex">
                     <div className="mt-10 text-2xl font-bold text-gray-700">
                         Shared Calendars
                     </div>
