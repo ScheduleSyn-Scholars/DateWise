@@ -30,7 +30,7 @@ const Form = () => {
             formData.userName = formData.email.split('@')[0];
             const userCredential = await auth.createUserWithEmailAndPassword(
                 formData.email,
-                formData.password
+                formData.password,
             );
             const userUid = userCredential.user.uid;
 
@@ -40,7 +40,7 @@ const Form = () => {
 
             sendMessageNotification(
                 formData.email,
-                'These are your notifications! Accept or decline them below.'
+                'These are your notifications! Accept or decline them below.',
             );
 
             if (userUid) {
@@ -57,66 +57,68 @@ const Form = () => {
 
     return (
         <div className="flex h-screen">
-            <div className="flex-1 flex items-center justify-center">
+            <div className="flex flex-1 items-center justify-center">
                 <div className="form rounded-md bg-gray-200 p-8">
-                <form onSubmit={handleSubmit}>
-                    <div className="mb-4 flex flex-col">
-                        <label htmlFor="firstName">First Name:</label>
-                        <input
-                            type="text"
-                            id="firstName"
-                            name="firstName"
-                            value={formData.firstName}
-                            onChange={handleInputChange}
-                            className="input"
-                        />
-                    </div>
-                    <div className="mb-4 flex flex-col">
-                        <label htmlFor="lastName">Last Name:</label>
-                        <input
-                            type="text"
-                            id="lastName"
-                            name="lastName"
-                            value={formData.lastName}
-                            onChange={handleInputChange}
-                            className="input"
-                        />
-                    </div>
-                    <div className="mb-4 flex flex-col">
-                        <label htmlFor="email">Email:</label>
-                        <input
-                            type="email"
-                            id="email"
-                            name="email"
-                            value={formData.email}
-                            onChange={handleInputChange}
-                            className="input"
-                        />
-                    </div>
-                    <div className="mb-4 flex flex-col">
-                        <label htmlFor="password">Password:</label>
-                        <input
-                            type="password"
-                            id="password"
-                            name="password"
-                            value={formData.password}
-                            onChange={handleInputChange}
-                            className="input"
-                        />
-                    </div>
-                    <div className="flex justify-center">
-                        <button type="submit" className="btn bg-green-800 text-white">
-                            Sign Up
-                        </button>
-                    </div>
-                </form>
+                    <form onSubmit={handleSubmit}>
+                        <div className="mb-4 flex flex-col">
+                            <label htmlFor="firstName">First Name:</label>
+                            <input
+                                type="text"
+                                id="firstName"
+                                name="firstName"
+                                value={formData.firstName}
+                                onChange={handleInputChange}
+                                className="input"
+                            />
+                        </div>
+                        <div className="mb-4 flex flex-col">
+                            <label htmlFor="lastName">Last Name:</label>
+                            <input
+                                type="text"
+                                id="lastName"
+                                name="lastName"
+                                value={formData.lastName}
+                                onChange={handleInputChange}
+                                className="input"
+                            />
+                        </div>
+                        <div className="mb-4 flex flex-col">
+                            <label htmlFor="email">Email:</label>
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                value={formData.email}
+                                onChange={handleInputChange}
+                                className="input"
+                            />
+                        </div>
+                        <div className="mb-4 flex flex-col">
+                            <label htmlFor="password">Password:</label>
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                value={formData.password}
+                                onChange={handleInputChange}
+                                className="input"
+                            />
+                        </div>
+                        <div className="flex justify-center">
+                            <button
+                                type="submit"
+                                className="btn bg-green-800 text-white">
+                                Sign Up
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
-        </div>  
-            <div className="flex-1 bg-left-center bg-cover" style={{ backgroundImage: `url('/GGCLibrary.jpg')` }}></div>
-    
+            <div
+                className="bg-left-center flex-1 bg-cover"
+                style={{ backgroundImage: `url('/GGCLibrary.jpg')` }}></div>
         </div>
     );
 };
 
 export default Form;
-
