@@ -12,6 +12,7 @@ const Header = () => {
                 <img src="/BearLogo.png" alt="Logo.png" className="h-20 w-auto" />
                 <p className="font m1-auto text-4xl">DateWise</p>
             </Link>
+
             <div className="flex-grow"></div>
 
             <div className="flex items-center space-x-5 pr-5">

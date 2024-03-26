@@ -8,6 +8,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 
 const CalendarEventModal = ({ isOpen, setIsOpen }) => {
     const [selectedDateTime, setSelectedDateTime] = useState(new Date());
+    const [description, setDescription] = useState(""); // Declare description state
     const { calendarName, calendarId } = useParams();
     const user = useUser();
     const [usersInfo, setUsersInfo] = useState([]);
@@ -65,6 +66,7 @@ const CalendarEventModal = ({ isOpen, setIsOpen }) => {
                 dateTime: selectedDateTime,
                 creator: user.uid,
                 attendees: [user.uid],
+                description: description // Add description to eventData
             };
             console.log('Event Data:', eventData);
             await createEvent(eventData);
@@ -110,6 +112,16 @@ const CalendarEventModal = ({ isOpen, setIsOpen }) => {
                             onClick={() => setIsOpen(false)}>
                             ✕
                         </button>
+
+                        <div className="mb-5 flex flex-col items-center sm:mb-0 sm:mr-10">
+                            <input
+                                type="text"
+                                placeholder="Enter event description"
+                                value={description}
+                                onChange={(e) => setDescription(e.target.value)}
+                            />
+                        </div>
+
                         <div className="mt-5 flex flex-col items-center pl-5 sm:mt-0">
                             <DatePicker
                                 selected={selectedDateTime}

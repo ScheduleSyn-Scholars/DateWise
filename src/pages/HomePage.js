@@ -47,6 +47,7 @@ const HomePage = () => {
                             },
                         );
                         const title = `${calendar.calendarName}\n${formattedTime.replace(/\s+/g, '')}`;
+
                         // Only add the event if the user is attending the event
                         if (docData.attendees.includes(user.uid)) {
                             allEvents = [
@@ -59,9 +60,11 @@ const HomePage = () => {
                                     end: docData.dateTime.toDate(),
                                     calendarId: calendar.id,
                                     calendarName: calendar.calendarName,
+                                    description: docData.description || "",
                                 },
                             ];
                         }
+
                     }
                 }
                 setEvents(allEvents);

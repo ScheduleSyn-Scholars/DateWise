@@ -9,6 +9,7 @@ import Header from '../components/Header';
 import { sendEventInvite } from '../resources/NotificationService';
 import CalendarEventModal from '../components/CalendarEvent';
 
+
 const ViewCalendar = () => {
     const { calendarId, calendarName } = useParams();
     const user = useUser();
@@ -18,7 +19,9 @@ const ViewCalendar = () => {
     const [searchInput, setSearchInput] = useState(''); //input based on input tag value
     const [filteredUsers, setFilteredUsers] = useState([]);
     const [exactMatchFound, setExactMatchFound] = useState(false);
+    const [description, setDescription] = useState(''); // Define description state variable
     const [error, setError] = useState(false);
+
     const [availability, setAvailability] = useState({
         selectedDays: [],
         times: {},
@@ -73,6 +76,7 @@ const ViewCalendar = () => {
         } catch (error) {
             console.error('Error fetching user availability:', error);
         }
+
     };
 
     const fetchUser2 = async () => {
@@ -465,6 +469,7 @@ const ViewCalendar = () => {
         }
     };
 
+
     //code for adding user to a calendar
     const addUser = async () => {
         try {
@@ -708,3 +713,4 @@ const ViewCalendar = () => {
 };
 
 export default ViewCalendar;
+
