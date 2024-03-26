@@ -30,7 +30,7 @@ const BigCalendar = (props) => {
             }
         };
 
-        events.sort((a, b) => {
+        props.events.sort((a, b) => {
             return a.dateTime.seconds - b.dateTime.seconds;
         });
 
@@ -56,14 +56,12 @@ const BigCalendar = (props) => {
         setSelectedEvent(null);
     };
 
-    const leaveEvent = async (event=selectedEvent) => {
+    const leaveEvent = async (event = selectedEvent) => {
         const confirmedLeave = window.confirm(
             `Would you like to stop attending ${event.title}?`,
         );
         // Remove the current user from the event attendees
-        console.log(
-            `selected event: ${JSON.stringify(event, null, 2)}`,
-        );
+        console.log(`selected event: ${JSON.stringify(event, null, 2)}`);
         if (confirmedLeave) {
             const eventDocRef = firestore
                 .collection('calendars')
@@ -76,7 +74,7 @@ const BigCalendar = (props) => {
         }
     };
 
-    const goToCalendar = (event=selectedEvent) => {
+    const goToCalendar = (event = selectedEvent) => {
         navigate(
             `/ViewCalendar/${event.calendarId}/${encodeURIComponent(event.calendarName)}`,
         );
@@ -167,19 +165,25 @@ const BigCalendar = (props) => {
                 </div>
                 {events.map((event, index) => {
                     return (
-                        <div key={index} class="collapse collapse-arrow bg-secondary">
+                        <div
+                            key={index}
+                            className="collapse collapse-arrow bg-secondary">
                             <input type="radio" name="my-accordion-1" />
-                            <div class="collapse-title text-xl font-medium">
+                            <div className="collapse-title text-xl font-medium">
                                 {event.name} -{' '}
                                 {new Date(event.start).toLocaleDateString()}
                             </div>
-                            <div class="collapse-content flex items-center justify-center">
+                            <div className="collapse-content flex items-center justify-center">
                                 <div className="overflow-x-auto">
                                     <table className="table font-times-new-roman text-xl">
                                         <tbody>
                                             <tr>
                                                 <th>Date</th>
-                                                <td>{new Date(event.start).toDateString()}</td>
+                                                <td>
+                                                    {new Date(
+                                                        event.start,
+                                                    ).toDateString()}
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <th>Time</th>
@@ -193,14 +197,18 @@ const BigCalendar = (props) => {
                                                 <td>
                                                     <button
                                                         className="btn btn-primary"
-                                                        onClick={() => goToCalendar(event)}>
+                                                        onClick={() =>
+                                                            goToCalendar(event)
+                                                        }>
                                                         Go To Calendar
                                                     </button>
                                                 </td>
                                                 <td>
                                                     <button
                                                         className="btn btn-error"
-                                                        onClick={() => leaveEvent(event)}>
+                                                        onClick={() =>
+                                                            leaveEvent(event)
+                                                        }>
                                                         Leave Event
                                                     </button>
                                                 </td>

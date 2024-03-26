@@ -7,7 +7,6 @@ import Header from '../components/Header.js';
 import NewCalendarModal from '../components/NewCalendar.js';
 import BigCalendar from '../components/BigCalendar.js';
 
-
 const HomePage = () => {
     const user = useUser();
     const [calendars, setUserCalendars] = useState([]);
@@ -81,23 +80,22 @@ const HomePage = () => {
     };
 
     return (
-        <div className="flex flex-col h-screen">
+        <div className="flex h-screen flex-col">
             <Header />
 
-            <div className="flex sm:h-fit h-full w-full">
-                <div className="relative flex w-full sm:h-fit h-full sm:items-center justify-center sm:border-r sm:border-gray-500">
+            <div className="flex h-full w-full sm:h-fit">
+                <div className="relative flex h-full w-full justify-center sm:h-fit sm:items-center sm:border-r sm:border-gray-500">
                     <BigCalendar events={events} />
-                    
                 </div>
 
-                <div className="sm:flex flex-col w-1/4 items-center justify-between hidden">
+                <div className="hidden w-1/4 flex-col items-center justify-between sm:flex">
                     <div className="mt-10 text-2xl font-bold text-gray-700">
                         Shared Calendars
                     </div>
                     {loading ? (
                         <p>Loading Calendars... </p>
                     ) : (
-                        <div className="flex flex-col items-center h-4/5 overflow-y-auto">
+                        <div className="flex h-4/5 flex-col items-center overflow-y-auto">
                             {calendars.map((calendar) => (
                                 <Link
                                     key={calendar.id}
@@ -110,9 +108,13 @@ const HomePage = () => {
                         </div>
                     )}
 
-                    <NewCalendarModal isOpen={isOpen} setIsOpen={setIsOpen} closeModalAndRefresh={closeModalAndRefresh} />
+                    <NewCalendarModal
+                        isOpen={isOpen}
+                        setIsOpen={setIsOpen}
+                        closeModalAndRefresh={closeModalAndRefresh}
+                    />
                     <Link to="/">
-                        <button className="btn bg-red-400 text-white mt-5">
+                        <button className="btn mt-5 bg-red-400 text-white">
                             Logout
                         </button>
                     </Link>
@@ -123,4 +125,3 @@ const HomePage = () => {
 };
 
 export default HomePage;
-
