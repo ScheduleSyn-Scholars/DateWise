@@ -158,7 +158,7 @@ const NotificationBell = () => {
 
     return (
         <div
-            className="dropdown dropdown-end dropdown-bottom"
+            className="dropdown dropdown-end dropdown-bottom z-[9999999]"
             ref={dropdownRef}>
             <div
                 ref={toggleRef}
