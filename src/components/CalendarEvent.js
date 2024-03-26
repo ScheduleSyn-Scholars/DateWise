@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
-import DatePicker from "react-datepicker";
-import { firestore } from "../resources/firebase";
-import { useUser } from "../resources/UserContext";
-import { useParams } from "react-router-dom";
-import { sendEventInvite } from "../resources/NotificationService";
+import React, { useState, useEffect } from 'react';
+import DatePicker from 'react-datepicker';
+import { firestore } from '../resources/firebase';
+import { useUser } from '../resources/UserContext';
+import { useParams } from 'react-router-dom';
+import { sendEventInvite } from '../resources/NotificationService';
 import 'react-datepicker/dist/react-datepicker.css';
 
 const CalendarEventModal = ({ isOpen, setIsOpen }) => {
@@ -16,13 +16,11 @@ const CalendarEventModal = ({ isOpen, setIsOpen }) => {
     useEffect(() => {
         const fetchData = async () => {
             if (user) {
-                await fetchUsersInfo(calendarId); 
-                
+                await fetchUsersInfo(calendarId);
             }
         };
         fetchData();
     }, [calendarId, user]);
-
 
     const fetchUsersInfo = async (calendarId) => {
         try {
@@ -101,19 +99,17 @@ const CalendarEventModal = ({ isOpen, setIsOpen }) => {
 
     return (
         <>
-            <button 
-                className="btn bg-green-800 text-white" 
-                onClick={() => setIsOpen(true)}
-            >
+            <button
+                className="btn bg-green-800 text-white"
+                onClick={() => setIsOpen(true)}>
                 Create Meeting Time
             </button>
             {isOpen && (
                 <div id="eventCal" className={`modal modal-open`}>
                     <div className="modal-box">
-                        <button 
-                            className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" 
-                            onClick={() => setIsOpen(false)}
-                        >
+                        <button
+                            className="btn btn-circle btn-ghost btn-sm absolute right-2 top-2"
+                            onClick={() => setIsOpen(false)}>
                             ✕
                         </button>
 
@@ -137,8 +133,7 @@ const CalendarEventModal = ({ isOpen, setIsOpen }) => {
                             <button
                                 className="items center h-10 w-32 rounded-full border-none bg-green-800 text-white"
                                 type="button"
-                                onClick={handleCreateEvent}
-                            >
+                                onClick={handleCreateEvent}>
                                 Submit Event
                             </button>
                         </div>
