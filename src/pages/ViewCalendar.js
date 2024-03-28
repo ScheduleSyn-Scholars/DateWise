@@ -33,6 +33,8 @@ const ViewCalendar = () => {
     const [usersInfo, setUsersInfo] = useState([]);
     const [isOpen, setIsOpen] = useState(false);
     const [adminUids, setAdminUids] = useState([]);
+    const [addUsersPermission, setAddUsersPermission] = useState('admins');
+    const [createEventsPermission, setCreateEventsPermission] = useState('admins')
 
     const navigate = useNavigate();
 
@@ -47,6 +49,8 @@ const ViewCalendar = () => {
                 ).data();
                 if (calendarData.admins) {
                     setAdminUids(calendarData.admins);
+                    setAddUsersPermission(calendarData.addUsersPermission);
+                    setCreateEventsPermission(calendarData.createEventsPermission);
                 }
                 await fetchUserAvailability(calendarId, user.uid);
                 await fetchUser2(calendarId);
@@ -763,7 +767,7 @@ const ViewCalendar = () => {
                             <p>Availability saved!</p>
                         </div>
                     )}
-                    <div className={`${isAdmin(user.uid) ? '' : 'hidden'}`}>
+                    <div className={`${isAdmin(user.uid) || createEventsPermission === 'everyone' ? '' : 'hidden'}`}>
                         <CalendarEventModal
                             isOpen={isOpen}
                             setIsOpen={setIsOpen}
@@ -806,7 +810,7 @@ const ViewCalendar = () => {
                         )}
 
                         <button
-                            className={`btn bg-green-800 text-white ${isAdmin(user.uid) ? '' : 'hidden'}`}
+                            className={`btn bg-green-800 text-white ${isAdmin(user.uid) || addUsersPermission === 'everyone' ? '' : 'hidden'}`}
                             type="button"
                             onClick={addUser}>
                             Add User
