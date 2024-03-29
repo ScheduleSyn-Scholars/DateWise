@@ -867,15 +867,6 @@ const ViewCalendar = () => {
                 </div>
             </div>
 
-            {/* Home Button */}
-            <div className="flex">
-                <Link to="/HomePage" className="ml-5">
-                    <button className="btn bg-green-800 text-white">
-                        Home
-                    </button>
-                </Link>
-            </div>
-
             {/* Modal for Selected User's Availability */}
             {selectedUserAvailability && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
