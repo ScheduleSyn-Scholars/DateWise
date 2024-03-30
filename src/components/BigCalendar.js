@@ -138,6 +138,10 @@ const BigCalendar = (props) => {
                                         </td>
                                     </tr>
                                     <tr>
+    <th>Description</th>
+    <td>{selectedEvent.description}</td>
+</tr>
+                                    <tr>
                                         <td>
                                             <button
                                                 className="btn btn-primary"
