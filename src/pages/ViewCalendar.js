@@ -681,7 +681,7 @@ const ViewCalendar = () => {
             <div className="mt-10vh text-center text-5xl font-medium text-gray-600">
                 {calendarName}
             </div>
-
+    
             {/* Users Section */}
             <div className="mt-5 flex items-center justify-center">
                 {usersInfo.map((calendarUser) => (
@@ -689,22 +689,24 @@ const ViewCalendar = () => {
                         key={calendarUser.uid}
                         className="mr-5 flex flex-col items-center">
                         <img
-                            src={
-                                calendarUser.imageURL ?? '/default-profile.png'
-                            }
+                            src={calendarUser.imageURL ?? '/default-profile.png'}
                             alt="User Profile Picture"
-                            className="mb-2 h-20 w-20 rounded-full cursor-pointer"
-                            onClick={() => handleDotClick(calendarUser.uid)} // Add onClick handler to show availability modal
+                            className={`mb-2 h-20 w-20 rounded-full ${
+                                userAvailabilityExists(calendarUser.uid) ? 'cursor-pointer' : ''
+                            }`}
+                            onClick={() => {
+                                if (userAvailabilityExists(calendarUser.uid)) {
+                                    handleDotClick(calendarUser.uid);
+                                }
+                            }}
                         />
-                        {/* <p className="mb-1">{user.email}</p> //removed since we just wanna see userName */}
                         <div className="flex items-center">
                             <p>{calendarUser.userName}</p>
                             {userAvailabilityExists(calendarUser.uid) ? (
                                 <span
                                     className="ml-2 h-3 w-3 cursor-pointer rounded-full bg-green-500"
-                                    onClick={() =>
-                                        handleDotClick(calendarUser.uid)
-                                    }></span>
+                                    onClick={() => handleDotClick(calendarUser.uid)}
+                                ></span>
                             ) : (
                                 <span className="ml-2 h-3 w-3 rounded-full bg-orange-500"></span>
                             )}
@@ -727,11 +729,12 @@ const ViewCalendar = () => {
                     </div>
                 ))}
             </div>
-
+    
             {/* Rest of the content */}
             <div className="mt-5 flex flex-col items-center justify-center sm:flex-row">
                 {/* Availability Form and Save Button */}
                 <div className="mb-5 flex flex-col items-center sm:mb-0 sm:mr-10">
+                    {/* Availability Form and Save Button */}
                     <AvailabilityForm
                         availability={availability}
                         onAvailabilityChange={handleAvailabilityChange}
@@ -768,7 +771,12 @@ const ViewCalendar = () => {
                             <p>Availability saved!</p>
                         </div>
                     )}
-                    <div className={`${isAdmin(user.uid) || createEventsPermission === 'everyone' ? '' : 'hidden'}`}>
+                    <div
+                        className={`${
+                            isAdmin(user.uid) || createEventsPermission === 'everyone'
+                                ? ''
+                                : 'hidden'
+                        }`}>
                         <CalendarEventModal
                             isOpen={isOpen}
                             setIsOpen={setIsOpen}
@@ -776,7 +784,7 @@ const ViewCalendar = () => {
                         />
                     </div>
                 </div>
-
+    
                 {/* Calendar Events */}
                 <div className="ml-10 flex h-full flex-col items-center pr-5">
                     Users:
@@ -799,9 +807,7 @@ const ViewCalendar = () => {
                                             key={user.id}>
                                             {' '}
                                             <button
-                                                onClick={() =>
-                                                    handleNewUser(user)
-                                                }>
+                                                onClick={() => handleNewUser(user)}>
                                                 {user.firstName} {user.lastName}
                                             </button>
                                         </li>
@@ -809,9 +815,13 @@ const ViewCalendar = () => {
                                 </ul>
                             </div>
                         )}
-
+    
                         <button
-                            className={`btn bg-green-800 text-white ${isAdmin(user.uid) || addUsersPermission === 'everyone' ? '' : 'hidden'}`}
+                            className={`btn bg-green-800 text-white ${
+                                isAdmin(user.uid) || addUsersPermission === 'everyone'
+                                    ? ''
+                                    : 'hidden'
+                            }`}
                             type="button"
                             onClick={addUser}>
                             Add User
@@ -840,16 +850,14 @@ const ViewCalendar = () => {
                     </button>
                 </div>
             </div>
-
+    
             {/* Home Button */}
             <div className="flex">
                 <Link to="/HomePage" className="ml-5">
-                    <button className="btn bg-green-800 text-white">
-                        Home
-                    </button>
+                    <button className="btn bg-green-800 text-white">Home</button>
                 </Link>
             </div>
-
+    
             {/* Modal for Selected User's Availability */}
             {selectedUserAvailability && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
@@ -894,6 +902,7 @@ const ViewCalendar = () => {
             )}
         </div>
     );
+    
 };
 
 export default ViewCalendar;
