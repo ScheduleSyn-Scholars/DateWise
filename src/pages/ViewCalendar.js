@@ -738,27 +738,21 @@ const ViewCalendar = () => {
                                 <span className="ml-2 h-3 w-3 rounded-full bg-orange-500"></span>
                             )}
                         </div>
-                        {isAdmin(user.uid) &&
-                            currentUserCanEditAdmins() &&
-                            calendarUser.uid !== user.uid && (
-                                <div className="form-control">
-                                    <label className="label flex cursor-pointer flex-col">
-                                        <span className="label-text">
-                                            Admin
-                                        </span>
-                                        <input
-                                            type="checkbox"
-                                            className="toggle"
-                                            checked={isAdmin(calendarUser.uid)}
-                                            onChange={() =>
-                                                handleAdminToggle(
-                                                    calendarUser.uid,
-                                                )
-                                            }
-                                        />
-                                    </label>
-                                </div>
-                            )}
+                        {isAdmin(user.uid) && currentUserCanEditAdmins() && calendarUser.uid !== user.uid && (
+                            <div className="form-control">
+                                <label className="label flex cursor-pointer flex-col">
+                                    <span className="label-text">Admin</span>
+                                    <input
+                                        type="checkbox"
+                                        className="toggle"
+                                        checked={isAdmin(calendarUser.uid)}
+                                        onChange={() =>
+                                            handleAdminToggle(calendarUser.uid)
+                                        }
+                                    />
+                                </label>
+                            </div>
+                        )}
                     </div>
                 ))}
             </div>
