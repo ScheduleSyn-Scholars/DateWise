@@ -60,11 +60,10 @@ const HomePage = () => {
                                     end: docData.dateTime.toDate(),
                                     calendarId: calendar.id,
                                     calendarName: calendar.calendarName,
-                                    description: docData.description || "",
+                                    description: docData.description || '',
                                 },
                             ];
                         }
-
                     }
                 }
                 setEvents(allEvents);
@@ -86,7 +85,7 @@ const HomePage = () => {
         <div className="flex h-screen flex-col">
             <Header />
 
-            <div className="flex sm:flex-row flex-col h-full w-full sm:h-fit">
+            <div className="flex h-full w-full flex-col sm:h-fit sm:flex-row">
                 <div className="relative flex h-full w-full justify-center sm:h-fit sm:items-center sm:border-r sm:border-gray-500">
                     <BigCalendar events={events} />
                 </div>

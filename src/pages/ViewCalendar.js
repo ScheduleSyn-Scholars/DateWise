@@ -35,7 +35,7 @@ const ViewCalendar = () => {
     const [adminUids, setAdminUids] = useState([]);
     const [addUsersPermission, setAddUsersPermission] = useState('');
     const [createEventsPermission, setCreateEventsPermission] = useState('');
-    const [manageAdminsPermission, setManageAdminsPermission] = useState(''); 
+    const [manageAdminsPermission, setManageAdminsPermission] = useState('');
     const [creatorUid, setCreatorUid] = useState('');
 
     const navigate = useNavigate();
@@ -52,8 +52,12 @@ const ViewCalendar = () => {
                 if (calendarData.admins) {
                     setAdminUids(calendarData.admins);
                     setAddUsersPermission(calendarData.addUsersPermission);
-                    setCreateEventsPermission(calendarData.createEventsPermission);
-                    setManageAdminsPermission(calendarData.manageAdminsPermission);
+                    setCreateEventsPermission(
+                        calendarData.createEventsPermission,
+                    );
+                    setManageAdminsPermission(
+                        calendarData.manageAdminsPermission,
+                    );
                 }
 
                 setCreatorUid(calendarData.creatorId);
@@ -657,28 +661,24 @@ const ViewCalendar = () => {
 
     // When toggled, removes admins from admin list and adds nonadmins to admin list.
     const handleAdminToggle = async (uid) => {
-      const calRef = firestore.collection('calendars').doc(calendarId);
-      if (isAdmin(uid)) {
-
-        await calRef.update({
-          admins: firebase.firestore.FieldValue.arrayRemove(uid)
-        });
-        setAdminUids((prevAdminUids) => {
-          return prevAdminUids.filter((adminUid) => {
-            return adminUid !== uid
-          })
-        })
-      } else {
-        await calRef.update({
-          admins: firebase.firestore.FieldValue.arrayUnion([uid])
-        });
-        setAdminUids((prevAdminUids) => {
-          return [
-            ...prevAdminUids,
-            uid
-          ]
-        });
-      }
+        const calRef = firestore.collection('calendars').doc(calendarId);
+        if (isAdmin(uid)) {
+            await calRef.update({
+                admins: firebase.firestore.FieldValue.arrayRemove(uid),
+            });
+            setAdminUids((prevAdminUids) => {
+                return prevAdminUids.filter((adminUid) => {
+                    return adminUid !== uid;
+                });
+            });
+        } else {
+            await calRef.update({
+                admins: firebase.firestore.FieldValue.arrayUnion([uid]),
+            });
+            setAdminUids((prevAdminUids) => {
+                return [...prevAdminUids, uid];
+            });
+        }
     };
 
     const currentUserCanEditAdmins = () => {
@@ -692,7 +692,7 @@ const ViewCalendar = () => {
         if (manageAdminsPermission === 'admins') {
             return isAdmin(user.uid);
         }
-    }
+    };
 
     return (
         <div className="flex h-screen flex-col">
@@ -727,21 +727,27 @@ const ViewCalendar = () => {
                                 <span className="ml-2 h-3 w-3 rounded-full bg-orange-500"></span>
                             )}
                         </div>
-                        {isAdmin(user.uid) && currentUserCanEditAdmins() && calendarUser.uid !== user.uid && (
-                            <div className="form-control">
-                                <label className="label flex cursor-pointer flex-col">
-                                    <span className="label-text">Admin</span>
-                                    <input
-                                        type="checkbox"
-                                        className="toggle"
-                                        checked={isAdmin(calendarUser.uid)}
-                                        onChange={() =>
-                                            handleAdminToggle(calendarUser.uid)
-                                        }
-                                    />
-                                </label>
-                            </div>
-                        )}
+                        {isAdmin(user.uid) &&
+                            currentUserCanEditAdmins() &&
+                            calendarUser.uid !== user.uid && (
+                                <div className="form-control">
+                                    <label className="label flex cursor-pointer flex-col">
+                                        <span className="label-text">
+                                            Admin
+                                        </span>
+                                        <input
+                                            type="checkbox"
+                                            className="toggle"
+                                            checked={isAdmin(calendarUser.uid)}
+                                            onChange={() =>
+                                                handleAdminToggle(
+                                                    calendarUser.uid,
+                                                )
+                                            }
+                                        />
+                                    </label>
+                                </div>
+                            )}
                     </div>
                 ))}
             </div>
@@ -786,7 +792,8 @@ const ViewCalendar = () => {
                             <p>Availability saved!</p>
                         </div>
                     )}
-                    <div className={`${isAdmin(user.uid) || createEventsPermission === 'everyone' ? '' : 'hidden'}`}>
+                    <div
+                        className={`${isAdmin(user.uid) || createEventsPermission === 'everyone' ? '' : 'hidden'}`}>
                         <CalendarEventModal
                             isOpen={isOpen}
                             setIsOpen={setIsOpen}

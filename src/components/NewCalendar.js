@@ -291,11 +291,11 @@ const NewCalendarModal = ({ isOpen, setIsOpen, closeModalAndRefresh }) => {
                                                 <th className="flex items-center">
                                                     Admin
                                                     <div
-                                                        className=" absolute z-[99999999] tooltip tooltip-bottom tooltip-info"
+                                                        className=" tooltip tooltip-bottom tooltip-info absolute z-[99999999]"
                                                         data-tip="Admins have special permissions according to your settings.">
                                                         <button className="btn btn-ghost ml-1 rounded-full p-2">
                                                             <InfoIcon className="h-3 w-3" />
-                                                        </button>   
+                                                        </button>
                                                     </div>
                                                 </th>
                                             </tr>
