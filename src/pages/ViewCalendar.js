@@ -693,7 +693,8 @@ const ViewCalendar = () => {
                                 calendarUser.imageURL ?? '/default-profile.png'
                             }
                             alt="User Profile Picture"
-                            className="mb-2 h-20 w-20 rounded-full"
+                            className="mb-2 h-20 w-20 rounded-full cursor-pointer"
+                            onClick={() => handleDotClick(calendarUser.uid)} // Add onClick handler to show availability modal
                         />
                         {/* <p className="mb-1">{user.email}</p> //removed since we just wanna see userName */}
                         <div className="flex items-center">
