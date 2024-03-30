@@ -295,7 +295,7 @@ const NewCalendarModal = ({ isOpen, setIsOpen, closeModalAndRefresh }) => {
                                                         data-tip="Admins have special permissions according to your settings.">
                                                         <button className="btn btn-ghost ml-1 rounded-full p-2">
                                                             <InfoIcon className="h-3 w-3" />
-                                                        </button>   
+                                                        </button>
                                                     </div>
                                                 </th>
                                             </tr>
