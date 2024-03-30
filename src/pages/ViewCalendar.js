@@ -33,8 +33,10 @@ const ViewCalendar = () => {
     const [usersInfo, setUsersInfo] = useState([]);
     const [isOpen, setIsOpen] = useState(false);
     const [adminUids, setAdminUids] = useState([]);
-    const [addUsersPermission, setAddUsersPermission] = useState('admins');
-    const [createEventsPermission, setCreateEventsPermission] = useState('admins')
+    const [addUsersPermission, setAddUsersPermission] = useState('');
+    const [createEventsPermission, setCreateEventsPermission] = useState('');
+    const [manageAdminsPermission, setManageAdminsPermission] = useState(''); 
+    const [creatorUid, setCreatorUid] = useState('');
 
     const navigate = useNavigate();
 
@@ -51,7 +53,11 @@ const ViewCalendar = () => {
                     setAdminUids(calendarData.admins);
                     setAddUsersPermission(calendarData.addUsersPermission);
                     setCreateEventsPermission(calendarData.createEventsPermission);
+                    setManageAdminsPermission(calendarData.manageAdminsPermission);
                 }
+
+                setCreatorUid(calendarData.creatorId);
+
                 await fetchUserAvailability(calendarId, user.uid);
                 await fetchUser2(calendarId);
                 const teamAvailabilityData =
@@ -675,6 +681,19 @@ const ViewCalendar = () => {
       }
     };
 
+    const currentUserCanEditAdmins = () => {
+        if (manageAdminsPermission === 'creator') {
+            if (user.uid === creatorUid) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        if (manageAdminsPermission === 'admins') {
+            return isAdmin(user.uid);
+        }
+    }
+
     return (
         <div className="flex h-screen flex-col">
             <Header />
@@ -708,7 +727,7 @@ const ViewCalendar = () => {
                                 <span className="ml-2 h-3 w-3 rounded-full bg-orange-500"></span>
                             )}
                         </div>
-                        {isAdmin(user.uid) && calendarUser.uid !== user.uid && (
+                        {isAdmin(user.uid) && currentUserCanEditAdmins() && calendarUser.uid !== user.uid && (
                             <div className="form-control">
                                 <label className="label flex cursor-pointer flex-col">
                                     <span className="label-text">Admin</span>

@@ -13,6 +13,8 @@ const NewCalendarModal = ({ isOpen, setIsOpen, closeModalAndRefresh }) => {
     const [createEventsPermission, setCreateEventsPermission] =
         useState('everyone');
     const [addUsersPermission, setAddUsersPermission] = useState('everyone');
+    const [manageAdminsPermission, setManageAdminsPermission] =
+        useState('creator');
     const user = useUser();
 
     const addEmail = async () => {
@@ -54,10 +56,12 @@ const NewCalendarModal = ({ isOpen, setIsOpen, closeModalAndRefresh }) => {
         const newCalendarAdminList = adminList.map((admin) => {
             return admin.uid;
         });
-        newCalendarAdminList.forEach(str => {
+        newCalendarAdminList.forEach((str) => {
             console.log(str);
-        })
-        console.log(`Admin uids added to calendar: ${newCalendarAdminList.toString()}`)
+        });
+        console.log(
+            `Admin uids added to calendar: ${newCalendarAdminList.toString()}`,
+        );
 
         const calendarData = {
             calendarName: calendarTitleValue,
@@ -66,6 +70,7 @@ const NewCalendarModal = ({ isOpen, setIsOpen, closeModalAndRefresh }) => {
             admins: [user.uid, ...newCalendarAdminList],
             addUsersPermission: addUsersPermission,
             createEventsPermission: createEventsPermission,
+            manageAdminsPermission: manageAdminsPermission,
         };
 
         try {
@@ -109,9 +114,11 @@ const NewCalendarModal = ({ isOpen, setIsOpen, closeModalAndRefresh }) => {
             return [
                 ...prevAdminList,
                 {
-                    name, uid, email
-                }
-            ]
+                    name,
+                    uid,
+                    email,
+                },
+            ];
         });
     };
 
@@ -141,6 +148,10 @@ const NewCalendarModal = ({ isOpen, setIsOpen, closeModalAndRefresh }) => {
 
     const handleAddUsersPermissionChange = (event) => {
         setAddUsersPermission(event.target.value);
+    };
+
+    const handleManageAdminsPermissionChange = (event) => {
+        setManageAdminsPermission(event.target.value);
     };
 
     return (
@@ -217,9 +228,7 @@ const NewCalendarModal = ({ isOpen, setIsOpen, closeModalAndRefresh }) => {
                                                                 handleCreateEventsPermissionChange
                                                             }
                                                             className="select w-full max-w-xs">
-                                                            <option
-                                                                value="everyone"
-                                                                >
+                                                            <option value="everyone">
                                                                 Everyone
                                                             </option>
                                                             <option value="admins">
@@ -229,17 +238,36 @@ const NewCalendarModal = ({ isOpen, setIsOpen, closeModalAndRefresh }) => {
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <th>Who can create events?</th>
+                                                    <th>
+                                                        Who can create events?
+                                                    </th>
                                                     <td>
                                                         <select
                                                             onChange={
                                                                 handleAddUsersPermissionChange
                                                             }
                                                             className="max-3-xs select w-full">
-                                                            <option
-                                                                value="everyone"
-                                                                >
+                                                            <option value="everyone">
                                                                 Everyone
+                                                            </option>
+                                                            <option value="admins">
+                                                                Admins
+                                                            </option>
+                                                        </select>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>
+                                                        Who can manage admins?
+                                                    </th>
+                                                    <td>
+                                                        <select
+                                                            onChange={
+                                                                handleManageAdminsPermissionChange
+                                                            }
+                                                            className="max-3-xs select w-full">
+                                                            <option value="creator">
+                                                                Creator Only
                                                             </option>
                                                             <option value="admins">
                                                                 Admins
@@ -263,11 +291,11 @@ const NewCalendarModal = ({ isOpen, setIsOpen, closeModalAndRefresh }) => {
                                                 <th className="flex items-center">
                                                     Admin
                                                     <div
-                                                        className="tooltip tooltip-bottom tooltip-info"
-                                                        data-tip="Admins can create events and invite new members to the calendar.">
+                                                        className=" absolute z-[99999999] tooltip tooltip-bottom tooltip-info"
+                                                        data-tip="Admins have special permissions according to your settings.">
                                                         <button className="btn btn-ghost ml-1 rounded-full p-2">
                                                             <InfoIcon className="h-3 w-3" />
-                                                        </button>
+                                                        </button>   
                                                     </div>
                                                 </th>
                                             </tr>
