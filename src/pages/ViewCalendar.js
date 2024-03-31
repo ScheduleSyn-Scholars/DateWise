@@ -683,7 +683,7 @@ const ViewCalendar = () => {
             </div>
     
             {/* Users Section */}
-            <div className="mt-5 flex items-center justify-center">
+            <div className="mt-5 flex items-center justify-center overflow-x-auto">
                 {usersInfo.map((calendarUser) => (
                     <div
                         key={calendarUser.uid}
@@ -691,14 +691,8 @@ const ViewCalendar = () => {
                         <img
                             src={calendarUser.imageURL ?? '/default-profile.png'}
                             alt="User Profile Picture"
-                            className={`mb-2 h-20 w-20 rounded-full ${
-                                userAvailabilityExists(calendarUser.uid) ? 'cursor-pointer' : ''
-                            }`}
-                            onClick={() => {
-                                if (userAvailabilityExists(calendarUser.uid)) {
-                                    handleDotClick(calendarUser.uid);
-                                }
-                            }}
+                            className="mb-2 h-20 w-20 rounded-full cursor-pointer"
+                            onClick={() => handleDotClick(calendarUser.uid)}
                         />
                         <div className="flex items-center">
                             <p>{calendarUser.userName}</p>
@@ -734,7 +728,6 @@ const ViewCalendar = () => {
             <div className="mt-5 flex flex-col items-center justify-center sm:flex-row">
                 {/* Availability Form and Save Button */}
                 <div className="mb-5 flex flex-col items-center sm:mb-0 sm:mr-10">
-                    {/* Availability Form and Save Button */}
                     <AvailabilityForm
                         availability={availability}
                         onAvailabilityChange={handleAvailabilityChange}
@@ -743,7 +736,8 @@ const ViewCalendar = () => {
                         <button
                             className="btn bg-green-800 text-white"
                             type="button"
-                            onClick={handleSaveAndUpdate}>
+                            onClick={handleSaveAndUpdate}
+                        >
                             Save
                         </button>
                     </div>
@@ -773,10 +767,12 @@ const ViewCalendar = () => {
                     )}
                     <div
                         className={`${
-                            isAdmin(user.uid) || createEventsPermission === 'everyone'
+                            isAdmin(user.uid) ||
+                            createEventsPermission === 'everyone'
                                 ? ''
                                 : 'hidden'
-                        }`}>
+                        }`}
+                    >
                         <CalendarEventModal
                             isOpen={isOpen}
                             setIsOpen={setIsOpen}
@@ -797,17 +793,22 @@ const ViewCalendar = () => {
                             onChange={filterSuggestion}
                             type="text"
                             placeholder="Type here"
-                            value={searchInput}></input>
+                            value={searchInput}
+                        ></input>
                         {filteredUsers.length > 0 && !exactMatchFound && (
                             <div className="dropdown-content top-14 max-h-96 w-full flex-col overflow-auto rounded-md bg-base-200 md:max-w-md">
                                 <ul className="menu-compact menu">
                                     {filteredUsers.map((user) => (
                                         <li
                                             className="w-full border-b border-b-base-content/10"
-                                            key={user.id}>
+                                            key={user.id}
+                                        >
                                             {' '}
                                             <button
-                                                onClick={() => handleNewUser(user)}>
+                                                onClick={() =>
+                                                    handleNewUser(user)
+                                                }
+                                            >
                                                 {user.firstName} {user.lastName}
                                             </button>
                                         </li>
@@ -818,25 +819,29 @@ const ViewCalendar = () => {
     
                         <button
                             className={`btn bg-green-800 text-white ${
-                                isAdmin(user.uid) || addUsersPermission === 'everyone'
+                                isAdmin(user.uid) ||
+                                addUsersPermission === 'everyone'
                                     ? ''
                                     : 'hidden'
                             }`}
                             type="button"
-                            onClick={addUser}>
+                            onClick={addUser}
+                        >
                             Add User
                         </button>
                         {userAdded && !error && (
                             <div
                                 role="alert"
-                                className="alert alert-success relative">
+                                className="alert alert-success relative"
+                            >
                                 <span>User has been added to Calendar!</span>
                             </div>
                         )}
                         {error && (
                             <div
                                 role="alert"
-                                className="alert-sm alert alert-error">
+                                className="alert-sm alert alert-error"
+                            >
                                 <span>
                                     Error occurred while trying to add user!
                                 </span>
@@ -845,7 +850,8 @@ const ViewCalendar = () => {
                     </div>
                     <button
                         onClick={handleLeaveGroup}
-                        className="btn mt-5 bg-green-800 text-white">
+                        className="btn mt-5 bg-green-800 text-white"
+                    >
                         Leave Group
                     </button>
                 </div>
@@ -887,14 +893,15 @@ const ViewCalendar = () => {
                                                         </p>
                                                     ))}
                                                 </div>
-                                            ),
+                                            )
                                         )}
                                 </div>
-                            ),
+                            )
                         )}
                         <button
                             className="mx-auto mt-4 block rounded-md bg-red-500 px-4 py-2 text-white"
-                            onClick={() => setSelectedUserAvailability(null)}>
+                            onClick={() => setSelectedUserAvailability(null)}
+                        >
                             Close
                         </button>
                     </div>
