@@ -355,9 +355,7 @@ const ViewCalendar = () => {
                             imageURL: userData.imageURL,
                         };
                     } else {
-                        console.error(
-                            `User with ID ${userId} not found in the 'users' collection.`,
-                        );
+                        console.error(`User with ID ${userId} not found in the 'users' collection.`);
                         return null;
                     }
                 });
@@ -365,9 +363,17 @@ const ViewCalendar = () => {
                 setUsersInfo(usersInfoData.filter((user) => user !== null));
             } else {
                 console.error(`Calendar with ID ${calendarId} not found.`);
+                // If calendar is not found, clear the users info
+                setUsersInfo([]);
             }
         } catch (error) {
             console.error('Error fetching users info:', error);
+            // If an error does occur, clear the users info and retry after 15 seconds
+            setUsersInfo([]);
+            setTimeout(() => {
+                console.log('Retrying to fetch users info...');
+                fetchUsersInfo(calendarId);
+            }, 15000); // Retry after 15 seconds
         }
     };
 
@@ -720,6 +726,18 @@ const ViewCalendar = () => {
                                 </label>
                             </div>
                         )}
+
+{error && (
+    <div
+        role="alert"
+        className="alert-sm alert alert-error"
+    >
+        <span>
+            Error occurred while fetching user data!
+        </span>
+    </div>
+)}
+
                     </div>
                 ))}
             </div>
