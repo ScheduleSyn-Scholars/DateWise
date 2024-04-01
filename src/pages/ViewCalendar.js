@@ -13,13 +13,13 @@ import CalendarEventModal from '../components/CalendarEvent';
 const ViewCalendar = () => {
   const { calendarId, calendarName } = useParams();
   const user = useUser();
-  const [users, setUsers] = useState([]);  //list of users from the database
-  const [userAdded, setUserAdded] = useState(false); //functionality to add user to database
-  const [userId, setUserId] = useState();      //value to CRUD with database 
-  const [searchInput, setSearchInput] = useState(""); //input based on input tag value
-  const [filteredUsers, setFilteredUsers] = useState([]);
-  const [exactMatchFound, setExactMatchFound] = useState(false);
-  const [error, setError] = useState(false);
+  // const [users, setUsers] = useState([]);  //list of users from the database
+  // const [userAdded, setUserAdded] = useState(false); //functionality to add user to database
+  // const [userId, setUserId] = useState();      //value to CRUD with database 
+  // const [searchInput, setSearchInput] = useState(""); //input based on input tag value
+  // const [filteredUsers, setFilteredUsers] = useState([]);
+  // const [exactMatchFound, setExactMatchFound] = useState(false);
+  // const [error, setError] = useState(false);
   const [description, setDescription] = useState(''); // Define description state variable
     const [availability, setAvailability] = useState({
         selectedDays: [],
@@ -39,7 +39,7 @@ const ViewCalendar = () => {
     const fetchData = async () => {
       if (user) {
         await fetchUserAvailability(calendarId, user.uid);
-        await fetchUser2(calendarId);
+        // await fetchUser2(calendarId);
         const teamAvailabilityData = await fetchTeamAvailability(calendarId);
         await fetchUsersInfo(calendarId); // Await the fetchUsersInfo function here
         fetchTeamAvailabilityOnCommonDays(teamAvailabilityData);
@@ -87,66 +87,68 @@ const ViewCalendar = () => {
     }
     };
 
-  const fetchUser2 = async () => {
-    //fetch all users from the users collection
-    const usersDataArray = [];
-    try {
-      const userRef = firestore.collection("users");
-      const userSnapshot = await userRef.get();
-      userSnapshot.forEach((doc) => {
-        const id = doc.id;
-        const { email, firstName, imageURL, lastName } = doc.data();
-        const userObject = { id, email, firstName, imageURL, lastName };
-        usersDataArray.push(userObject);
-      });
-      setUsers(usersDataArray);
-    } catch (Exception) {
-      console.log("Error fetching use", Exception);
-    }
+  // const fetchUser2 = async () => {
+  //   //fetch all users from the users collection
+  //   const usersDataArray = [];
+  //   try {
+  //     const userRef = firestore.collection("users");
+  //     const userSnapshot = await userRef.get();
+  //     userSnapshot.forEach((doc) => {
+  //       const id = doc.id;
+  //       const { email, firstName, imageURL, lastName } = doc.data();
+  //       const userObject = { id, email, firstName, imageURL, lastName };
+  //       usersDataArray.push(userObject);
+  //     });
+  //     setUsers(usersDataArray);
+  //   } catch (Exception) {
+  //     console.log("Error fetching use", Exception);
+  //   }
 
-  }
-  const filterSuggestion = (input) => {
-    let validatedInput = input.target.value.toLowerCase();
-    let match = 0;
-    if (input.target.value === "" || input.target.value.trim() === '') {
-      setFilteredUsers([]);
-      setSearchInput("");
-      setUserId('');
-      setExactMatchFound(false);
-      return;
-    } else {
-      setSearchInput(input.target.value);
-      const filtered = users.filter(user =>{
-        //
-        if(((user.firstName)?.toLowerCase().includes(validatedInput)||(user.lastName)?.toLowerCase().includes(validatedInput)) && match <10){
-          match++;
-          return user;
-        }
-      });
-      //if match < 10, then put the filtered option
-      // Check if exact match is found
-      const exactMatch = users.find(user => {
-        return (user.firstName?.toLowerCase() === validatedInput || user.lastName?.toLowerCase() === validatedInput);
-      });
+  // }
 
-      // If exact match found, set exactMatchFound to true and clear filtered list
-      if (exactMatch) {
-        setExactMatchFound(true);
-        setFilteredUsers([]);
-      } else {
-        setExactMatchFound(false);
-        setFilteredUsers(filtered);
-      }
-      //setFilteredUsers(filtered);
-    }
+  //Autocomplete functionality (Handles filtration, finding exact match, returning dropdown list of matched results that amount to 10 values)
+  // const filterSuggestion = (input) => {
+  //   let validatedInput = input.target.value.toLowerCase();
+  //   let match = 0;
+  //   if (input.target.value === "" || input.target.value.trim() === '') {
+  //     setFilteredUsers([]);
+  //     setSearchInput("");
+  //     setUserId('');
+  //     setExactMatchFound(false);
+  //     return;
+  //   } else {
+  //     setSearchInput(input.target.value);
+  //     const filtered = users.filter(user =>{
+  //       //
+  //       if(((user.firstName)?.toLowerCase().includes(validatedInput)||(user.lastName)?.toLowerCase().includes(validatedInput)) && match <10){
+  //         match++;
+  //         return user;
+  //       }
+  //     });
+  //     //if match < 10, then put the filtered option
+  //     // Check if exact match is found
+  //     const exactMatch = users.find(user => {
+  //       return (user.firstName?.toLowerCase() === validatedInput || user.lastName?.toLowerCase() === validatedInput);
+  //     });
 
-  }
+  //     // If exact match found, set exactMatchFound to true and clear filtered list
+  //     if (exactMatch) {
+  //       setExactMatchFound(true);
+  //       setFilteredUsers([]);
+  //     } else {
+  //       setExactMatchFound(false);
+  //       setFilteredUsers(filtered);
+  //     }
+  //     //setFilteredUsers(filtered);
+  //   }
+
+  // }
   //Button that handles Adding User to Calendar
-  const handleNewUser= (user) => {
-    setSearchInput(`${user.firstName} ${user.lastName}`);
-    setExactMatchFound(true);
-    setUserId(user.id);
-  }
+  // const handleNewUser= (user) => {
+  //   setSearchInput(`${user.firstName} ${user.lastName}`);
+  //   setExactMatchFound(true);
+  //   setUserId(user.id);
+  // }
 
   const fetchTeamAvailability = async (calendarId) => {
     try {
@@ -504,34 +506,34 @@ const handleDotClick = async (userUid) => {
 
 
   //code for adding user to a calendar
-  const addUser = async () => {
-    try {
-      if(userId === ''){
-        throw new Error("Please add a user");
-      }
-      const calRef = firestore.collection('calendars').doc(calendarId);
-      const calSnapshot = await calRef.get();
-      if (calSnapshot.exists) {
-        await calRef.update({
-          users: FieldValue.arrayUnion(userId)
-        })
-      }
-      setUserAdded(true);
-      setSearchInput('');
-      setError(false);
-      setTimeout(() => {
-        setUserAdded(false);
-      }, 3000);
+  // const addUser = async () => {
+  //   try {
+  //     if(userId === ''){
+  //       throw new Error("Please add a user");
+  //     }
+  //     const calRef = firestore.collection('calendars').doc(calendarId);
+  //     const calSnapshot = await calRef.get();
+  //     if (calSnapshot.exists) {
+  //       await calRef.update({
+  //         users: FieldValue.arrayUnion(userId)
+  //       })
+  //     }
+  //     setUserAdded(true);
+  //     setSearchInput('');
+  //     setError(false);
+  //     setTimeout(() => {
+  //       setUserAdded(false);
+  //     }, 3000);
 
-    } catch (error) {
-      setError(true);
-      console.error('Error while trying to add user',error);
-      setTimeout(() => {
-        setError(false);
-      }, 3000);
-    }
+  //   } catch (error) {
+  //     setError(true);
+  //     console.error('Error while trying to add user',error);
+  //     setTimeout(() => {
+  //       setError(false);
+  //     }, 3000);
+  //   }
    
-  };
+  // };
   // Sends each calendar member a notification for the event
   const sendEventInvites = async (newEventId) => {
     for (const userInfo of usersInfo) {
@@ -612,6 +614,26 @@ const handleDotClick = async (userUid) => {
         handleShowBestTime(); // Then call handleShowBestTime
     };
 
+    const addEmail = async () => {
+      const emailInput = document.getElementById('email');
+      const emailToAdd = emailInput.value;
+      emailInput.value = '';
+      const query = firestore.collection('users').where('email', '==', emailToAdd);
+      const querySnapshot = await query.get();
+      
+      if (querySnapshot.docs.length === 0) {
+          // setSuccessMessage('');
+          // setErrorMessage('No user with that email exists');
+      } else {
+          const userToAddDoc = querySnapshot.docs[0];
+          const userToAddData = userToAddDoc.data();
+          const name = userToAddData.firstName + ' ' + userToAddData.lastName;
+          // setInvitedList(prevList => [...prevList, { name, email: emailToAdd }]);
+          // setErrorMessage('');
+          // setSuccessMessage('User successfully added');
+      }
+  };
+
     return (
       <div className="flex h-screen flex-col">
         <Header />
@@ -688,15 +710,31 @@ const handleDotClick = async (userUid) => {
                 </div>
               ))}
             </div>
-            <div className="flex flex-col justify-center items-center space-y-4">
+            {/* <div className="flex flex-col justify-center items-center space-y-4">
               <input
                 className="input input-bordered w-full md:max-w-md input-sm"
                 onChange={filterSuggestion}
                 type="text"
                 placeholder="Type here"
                 value={searchInput}
+              ></input> */}
+               <input
+                className="input input-bordered w-full md:max-w-md input-sm"
+                onChange=""
+                type="text"
+                placeholder="Type here"
               ></input>
-              {filteredUsers.length > 0 && !exactMatchFound && (
+            <div className="flex space-x-2">
+              <input
+                id="email"
+                type="text"
+                placeholder="Enter email to invite"
+                className="input input-bordered w-full md:max-w-md input-sm"
+                onKeyDown={(e) => e.key === 'Enter' && addEmail()}
+              />
+              <button className="btn bg-green-800 text-white" onClick={addEmail}>Add</button>
+            </div>
+              {/* {filteredUsers.length > 0 && !exactMatchFound && (
                 <div className="dropdown-content bg-base-200 top-14 max-h-96 overflow-auto flex-col rounded-md w-full md:max-w-md">
                   <ul className="menu menu-compact">
                     {filteredUsers.map((user) => (
@@ -712,9 +750,9 @@ const handleDotClick = async (userUid) => {
                     ))}
                   </ul>
                 </div>
-              )}
+              )} */}
     
-              <button
+              {/* <button
                 className="btn bg-green-800 text-white"
                 type="button"
                 onClick={addUser}
@@ -731,7 +769,7 @@ const handleDotClick = async (userUid) => {
                   <span>Error occurred while trying to add user!</span>
                 </div>
               )}
-            </div>
+            </div> */}
             <button
               onClick={handleLeaveGroup}
               className="btn mt-5 bg-green-800 text-white"
