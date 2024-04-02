@@ -73,7 +73,7 @@ const Login = () => {
                     </form>
                 </div>
             </div>
-            <div className="flex-1 bg-left-center bg-cover" style={{ backgroundImage: `url('/GGCLibrary.jpg')` }}></div>
+            <div className="flex-1 bg-left-center bg-cover hidden md:block" style={{ backgroundImage: `url('/GGCLibrary.jpg')` }}></div>
         </div>
     );
 };
