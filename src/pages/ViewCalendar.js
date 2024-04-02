@@ -6,22 +6,23 @@ import { useUser } from '../resources/UserContext';
 import AvailabilityForm from '../components/Calendar/AvailabilityForm';
 import 'react-datepicker/dist/react-datepicker.css';
 import Header from '../components/Header';
-import { sendEventInvite } from '../resources/NotificationService';
+import { sendCalendarInvite, sendEventInvite } from '../resources/NotificationService';
 import CalendarEventModal from '../components/CalendarEvent';
 import firebase from 'firebase/compat/app';
 import CalendarSettingsModal from '../components/CalendarSettings';
 
 const ViewCalendar = () => {
-    const { calendarId, calendarName } = useParams();
-    const user = useUser();
-     const [users, setUsers] = useState([]); //list of users from the database
-     const [userAdded, setUserAdded] = useState(false); //functionality to add user to database
-    // const [userId, setUserId] = useState(); //value to CRUD with database
-    // const [searchInput, setSearchInput] = useState(''); //input based on input tag value
-    // const [filteredUsers, setFilteredUsers] = useState([]);
-    // const [exactMatchFound, setExactMatchFound] = useState(false);
-     const [error, setError] = useState(false);
-    const [description, setDescription] = useState(''); // Define description state variable
+  const { calendarId, calendarName } = useParams();
+  const user = useUser();
+  // const [users, setUsers] = useState([]);  //list of users from the database
+  // const [userAdded, setUserAdded] = useState(false); //functionality to add user to database
+  // const [userId, setUserId] = useState();      //value to CRUD with database 
+  // const [searchInput, setSearchInput] = useState(""); //input based on input tag value
+  // const [filteredUsers, setFilteredUsers] = useState([]);
+  // const [exactMatchFound, setExactMatchFound] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+  const [description, setDescription] = useState(''); // Define description state variable
     const [availability, setAvailability] = useState({
         selectedDays: [],
         times: {},
@@ -668,15 +669,15 @@ const ViewCalendar = () => {
       const querySnapshot = await query.get();
       
       if (querySnapshot.docs.length === 0) {
-          // setSuccessMessage('');
-          // setErrorMessage('No user with that email exists');
+          setSuccessMessage('');
+          setErrorMessage('No user with that email exists');
       } else {
           const userToAddDoc = querySnapshot.docs[0];
           const userToAddData = userToAddDoc.data();
           const name = userToAddData.firstName + ' ' + userToAddData.lastName;
-          // setInvitedList(prevList => [...prevList, { name, email: emailToAdd }]);
-          // setErrorMessage('');
-          // setSuccessMessage('User successfully added');
+          sendCalendarInvite(user, emailToAdd, calendarId);
+          setErrorMessage('');
+          setSuccessMessage('User successfully added');
       }
   };
 
@@ -812,6 +813,8 @@ const ViewCalendar = () => {
                 onKeyDown={(e) => e.key === 'Enter' && addEmail()}
               />
               <button className={`btn bg-green-800 text-white ${isAdmin(user.uid) || addUsersPermission === 'everyone' ? '' : 'hidden'}`} onClick={addEmail}>Add</button>
+              {errorMessage && <div className="text-red-500">{errorMessage}</div>}
+              {successMessage && <div className="text-green-500">{successMessage}</div>}
             </div>
                         {/* <button
                             className={`btn bg-green-800 text-white ${isAdmin(user.uid) || addUsersPermission === 'everyone' ? '' : 'hidden'}`}
