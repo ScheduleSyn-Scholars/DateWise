@@ -61,14 +61,22 @@ const HomePage = () => {
                         });
                     }
                 }
-                setEvents(allEvents);
+
+                //Enable only current dated events
+                const currentDate = new Date();
+                const currentEvents = allEvents.filter(event => {
+                    // Checks if the event's end date is after today's date
+                    return new Date(event.end) >= currentDate;
+                });
+                setEvents(currentEvents);
             } catch (error) {
                 console.error('Error loading user calendars:', error);
             }
         };
 
-        loadUserData();
-        setLoading(false);
+        //loadUserData();
+        loadUserData().then(() => setLoading(false));
+        //setLoading(false);
     }, [user]);
 
     const closeModalAndRefresh = () => {
