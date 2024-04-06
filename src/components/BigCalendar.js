@@ -45,7 +45,7 @@ const BigCalendar = (props) => {
     const handleSelectEvent = (event, e) => {
         const eventRect = e.target.getBoundingClientRect();
         const middleLine = window.innerHeight / 2;
-        
+
         let top;
         if (eventRect.top < middleLine) {
             top = eventRect.bottom - 75;
@@ -57,7 +57,6 @@ const BigCalendar = (props) => {
             top: top,
             left: eventRect.left - eventRect.width / 2,
         });
-        console.log(JSON.stringify(event, null, 2));
         setSelectedEvent(event);
     };
 
@@ -65,12 +64,11 @@ const BigCalendar = (props) => {
         setSelectedEvent(null);
     };
 
-    const leaveEvent = async (event = selectedEvent) => {
+    const leaveEvent = async (event) => {
         const confirmedLeave = window.confirm(
             `Would you like to stop attending ${event.title}?`,
         );
         // Remove the current user from the event attendees
-        console.log(`selected event: ${JSON.stringify(event, null, 2)}`);
         if (confirmedLeave) {
             const eventDocRef = firestore
                 .collection('calendars')
