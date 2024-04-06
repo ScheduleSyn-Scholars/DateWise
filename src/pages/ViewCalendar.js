@@ -34,7 +34,8 @@ const ViewCalendar = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [adminUids, setAdminUids] = useState([]);
     const [addUsersPermission, setAddUsersPermission] = useState('admins');
-    const [createEventsPermission, setCreateEventsPermission] = useState('admins')
+    const [createEventsPermission, setCreateEventsPermission] =
+        useState('admins');
 
     const navigate = useNavigate();
 
@@ -50,7 +51,9 @@ const ViewCalendar = () => {
                 if (calendarData.admins) {
                     setAdminUids(calendarData.admins);
                     setAddUsersPermission(calendarData.addUsersPermission);
-                    setCreateEventsPermission(calendarData.createEventsPermission);
+                    setCreateEventsPermission(
+                        calendarData.createEventsPermission,
+                    );
                 }
                 await fetchUserAvailability(calendarId, user.uid);
                 await fetchUser2(calendarId);
@@ -582,62 +585,73 @@ const ViewCalendar = () => {
     const handleLeaveGroup = async () => {
         try {
             const userRef = firestore.collection('users').doc(user.uid);
-    
+
             // Fetch the user's document
             const userDoc = await userRef.get();
             if (userDoc.exists) {
                 // Get the current calendars array
                 const calendars = userDoc.data().calendars || [];
-    
+
                 // Remove the map with the specified calendarId
                 const updatedCalendars = calendars.filter(
                     (calendar) => calendar.id !== calendarId,
                 );
-    
+
                 // Update the user document with the updated calendars array
                 await userRef.update({
                     calendars: updatedCalendars,
                 });
-    
+
                 // Remove the user from the calendar's users array
-                const calRef = firestore.collection('calendars').doc(calendarId);
+                const calRef = firestore
+                    .collection('calendars')
+                    .doc(calendarId);
                 await calRef.update({
                     users: firebase.firestore.FieldValue.arrayRemove(user.uid),
                 });
-    
+
                 // Fetch the updated calendar document to check if any users are left
                 const updatedCalDoc = await calRef.get();
-                
+
                 if (updatedCalDoc.exists) {
                     const updatedCalData = updatedCalDoc.data();
-    
+
                     // If the users array is empty after removal, delete the calendar document
-                    if (updatedCalData.users && updatedCalData.users.length === 0) {
+                    if (
+                        updatedCalData.users &&
+                        updatedCalData.users.length === 0
+                    ) {
                         await calRef.delete();
-                        console.log('Calendar deleted successfully due to no remaining users.');
+                        console.log(
+                            'Calendar deleted successfully due to no remaining users.',
+                        );
                     } else {
-                        console.log('User removed from the calendar successfully.');
+                        console.log(
+                            'User removed from the calendar successfully.',
+                        );
                     }
                 } else {
                     console.error('Failed to fetch updated calendar document.');
                 }
-    
+
                 navigate('/HomePage');
                 window.location.reload();
-    
+
                 console.log('User removed from calendar:', calendarId);
             } else {
                 console.error('User document does not exist');
             }
         } catch (error) {
-            console.error('Error removing user from calendar or deleting calendar:', error);
+            console.error(
+                'Error removing user from calendar or deleting calendar:',
+                error,
+            );
         }
     };
-    
+
     const closeModal = () => {
         setIsOpen(false);
     };
-    
 
     const handleSaveAndUpdate = async () => {
         await updateAvailability(); // Wait until updateAvailability completes
@@ -650,28 +664,24 @@ const ViewCalendar = () => {
 
     // When toggled, removes admins from admin list and adds nonadmins to admin list.
     const handleAdminToggle = async (uid) => {
-      const calRef = firestore.collection('calendars').doc(calendarId);
-      if (isAdmin(uid)) {
-
-        await calRef.update({
-          admins: firebase.firestore.FieldValue.arrayRemove(uid)
-        });
-        setAdminUids((prevAdminUids) => {
-          return prevAdminUids.filter((adminUid) => {
-            return adminUid !== uid
-          })
-        })
-      } else {
-        await calRef.update({
-          admins: firebase.firestore.FieldValue.arrayUnion([uid])
-        });
-        setAdminUids((prevAdminUids) => {
-          return [
-            ...prevAdminUids,
-            uid
-          ]
-        });
-      }
+        const calRef = firestore.collection('calendars').doc(calendarId);
+        if (isAdmin(uid)) {
+            await calRef.update({
+                admins: firebase.firestore.FieldValue.arrayRemove(uid),
+            });
+            setAdminUids((prevAdminUids) => {
+                return prevAdminUids.filter((adminUid) => {
+                    return adminUid !== uid;
+                });
+            });
+        } else {
+            await calRef.update({
+                admins: firebase.firestore.FieldValue.arrayUnion([uid]),
+            });
+            setAdminUids((prevAdminUids) => {
+                return [...prevAdminUids, uid];
+            });
+        }
     };
 
     return (
@@ -692,7 +702,7 @@ const ViewCalendar = () => {
                                 calendarUser.imageURL ?? '/default-profile.png'
                             }
                             alt="User Profile Picture"
-                            className="mb-2 h-20 w-20 rounded-full cursor-pointer"
+                            className="mb-2 h-20 w-20 cursor-pointer rounded-full"
                             onClick={() => handleDotClick(calendarUser.uid)} // Add onClick handler to show availability modal
                         />
                         {/* <p className="mb-1">{user.email}</p> //removed since we just wanna see userName */}
@@ -767,7 +777,8 @@ const ViewCalendar = () => {
                             <p>Availability saved!</p>
                         </div>
                     )}
-                    <div className={`${isAdmin(user.uid) || createEventsPermission === 'everyone' ? '' : 'hidden'}`}>
+                    <div
+                        className={`${isAdmin(user.uid) || createEventsPermission === 'everyone' ? '' : 'hidden'}`}>
                         <CalendarEventModal
                             isOpen={isOpen}
                             setIsOpen={setIsOpen}

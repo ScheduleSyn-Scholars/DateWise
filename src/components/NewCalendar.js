@@ -54,10 +54,12 @@ const NewCalendarModal = ({ isOpen, setIsOpen, closeModalAndRefresh }) => {
         const newCalendarAdminList = adminList.map((admin) => {
             return admin.uid;
         });
-        newCalendarAdminList.forEach(str => {
+        newCalendarAdminList.forEach((str) => {
             console.log(str);
-        })
-        console.log(`Admin uids added to calendar: ${newCalendarAdminList.toString()}`)
+        });
+        console.log(
+            `Admin uids added to calendar: ${newCalendarAdminList.toString()}`,
+        );
 
         const calendarData = {
             calendarName: calendarTitleValue,
@@ -109,9 +111,11 @@ const NewCalendarModal = ({ isOpen, setIsOpen, closeModalAndRefresh }) => {
             return [
                 ...prevAdminList,
                 {
-                    name, uid, email
-                }
-            ]
+                    name,
+                    uid,
+                    email,
+                },
+            ];
         });
     };
 
@@ -217,9 +221,7 @@ const NewCalendarModal = ({ isOpen, setIsOpen, closeModalAndRefresh }) => {
                                                                 handleCreateEventsPermissionChange
                                                             }
                                                             className="select w-full max-w-xs">
-                                                            <option
-                                                                value="everyone"
-                                                                >
+                                                            <option value="everyone">
                                                                 Everyone
                                                             </option>
                                                             <option value="admins">
@@ -229,16 +231,16 @@ const NewCalendarModal = ({ isOpen, setIsOpen, closeModalAndRefresh }) => {
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <th>Who can create events?</th>
+                                                    <th>
+                                                        Who can create events?
+                                                    </th>
                                                     <td>
                                                         <select
                                                             onChange={
                                                                 handleAddUsersPermissionChange
                                                             }
                                                             className="max-3-xs select w-full">
-                                                            <option
-                                                                value="everyone"
-                                                                >
+                                                            <option value="everyone">
                                                                 Everyone
                                                             </option>
                                                             <option value="admins">

@@ -13,7 +13,7 @@ const add30Minutes = (time) => {
     return `${String(newHours).padStart(2, '0')}:${String(newMinutes).padStart(2, '0')}`;
 };
 
-const AvailabilityForm = ({ availability,onAvailabilityChange }) => {
+const AvailabilityForm = ({ availability, onAvailabilityChange }) => {
     const [selectedDays, setSelectedDays] = useState([]);
     const [times, setTimes] = useState({});
 
@@ -100,10 +100,8 @@ const AvailabilityForm = ({ availability,onAvailabilityChange }) => {
                     {selectedDays.includes(day) && (
                         <div className="flex flex-col items-baseline">
                             {times[day]?.map((timeSlot, index) => (
-                                <div
-                                    key={index}
-                                    className="flex items-center">
-                                    <label className="mb-2.5 flex w-fill items-center font-[bold] text-base">
+                                <div key={index} className="flex items-center">
+                                    <label className="w-fill mb-2.5 flex items-center font-[bold] text-base">
                                         <input
                                             type="time"
                                             value={timeSlot.start}
@@ -119,7 +117,7 @@ const AvailabilityForm = ({ availability,onAvailabilityChange }) => {
                                             className="mx-[1vw] h-10 w-[150%]"
                                         />
                                     </label>
-                                    <label className="mb-2.5 flex w-fill items-center font-[bold] text-base">
+                                    <label className="w-fill mb-2.5 flex items-center font-[bold] text-base">
                                         -
                                         <input
                                             type="time"
