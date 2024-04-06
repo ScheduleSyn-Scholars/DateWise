@@ -74,7 +74,7 @@ const BigCalendar = (props) => {
         }
     };
 
-    const goToCalendar = (event = selectedEvent) => {
+    const goToCalendar = (event) => {
         navigate(
             `/ViewCalendar/${event.calendarId}/${encodeURIComponent(event.calendarName)}`,
         );
@@ -82,6 +82,7 @@ const BigCalendar = (props) => {
 
     return (
         <div>
+            {/** Desktop View */}
             <div className="hidden sm:flex">
                 <Calendar
                     localizer={localizer}
@@ -138,21 +139,25 @@ const BigCalendar = (props) => {
                                         </td>
                                     </tr>
                                     <tr>
-    <th>Description</th>
-    <td>{selectedEvent.description}</td>
-</tr>
+                                        <th>Description</th>
+                                        <td>{selectedEvent.description}</td>
+                                    </tr>
                                     <tr>
                                         <td>
                                             <button
                                                 className="btn btn-primary"
-                                                onClick={goToCalendar}>
+                                                onClick={() => {
+                                                    goToCalendar(selectedEvent);
+                                                }}>
                                                 Go To Calendar
                                             </button>
                                         </td>
                                         <td>
                                             <button
                                                 className="btn btn-error"
-                                                onClick={leaveEvent}>
+                                                onClick={() => {
+                                                    leaveEvent(selectedEvent);
+                                                }}>
                                                 Leave Event
                                             </button>
                                         </td>
@@ -163,6 +168,7 @@ const BigCalendar = (props) => {
                     </div>
                 )}
             </div>
+            {/** Mobile View */}
             <div className="flex h-full w-screen flex-col space-y-2 p-2 sm:hidden">
                 <div className="divider divider-start font-times-new-roman text-xl font-bold">
                     Events
