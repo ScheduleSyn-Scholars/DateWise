@@ -44,8 +44,17 @@ const BigCalendar = (props) => {
 
     const handleSelectEvent = (event, e) => {
         const eventRect = e.target.getBoundingClientRect();
+        const middleLine = window.innerHeight / 2;
+        
+        let top;
+        if (eventRect.top < middleLine) {
+            top = eventRect.bottom - 75;
+        } else {
+            top = eventRect.top - 425;
+        }
+
         setPopupPosition({
-            top: eventRect.top - 425,
+            top: top,
             left: eventRect.left - eventRect.width / 2,
         });
         console.log(JSON.stringify(event, null, 2));
