@@ -23,6 +23,7 @@ const CalendarSettingsModal = ({
     const [addUsers, setAddUsers] = useState(addUsersPermission);
     const [manageAdmins, setManageAdmins] = useState(manageAdminsPermission);
     const [admins, setAdmins] = useState(adminList);
+    const [users, setUsers] = useState(usersInfo);
 
     const user = useUser();
 
@@ -31,7 +32,8 @@ const CalendarSettingsModal = ({
         setAddUsers(addUsersPermission);
         setManageAdmins(manageAdminsPermission);
         setAdmins(adminList);
-    }, [createEventsPermission, addUsersPermission, manageAdminsPermission, adminList]);
+        setUsers(usersInfo);
+    }, [createEventsPermission, addUsersPermission, manageAdminsPermission, adminList, usersInfo]);
 
     const handleCreateEventsPermissionChange = async (event) => {
         try {
@@ -104,8 +106,13 @@ const CalendarSettingsModal = ({
     }
 
     const kickUser = async (userInfo) => {
-        const confirmKick = window.confirm(`Are you sure you want to kick ${userInfo.userName}`);
+        const confirmKick = window.confirm(`Are you sure you want to kick ${userInfo.userName}?`);
         if (confirmKick) {
+            // Remove the user from the displayedList
+            setUsers(users.filter(u => {
+                return u.uid !== userInfo.uid;
+            }));
+
             // Remove the calendar from the user's calendars
             const userDocRef = firestore.collection('users').doc(userInfo.uid);
             const userData = (await userDocRef.get()).data();
@@ -240,7 +247,7 @@ const CalendarSettingsModal = ({
                                     <div className="overflow-x-auto">
                                         <table className="table w-full">
                                             <tbody>
-                                                {usersInfo.map((userInfo, index) => {
+                                                {users.map((userInfo, index) => {
                                                     if (
                                                         userInfo.uid !==
                                                         creatorUid && userInfo.uid !== user.uid
@@ -260,6 +267,8 @@ const CalendarSettingsModal = ({
                                                                 </td>
                                                             </tr>
                                                         );
+                                                    } else {
+                                                        return null;
                                                     }
                                                 })}
                                             </tbody>
