@@ -53,15 +53,8 @@ const ViewCalendar = () => {
                 ).data();
                 if (calendarData.admins) {
                     setAdminUids(calendarData.admins);
-                    setAddUsersPermission(
-                        calendarData.addUsersPermission || 'creator',
-                    );
-                    setCreateEventsPermission(
-                        calendarData.createEventsPermission || 'creator',
-                    );
-                    setManageAdminsPermission(
-                        calendarData.manageAdminsPermission || 'creator',
-                    );
+                    setAddUsersPermission(calendarData.addUsersPermission);
+                    setCreateEventsPermission(calendarData.createEventsPermission);
                 }
 
                 setCreatorUid(calendarData.creatorId);
@@ -673,28 +666,6 @@ const ViewCalendar = () => {
         return adminUids.includes(uid);
     };
 
-    // When toggled, removes admins from admin list and adds nonadmins to admin list.
-    const handleAdminToggle = async (uid) => {
-        const calRef = firestore.collection('calendars').doc(calendarId);
-        if (isAdmin(uid)) {
-            await calRef.update({
-                admins: firebase.firestore.FieldValue.arrayRemove(uid),
-            });
-            setAdminUids((prevAdminUids) => {
-                return prevAdminUids.filter((adminUid) => {
-                    return adminUid !== uid;
-                });
-            });
-        } else {
-            await calRef.update({
-                admins: firebase.firestore.FieldValue.arrayUnion([uid]),
-            });
-            setAdminUids((prevAdminUids) => {
-                return [...prevAdminUids, uid];
-            });
-        }
-    };
-
     return (
         <div className="flex h-screen flex-col">
             <Header />
@@ -788,8 +759,7 @@ const ViewCalendar = () => {
                             <p>Availability saved!</p>
                         </div>
                     )}
-                    <div
-                        className={`${(isAdmin(user.uid) && createEventsPermission === 'admins') || createEventsPermission === 'everyone' || creatorUid === user.uid ? '' : 'hidden'}`}>
+                    <div className={`${isAdmin(user.uid) || createEventsPermission === 'everyone' ? '' : 'hidden'}`}>
                         <CalendarEventModal
                             isOpen={isOpen}
                             setIsOpen={setIsOpen}
