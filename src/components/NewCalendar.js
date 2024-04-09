@@ -235,7 +235,7 @@ const NewCalendarModal = ({ isOpen, setIsOpen, closeModalAndRefresh }) => {
                                                             <option value="admins">
                                                                 Admins
                                                             </option>
-                                                            <option value='creator'>
+                                                            <option value="creator">
                                                                 Creator Only
                                                             </option>
                                                         </select>

@@ -14,7 +14,7 @@ const CalendarSettingsModal = ({
     manageAdminsPermission,
     usersInfo,
     creatorUid,
-    calendarName
+    calendarName,
 }) => {
     let path = useLocation().pathname;
     let calendarId = path.split('/')[2];
@@ -33,7 +33,13 @@ const CalendarSettingsModal = ({
         setManageAdmins(manageAdminsPermission);
         setAdmins(adminList);
         setUsers(usersInfo);
-    }, [createEventsPermission, addUsersPermission, manageAdminsPermission, adminList, usersInfo]);
+    }, [
+        createEventsPermission,
+        addUsersPermission,
+        manageAdminsPermission,
+        adminList,
+        usersInfo,
+    ]);
 
     const handleCreateEventsPermissionChange = async (event) => {
         try {
@@ -82,36 +88,41 @@ const CalendarSettingsModal = ({
 
     const toggleAdmin = async (uid) => {
         try {
-            const calendarDocRef = firestore.collection('calendars').doc(calendarId);
+            const calendarDocRef = firestore
+                .collection('calendars')
+                .doc(calendarId);
 
             if (admins.includes(uid)) {
-                setAdmins(admins.filter((adminUid) => {
-                    return adminUid !== uid
-                }));
+                setAdmins(
+                    admins.filter((adminUid) => {
+                        return adminUid !== uid;
+                    }),
+                );
                 await calendarDocRef.update({
-                    admins: firebase.firestore.FieldValue.arrayRemove(uid)
-                })
+                    admins: firebase.firestore.FieldValue.arrayRemove(uid),
+                });
             } else {
-                setAdmins([
-                    ...admins,
-                    uid
-                ]);
+                setAdmins([...admins, uid]);
                 await calendarDocRef.update({
-                    admins: firebase.firestore.FieldValue.arrayUnion(uid)
-                })
+                    admins: firebase.firestore.FieldValue.arrayUnion(uid),
+                });
             }
         } catch (error) {
             console.error(`Error updating admin status: ${error}`);
         }
-    }
+    };
 
     const kickUser = async (userInfo) => {
-        const confirmKick = window.confirm(`Are you sure you want to kick ${userInfo.userName}?`);
+        const confirmKick = window.confirm(
+            `Are you sure you want to kick ${userInfo.userName}?`,
+        );
         if (confirmKick) {
             // Remove the user from the displayedList
-            setUsers(users.filter(u => {
-                return u.uid !== userInfo.uid;
-            }));
+            setUsers(
+                users.filter((u) => {
+                    return u.uid !== userInfo.uid;
+                }),
+            );
 
             // Remove the calendar from the user's calendars
             const userDocRef = firestore.collection('users').doc(userInfo.uid);
@@ -122,17 +133,23 @@ const CalendarSettingsModal = ({
             await userDocRef.update(userData);
 
             // Remove the user from the calendar
-            const calendarDocRef = firestore.collection('calendars').doc(calendarId);
-            
+            const calendarDocRef = firestore
+                .collection('calendars')
+                .doc(calendarId);
+
             await calendarDocRef.update({
                 admins: firebase.firestore.FieldValue.arrayRemove(userInfo.uid),
-                users: firebase.firestore.FieldValue.arrayRemove(userInfo.uid)
-            })
+                users: firebase.firestore.FieldValue.arrayRemove(userInfo.uid),
+            });
 
             // Send the kicked user a notification that they've been kicked.
-            await sendMessageNotification(user, userInfo.email, `${user.firstName} ${user.lastName} has kicked you from ${calendarName}`)
+            await sendMessageNotification(
+                user,
+                userInfo.email,
+                `${user.firstName} ${user.lastName} has kicked you from ${calendarName}`,
+            );
         }
-    }
+    };
 
     return (
         <>
@@ -236,7 +253,8 @@ const CalendarSettingsModal = ({
                             </div>
                         )}
 
-                        {((adminList.includes(user.uid) && manageAdmins === 'admins') ||
+                        {((adminList.includes(user.uid) &&
+                            manageAdmins === 'admins') ||
                             creatorUid === user.uid) && (
                             <div className="collapse collapse-arrow bg-base-200">
                                 <input type="radio" name="my-accordion-2" />
@@ -247,30 +265,55 @@ const CalendarSettingsModal = ({
                                     <div className="overflow-x-auto">
                                         <table className="table w-full">
                                             <tbody>
-                                                {users.map((userInfo, index) => {
-                                                    if (
-                                                        userInfo.uid !==
-                                                        creatorUid && userInfo.uid !== user.uid
-                                                    ) {
-                                                        return (
-                                                            <tr key={index}>
-                                                                <td>
-                                                                    {
-                                                                        userInfo.userName
-                                                                    }
-                                                                </td>
-                                                                <td>
-                                                                    <button onClick={() => kickUser(userInfo)} className='btn btn-error font-bold'>Kick User</button>
-                                                                </td>
-                                                                <td>
-                                                                    <button onClick={() => toggleAdmin(userInfo.uid)} className='btn btn-info'>{admins.includes(userInfo.uid) ? 'Remove Admin' : 'Make Admin'}</button>
-                                                                </td>
-                                                            </tr>
-                                                        );
-                                                    } else {
-                                                        return null;
-                                                    }
-                                                })}
+                                                {users.map(
+                                                    (userInfo, index) => {
+                                                        if (
+                                                            userInfo.uid !==
+                                                                creatorUid &&
+                                                            userInfo.uid !==
+                                                                user.uid
+                                                        ) {
+                                                            return (
+                                                                <tr key={index}>
+                                                                    <td>
+                                                                        {
+                                                                            userInfo.userName
+                                                                        }
+                                                                    </td>
+                                                                    <td>
+                                                                        <button
+                                                                            onClick={() =>
+                                                                                kickUser(
+                                                                                    userInfo,
+                                                                                )
+                                                                            }
+                                                                            className="btn btn-error font-bold">
+                                                                            Kick
+                                                                            User
+                                                                        </button>
+                                                                    </td>
+                                                                    <td>
+                                                                        <button
+                                                                            onClick={() =>
+                                                                                toggleAdmin(
+                                                                                    userInfo.uid,
+                                                                                )
+                                                                            }
+                                                                            className="btn btn-info">
+                                                                            {admins.includes(
+                                                                                userInfo.uid,
+                                                                            )
+                                                                                ? 'Remove Admin'
+                                                                                : 'Make Admin'}
+                                                                        </button>
+                                                                    </td>
+                                                                </tr>
+                                                            );
+                                                        } else {
+                                                            return null;
+                                                        }
+                                                    },
+                                                )}
                                             </tbody>
                                         </table>
                                     </div>
