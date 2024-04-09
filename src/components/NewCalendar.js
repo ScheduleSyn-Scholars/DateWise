@@ -15,6 +15,7 @@ const NewCalendarModal = ({ isOpen, setIsOpen, closeModalAndRefresh }) => {
     const [addUsersPermission, setAddUsersPermission] = useState('everyone');
     const [manageAdminsPermission, setManageAdminsPermission] =
         useState('creator');
+
     const user = useUser();
 
     const addEmail = async () => {
@@ -234,6 +235,9 @@ const NewCalendarModal = ({ isOpen, setIsOpen, closeModalAndRefresh }) => {
                                                             <option value="admins">
                                                                 Admins
                                                             </option>
+                                                            <option value='creator'>
+                                                                Creator Only
+                                                            </option>
                                                         </select>
                                                     </td>
                                                 </tr>
@@ -252,6 +256,9 @@ const NewCalendarModal = ({ isOpen, setIsOpen, closeModalAndRefresh }) => {
                                                             </option>
                                                             <option value="admins">
                                                                 Admins
+                                                            </option>
+                                                            <option>
+                                                                Creator Only
                                                             </option>
                                                         </select>
                                                     </td>

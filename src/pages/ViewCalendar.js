@@ -9,6 +9,7 @@ import Header from '../components/Header';
 import { sendEventInvite } from '../resources/NotificationService';
 import CalendarEventModal from '../components/CalendarEvent';
 import firebase from 'firebase/compat/app';
+import CalendarSettingsModal from '../components/CalendarSettings';
 
 const ViewCalendar = () => {
     const { calendarId, calendarName } = useParams();
@@ -37,6 +38,7 @@ const ViewCalendar = () => {
     const [createEventsPermission, setCreateEventsPermission] = useState('');
     const [manageAdminsPermission, setManageAdminsPermission] = useState('');
     const [creatorUid, setCreatorUid] = useState('');
+    const [settingsOpen, setSettingsOpen] = useState(false);
 
     const navigate = useNavigate();
 
@@ -51,12 +53,14 @@ const ViewCalendar = () => {
                 ).data();
                 if (calendarData.admins) {
                     setAdminUids(calendarData.admins);
-                    setAddUsersPermission(calendarData.addUsersPermission);
+                    setAddUsersPermission(
+                        calendarData.addUsersPermission || 'creator',
+                    );
                     setCreateEventsPermission(
-                        calendarData.createEventsPermission,
+                        calendarData.createEventsPermission || 'creator',
                     );
                     setManageAdminsPermission(
-                        calendarData.manageAdminsPermission,
+                        calendarData.manageAdminsPermission || 'creator',
                     );
                 }
 
@@ -361,7 +365,7 @@ const ViewCalendar = () => {
                         return {
                             uid: userId,
                             email: userData.email,
-                            userName: userData.userName,
+                            userName: `${userData.firstName} ${userData.lastName}`,
                             imageURL: userData.imageURL,
                         };
                     } else {
@@ -691,24 +695,26 @@ const ViewCalendar = () => {
         }
     };
 
-    const currentUserCanEditAdmins = () => {
-        if (manageAdminsPermission === 'creator') {
-            if (user.uid === creatorUid) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-        if (manageAdminsPermission === 'admins') {
-            return isAdmin(user.uid);
-        }
-    };
-
     return (
         <div className="flex h-screen flex-col">
             <Header />
-            <div className="mt-10vh text-center text-5xl font-medium text-gray-600">
-                {calendarName}
+            <div className="mt-10vh flex items-center justify-center space-x-2 text-center text-5xl font-medium text-gray-600">
+                <p>{calendarName}</p>
+                {(user.uid === creatorUid ||
+                    (isAdmin(user.uid) &&
+                        manageAdminsPermission === 'admins')) && (
+                    <CalendarSettingsModal
+                        isOpen={settingsOpen}
+                        setOpen={setSettingsOpen}
+                        createEventsPermission={createEventsPermission}
+                        addUsersPermission={addUsersPermission}
+                        manageAdminsPermission={manageAdminsPermission}
+                        adminList={adminUids}
+                        usersInfo={usersInfo}
+                        creatorUid={creatorUid}
+                        calendarName={calendarName}
+                    />
+                )}
             </div>
 
             {/* Users Section */}
@@ -738,27 +744,6 @@ const ViewCalendar = () => {
                                 <span className="ml-2 h-3 w-3 rounded-full bg-orange-500"></span>
                             )}
                         </div>
-                        {isAdmin(user.uid) &&
-                            currentUserCanEditAdmins() &&
-                            calendarUser.uid !== user.uid && (
-                                <div className="form-control">
-                                    <label className="label flex cursor-pointer flex-col">
-                                        <span className="label-text">
-                                            Admin
-                                        </span>
-                                        <input
-                                            type="checkbox"
-                                            className="toggle"
-                                            checked={isAdmin(calendarUser.uid)}
-                                            onChange={() =>
-                                                handleAdminToggle(
-                                                    calendarUser.uid,
-                                                )
-                                            }
-                                        />
-                                    </label>
-                                </div>
-                            )}
                     </div>
                 ))}
             </div>
@@ -804,7 +789,7 @@ const ViewCalendar = () => {
                         </div>
                     )}
                     <div
-                        className={`${isAdmin(user.uid) || createEventsPermission === 'everyone' ? '' : 'hidden'}`}>
+                        className={`${(isAdmin(user.uid) && createEventsPermission === 'admins') || createEventsPermission === 'everyone' || creatorUid === user.uid ? '' : 'hidden'}`}>
                         <CalendarEventModal
                             isOpen={isOpen}
                             setIsOpen={setIsOpen}
@@ -847,7 +832,7 @@ const ViewCalendar = () => {
                         )}
 
                         <button
-                            className={`btn bg-green-800 text-white ${isAdmin(user.uid) || addUsersPermission === 'everyone' ? '' : 'hidden'}`}
+                            className={`btn bg-green-800 text-white ${creatorUid === user.uid || (isAdmin(user.uid) && addUsersPermission === 'admins') || addUsersPermission === 'everyone' ? '' : 'hidden'}`}
                             type="button"
                             onClick={addUser}>
                             Add User
