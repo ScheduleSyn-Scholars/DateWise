@@ -104,7 +104,7 @@ const CalendarSettingsModal = ({
     }
 
     const kickUser = async (userInfo) => {
-        const confirmKick = window.alert(`Are you sure you want to kick ${userInfo.userName}`);
+        const confirmKick = window.confirm(`Are you sure you want to kick ${userInfo.userName}`);
         if (confirmKick) {
             // Remove the calendar from the user's calendars
             const userDocRef = firestore.collection('users').doc(userInfo.uid);
