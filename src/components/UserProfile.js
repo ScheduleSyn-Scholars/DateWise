@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { firestore, storage } from '../resources/firebase';
 import { useUser } from '../resources/UserContext';
+import { Link } from 'react-router-dom';
 
 function UserProfileModal({ isOpen, setIsOpen }) {
     const [image, setImage] = useState('');
@@ -120,6 +121,11 @@ function UserProfileModal({ isOpen, setIsOpen }) {
                                     Save
                                 </button>
                             </div>
+                            <Link to="/">
+                        <button className="btn mt-5 bg-red-400 text-white">
+                            Logout
+                        </button>
+                    </Link>
                         </div>
                     </div>
                 </div>

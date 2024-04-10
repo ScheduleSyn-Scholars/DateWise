@@ -689,7 +689,7 @@ const ViewCalendar = () => {
             </div>
 
             {/* Users Section */}
-            <div className="mt-5 flex items-center justify-center">
+            <div className="mt-0.5 flex items-center justify-center">
                 {usersInfo.map((calendarUser) => (
                     <div
                         key={calendarUser.uid}
@@ -720,7 +720,7 @@ const ViewCalendar = () => {
             </div>
 
             {/* Rest of the content */}
-            <div className="mt-5 flex flex-col items-center justify-center sm:flex-row">
+            <div className="flex flex-col items-center justify-center sm:flex-row">
                 {/* Availability Form and Save Button */}
                 <div className="mb-5 flex flex-col items-center sm:mb-0 sm:mr-10">
                     <AvailabilityForm
@@ -735,12 +735,35 @@ const ViewCalendar = () => {
                             Save
                         </button>
                     </div>
+                   
+                   
+                    {showSavedPopup && (
+                        <div role="alert" className="alert alert-success">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        <span>Availability Saved!</span>
+                      </div>
+                    )}
+                    
+                </div>
+
+                <div className="flex flex-col items-center">
+
+                <div className={`${isAdmin(user.uid) || createEventsPermission === 'everyone' ? '' : 'hidden'}`}>
+                        <CalendarEventModal
+                            isOpen={isOpen}
+                            setIsOpen={setIsOpen}
+                            closeModal={closeModal}
+                        />
+                    </div>
+                    <button className='btn bg-green-800 text-white' onClick={handleShowBestTime}>Show Best Time</button>
+
                     {bestTime && (
-                        <div className="mt-5">
-                            <p>Best Time to Meet:</p>
-                            <p>Day: {bestTime.day}</p>
+                        <div className="mt-5 text-center">
+                            <p>Currently the best time</p>
+                            <p>to meet is:</p>
+                            <p>{bestTime.day}</p>
                             <p>
-                                Time:{' '}
+                                {' '}
                                 {bestTime.start !== undefined
                                     ? convertTo12HourFormat(bestTime.start)
                                     : ''}{' '}
@@ -753,24 +776,11 @@ const ViewCalendar = () => {
                                     : ''}
                             </p>
                         </div>
-                    )}
-                    {showSavedPopup && (
-                        <div className="mt-5">
-                            <p>Availability saved!</p>
-                        </div>
-                    )}
-                    <div className={`${isAdmin(user.uid) || createEventsPermission === 'everyone' ? '' : 'hidden'}`}>
-                        <CalendarEventModal
-                            isOpen={isOpen}
-                            setIsOpen={setIsOpen}
-                            closeModal={closeModal}
-                        />
-                    </div>
+                         )}
                 </div>
 
                 {/* Calendar Events */}
-                <div className="ml-10 flex h-full flex-col items-center pr-5">
-                    Users:
+                <div className="ml-10 flex h-full flex-col items-center pr-5 justify-between">
                     <div className="mt-5vh flex flex-col items-center">
                         {/* Users Section */}
                     </div>
@@ -826,7 +836,7 @@ const ViewCalendar = () => {
                     </div>
                     <button
                         onClick={handleLeaveGroup}
-                        className="btn mt-5 bg-green-800 text-white">
+                        className="btn mt-5 bg-red-400 text-white">
                         Leave Group
                     </button>
                 </div>

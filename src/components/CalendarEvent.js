@@ -102,7 +102,7 @@ const CalendarEventModal = ({ isOpen, setIsOpen }) => {
             <button
                 className="btn bg-green-800 text-white"
                 onClick={() => setIsOpen(true)}>
-                Create Meeting Time
+                Schedule Meeting
             </button>
             {isOpen && (
                 <div id="eventCal" className={`modal modal-open`}>
