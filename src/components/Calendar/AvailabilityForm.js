@@ -82,7 +82,7 @@ const AvailabilityForm = ({ availability, onAvailabilityChange }) => {
     }, [availability]);
 
     return (
-        <div className="m-5 flex w-[90%] max-w-[500px] flex-col items-start rounded-[10px] bg-[#f8f8f8] p-5 shadow-[0_0_10px_rgba(0,0,0,0.1)]">
+        <div className="m-5 flex w-dvw max-w-[450px] flex-col items-start rounded-[10px] bg-[#f8f8f8] p-5 shadow-[0_0_10px_rgba(0,0,0,0.1)]">
             <h2 className="mb-5 text-2xl text-[#228b22]">
                 Select Your Availability
             </h2>
