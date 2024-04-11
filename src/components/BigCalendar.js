@@ -178,10 +178,10 @@ const BigCalendar = (props) => {
             {/** Mobile View */}
             <div className="flex h-full w-screen flex-col space-y-2 p-2 sm:hidden">
                 <div className="divider divider-start font-times-new-roman text-xl font-bold">
-                    Events
+                    Upcoming Events
                 </div>
                 {events.map((event, index) => {
-                    return (
+                    return event.start > new Date() && (
                         <div
                             key={index}
                             className="collapse collapse-arrow bg-secondary">
