@@ -105,7 +105,7 @@ const HomePage = () => {
                                 <Link
                                     key={calendar.id}
                                     to={`/ViewCalendar/${calendar.id}/${encodeURIComponent(calendar.calendarName)}`}>
-                                    <button className="btn btn-outline text-green-800 text-lg font-sans sm:w-auto w-full sm:btn-ghost sm:text-gray-500 sm:text-xl">
+                                    <button className="btn bg-green-800 text-white shadow-md text-lg font-sans sm:w-auto w-full sm:btn-ghost sm:text-gray-500 sm:text-xl">
                                         {calendar.calendarName}
                                     </button>
                                 </Link>
