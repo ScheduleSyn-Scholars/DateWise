@@ -109,7 +109,7 @@ const BigCalendar = (props) => {
                             top: `${popupPosition.top}px`,
                             left: `${popupPosition.left}px`,
                         }}
-                        className="absolute z-[99999] flex w-64 flex-col items-center justify-center rounded-2xl border-2 border-primary bg-secondary p-3 shadow-2xl"
+                        className="absolute z-[99999] flex w-64 flex-col items-center justify-center rounded-2xl border-1 border-gray-800 bg-gray-200 p-3 shadow-2xl"
                         ref={popupRef}>
                         <div className="top-0 flex w-full items-center">
                             <div className="flex-grow text-center text-2xl font-bold">
@@ -152,7 +152,7 @@ const BigCalendar = (props) => {
                                     <tr>
                                         <td>
                                             <button
-                                                className="btn btn-primary"
+                                                className="btn bg-green-800 text-white"
                                                 onClick={() => {
                                                     goToCalendar(selectedEvent);
                                                 }}>
@@ -161,7 +161,7 @@ const BigCalendar = (props) => {
                                         </td>
                                         <td>
                                             <button
-                                                className="btn btn-error"
+                                                className="btn bg-red-500 text-white"
                                                 onClick={() => {
                                                     leaveEvent(selectedEvent);
                                                 }}>
@@ -184,7 +184,7 @@ const BigCalendar = (props) => {
                     return event.start > new Date() && (
                         <div
                             key={index}
-                            className="collapse collapse-arrow bg-secondary">
+                            className="collapse collapse-arrow rounded-2xl border-1 border-gray-800 bg-gray-200 p-3 shadow-2xl">
                             <input type="radio" name="my-accordion-1" />
                             <div className="collapse-title text-xl font-medium">
                                 {event.name} -{' '}
@@ -213,7 +213,7 @@ const BigCalendar = (props) => {
                                             <tr>
                                                 <td>
                                                     <button
-                                                        className="btn btn-primary"
+                                                        className="btn bg-green-800 text-white"
                                                         onClick={() =>
                                                             goToCalendar(event)
                                                         }>
@@ -222,7 +222,7 @@ const BigCalendar = (props) => {
                                                 </td>
                                                 <td>
                                                     <button
-                                                        className="btn btn-error"
+                                                        className="btn bg-red-500 text-white"
                                                         onClick={() =>
                                                             leaveEvent(event)
                                                         }>
