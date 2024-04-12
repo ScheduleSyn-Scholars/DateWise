@@ -184,7 +184,7 @@ const NotificationBell = () => {
                             return (
                                 <div
                                     key={index}
-                                    className={`collapse collapse-arrow bg-base-200 p-4 ${isOpen ? '' : 'hidden'}`}>
+                                    className={`collapse collapse-arrow bg-base-200 p-2 ${isOpen ? '' : 'hidden'}`}>
                                     <input type="radio" name="my-accordion-2" />
                                     <div className="collapse-title text-xl font-medium">
                                         {notification.message}
@@ -208,9 +208,9 @@ const NotificationBell = () => {
                             return (
                                 <div
                                     key={index}
-                                    className={`collapse collapse-arrow bg-base-200 p-4 ${isOpen ? '' : 'hidden'}`}>
+                                    className={`collapse collapse-arrow bg-base-200 p-2 ${isOpen ? '' : 'hidden'}`}>
                                     <input type="radio" name="my-accordion-2" />
-                                    <div className="text-xk collapse-title font-medium">
+                                    <div className="text-xl collapse-title font-medium">
                                         {notification.fromName} has invited you
                                         to join {notification.calendarName}
                                     </div>
@@ -242,7 +242,7 @@ const NotificationBell = () => {
                             return (
                                 <div
                                     key={index}
-                                    className={`collapse collapse-arrow bg-base-200 p-4 ${isOpen ? '' : 'hidden'}`}>
+                                    className={`collapse collapse-arrow bg-base-200 p-2 ${isOpen ? '' : 'hidden'}`}>
                                     <input type="radio" name="my-accordion-2" />
                                     <div className="collapse-title text-xl font-medium">
                                         {notification.fromName} has invited you
