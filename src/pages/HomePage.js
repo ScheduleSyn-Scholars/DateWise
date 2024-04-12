@@ -90,19 +90,22 @@ const HomePage = () => {
                     <BigCalendar events={events} />
                 </div>
 
-                <div className="w-1/4 flex-col items-center justify-between sm:flex">
-                    <div className="mt-10 text-2xl font-bold text-gray-700">
+                <div className="sm:w-1/4 w-full flex-col items-center justify-between sm:flex p-2 sm:p-0">
+                    <div className="mt-10 text-2xl font-bold text-gray-700 hidden sm:block">
                         Shared Calendars
+                    </div>
+                    <div className='sm:hidden divider divider-start font-times-new-roman text-xl font-bold'>
+                        Calendars
                     </div>
                     {loading ? (
                         <p>Loading Calendars... </p>
                     ) : (
-                        <div className="flex h-4/5 flex-col items-center overflow-y-auto">
+                        <div className="flex sm:h-4/5 sm:w-auto justify-center flex-col items-center overflow-y-auto space-y-2 p-2">
                             {calendars.map((calendar) => (
                                 <Link
                                     key={calendar.id}
                                     to={`/ViewCalendar/${calendar.id}/${encodeURIComponent(calendar.calendarName)}`}>
-                                    <button className="mb-2 h-auto w-auto cursor-pointer rounded-[15px] border-[none] p-2 text-center font-times-new-roman text-2xl font-medium text-gray-800/60">
+                                    <button className="btn btn-accent font-bold text-xl font-times-new-roman sm:w-auto w-full">
                                         {calendar.calendarName}
                                     </button>
                                 </Link>

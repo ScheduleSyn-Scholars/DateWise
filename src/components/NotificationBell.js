@@ -173,7 +173,7 @@ const NotificationBell = () => {
             </div>
             <ul
                 tabIndex={0}
-                className="dropdown-content w-96 space-y-1 rounded-xl bg-neutral p-2 text-black shadow">
+                className="dropdown-content sm:block sm:w-96 sm:space-y-1 rounded-xl bg-neutral p-2 text-black shadow">
                 <p
                     className={`text-center text-xl text-white ${isOpen ? '' : 'hidden'}`}>
                     Notifications
@@ -250,12 +250,12 @@ const NotificationBell = () => {
                                     </div>
                                     <div className="collapse-content flex flex-col items-center justify-center">
                                         <p>
-                                            Calendar:{' '}
+                                            <b>Calendar</b>:
                                             {notification.calendarName}
                                         </p>
-                                        <p>Event: {notification.eventName}</p>
+                                        <p><b>Event</b>: {notification.eventName}</p>
                                         <p>
-                                            Time:{' '}
+                                            <b>Time:</b>
                                             {notification.dateTime
                                                 .toDate()
                                                 .toLocaleString()}
