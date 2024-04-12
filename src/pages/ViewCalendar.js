@@ -822,7 +822,7 @@ const ViewCalendar = () => {
                             onClick={addUser}>
                             Add User
                         </button> */}
-                        {userAdded && !error && (
+                        {/* {userAdded && !error && (
                             <div
                                 role="alert"
                                 className="alert alert-success relative">
@@ -837,7 +837,7 @@ const ViewCalendar = () => {
                                     Error occurred while trying to add user!
                                 </span>
                             </div>
-                        )}
+                        )} */}
                     </div>
                     <button
                         onClick={handleLeaveGroup}
