@@ -100,23 +100,25 @@ const HomePage = () => {
                     {loading ? (
                         <p>Loading Calendars... </p>
                     ) : (
-                        <div className="flex sm:h-4/5 sm:w-auto justify-center flex-col items-center overflow-y-auto space-y-2 p-2">
+                        <div className="flex sm:h-4/5 sm:w-auto flex-col overflow-y-auto space-y-2 p-2 sm:items-center">
                             {calendars.map((calendar) => (
                                 <Link
                                     key={calendar.id}
                                     to={`/ViewCalendar/${calendar.id}/${encodeURIComponent(calendar.calendarName)}`}>
-                                    <button className="btn btn-accent font-bold text-xl font-times-new-roman sm:w-auto w-full">
+                                    <button className="btn btn-outline text-green-800 text-lg font-sans sm:w-auto w-full sm:btn-ghost sm:text-gray-500 sm:text-xl">
                                         {calendar.calendarName}
                                     </button>
                                 </Link>
                             ))}
                         </div>
                     )}
+                    <div className="flex w-full justify-end sm:justify-start p-2 sm:p-0 sm:justify-center">
                     <NewCalendarModal
                         isOpen={isOpen}
                         setIsOpen={setIsOpen}
                         closeModalAndRefresh={closeModalAndRefresh}
                     />
+                    </div>
                 </div>
             </div>
         </div>
