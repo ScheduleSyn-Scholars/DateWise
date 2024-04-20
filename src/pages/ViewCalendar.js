@@ -689,57 +689,49 @@ const ViewCalendar = () => {
             </div>
     
             {/* Users Section */}
-            <div className="mt-5 flex items-center justify-center overflow-x-auto">
-                {usersInfo.map((calendarUser) => (
-                    <div
-                        key={calendarUser.uid}
-                        className="mr-5 flex flex-col items-center">
-                        <img
-                            src={calendarUser.imageURL ?? '/default-profile.png'}
-                            alt="User Profile Picture"
-                            className="mb-2 h-20 w-20 rounded-full cursor-pointer"
-                            onClick={() => handleDotClick(calendarUser.uid)}
-                        />
-                        <div className="flex items-center">
-                            <p>{calendarUser.userName}</p>
-                            {userAvailabilityExists(calendarUser.uid) ? (
-                                <span
-                                    className="ml-2 h-3 w-3 cursor-pointer rounded-full bg-green-500"
-                                    onClick={() => handleDotClick(calendarUser.uid)}
-                                ></span>
-                            ) : (
-                                <span className="ml-2 h-3 w-3 rounded-full bg-orange-500"></span>
+            <div className="mt-5 overflow-x-auto">
+                <div className="flex space-x-5">
+                    {usersInfo.map((calendarUser) => (
+                        <div
+                            key={calendarUser.uid}
+                            className="flex flex-col items-center"
+                            style={{ minWidth: '100px' }}  // Fixed width for each user container
+                        >
+                            <img
+                                src={calendarUser.imageURL ?? '/default-profile.png'}
+                                alt="User Profile Picture"
+                                className="mb-2 h-20 w-20 rounded-full cursor-pointer"
+                                onClick={() => handleDotClick(calendarUser.uid)}
+                            />
+                            <div className="flex items-center">
+                                <p>{calendarUser.userName}</p>
+                                {userAvailabilityExists(calendarUser.uid) ? (
+                                    <span
+                                        className="ml-2 h-3 w-3 cursor-pointer rounded-full bg-green-500"
+                                        onClick={() => handleDotClick(calendarUser.uid)}
+                                    ></span>
+                                ) : (
+                                    <span className="ml-2 h-3 w-3 rounded-full bg-orange-500"></span>
+                                )}
+                            </div>
+                            {isAdmin(user.uid) && calendarUser.uid !== user.uid && (
+                                <div className="form-control">
+                                    <label className="label flex cursor-pointer flex-col">
+                                        <span className="label-text">Admin</span>
+                                        <input
+                                            type="checkbox"
+                                            className="toggle"
+                                            checked={isAdmin(calendarUser.uid)}
+                                            onChange={() =>
+                                                handleAdminToggle(calendarUser.uid)
+                                            }
+                                        />
+                                    </label>
+                                </div>
                             )}
                         </div>
-                        {isAdmin(user.uid) && calendarUser.uid !== user.uid && (
-                            <div className="form-control">
-                                <label className="label flex cursor-pointer flex-col">
-                                    <span className="label-text">Admin</span>
-                                    <input
-                                        type="checkbox"
-                                        className="toggle"
-                                        checked={isAdmin(calendarUser.uid)}
-                                        onChange={() =>
-                                            handleAdminToggle(calendarUser.uid)
-                                        }
-                                    />
-                                </label>
-                            </div>
-                        )}
-
-{error && (
-    <div
-        role="alert"
-        className="alert-sm alert alert-error"
-    >
-        <span>
-            Error occurred while fetching user data!
-        </span>
-    </div>
-)}
-
-                    </div>
-                ))}
+                    ))}
+                </div>
             </div>
     
             {/* Rest of the content */}
@@ -926,8 +918,8 @@ const ViewCalendar = () => {
                 </div>
             )}
         </div>
-    );
+   );
     
 };
-
-export default ViewCalendar;
+    export default ViewCalendar;
+    
