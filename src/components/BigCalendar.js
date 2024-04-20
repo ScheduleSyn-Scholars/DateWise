@@ -164,67 +164,69 @@ const BigCalendar = (props) => {
                 )}
             </div>
             <div className="flex h-full w-screen flex-col space-y-2 p-2 sm:hidden">
-                <div className="divider divider-start font-times-new-roman text-xl font-bold">
-                    Events
+    <div className="divider divider-start font-times-new-roman text-xl font-bold">
+        Events
+    </div>
+    {events.map((event, index) => {
+        return (
+            <div key={index} className="collapse collapse-arrow bg-secondary">
+                <input type="radio" name="my-accordion-1" />
+                <div className="collapse-title text-xl font-medium flex justify-center ">
+                    {event.name} -{' '}
+                    {new Date(event.start).toLocaleDateString()}
                 </div>
-                {events.map((event, index) => {
-                    return (
-                        <div
-                            key={index}
-                            className="collapse collapse-arrow bg-secondary">
-                            <input type="radio" name="my-accordion-1" />
-                            <div className="collapse-title text-xl font-medium">
-                                {event.name} -{' '}
-                                {new Date(event.start).toLocaleDateString()}
-                            </div>
-                            <div className="collapse-content flex items-center justify-center">
-                                <div className="overflow-x-auto">
-                                    <table className="table font-times-new-roman text-xl">
-                                        <tbody>
-                                            <tr>
-                                                <th>Date</th>
-                                                <td>
-                                                    {new Date(
-                                                        event.start,
-                                                    ).toDateString()}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th>Time</th>
-                                                <td>
-                                                    {new Date(
-                                                        event.start,
-                                                    ).toLocaleTimeString()}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <button
-                                                        className="btn btn-primary"
-                                                        onClick={() =>
-                                                            goToCalendar(event)
-                                                        }>
-                                                        Go To Calendar
-                                                    </button>
-                                                </td>
-                                                <td>
-                                                    <button
-                                                        className="btn btn-error"
-                                                        onClick={() =>
-                                                            leaveEvent(event)
-                                                        }>
-                                                        Leave Event
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    );
-                })}
+                <div className="collapse-content flex items-center justify-center">
+                    <div className="overflow-x-auto">
+                        <table className="table font-times-new-roman text-xl">
+                            <tbody>
+                                <tr>
+                                    <th>Date</th>
+                                    <td>
+                                        {new Date(
+                                            event.start,
+                                        ).toDateString()}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Time</th>
+                                    <td>
+                                        {new Date(
+                                            event.start,
+                                        ).toLocaleTimeString()}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Description</th>
+                                    <td>{event.description}</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <button
+                                            className="btn btn-primary"
+                                            onClick={() =>
+                                                goToCalendar(event)
+                                            }>
+                                            Go To Calendar
+                                        </button>
+                                    </td>
+                                    <td>
+                                        <button
+                                            className="btn btn-error"
+                                            onClick={() =>
+                                                leaveEvent(event)
+                                            }>
+                                            Leave Event
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
+        );
+    })}
+</div>
         </div>
     );
 };
