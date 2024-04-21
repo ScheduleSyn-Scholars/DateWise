@@ -60,21 +60,28 @@ const HomePage = () => {
                                     end: docData.dateTime.toDate(),
                                     calendarId: calendar.id,
                                     calendarName: calendar.calendarName,
-                                    description: docData.description || "",
+                                    description: docData.description || '',
                                 },
                             ];
                         }
-
                     }
                 }
-                setEvents(allEvents);
+
+                //Enable only current dated events
+                const currentDate = new Date();
+                const currentEvents = allEvents.filter(event => {
+                    // Checks if the event's end date is after today's date
+                    return new Date(event.end) >= currentDate;
+                });
+                setEvents(currentEvents);
             } catch (error) {
                 console.error('Error loading user calendars:', error);
             }
         };
 
-        loadUserData();
-        setLoading(false);
+        //loadUserData();
+        loadUserData().then(() => setLoading(false));
+        //setLoading(false);
     }, [user]);
 
     const closeModalAndRefresh = () => {
@@ -86,41 +93,40 @@ const HomePage = () => {
         <div className="flex h-screen flex-col">
             <Header />
 
-            <div className="flex sm:flex-row flex-col h-full w-full sm:h-fit">
+            <div className="flex h-full w-full flex-col sm:h-fit sm:flex-row">
                 <div className="relative flex h-full w-full justify-center sm:h-fit sm:items-center sm:border-r sm:border-gray-500">
                     <BigCalendar events={events} />
                 </div>
 
-                <div className="w-1/4 flex-col items-center justify-between sm:flex">
-                    <div className="mt-10 text-2xl font-bold text-gray-700">
+                <div className="sm:w-1/4 w-full flex-col items-center justify-between sm:flex p-2 sm:p-0">
+                    <div className="mt-10 text-2xl font-bold text-gray-700 hidden sm:block">
                         Shared Calendars
+                    </div>
+                    <div className='sm:hidden divider divider-start font-times-new-roman text-xl font-bold'>
+                        Calendars
                     </div>
                     {loading ? (
                         <p>Loading Calendars... </p>
                     ) : (
-                        <div className="flex h-4/5 flex-col items-center overflow-y-auto">
+                        <div className="flex sm:h-4/5 sm:w-auto flex-col overflow-y-auto space-y-2 p-2 sm:items-center">
                             {calendars.map((calendar) => (
                                 <Link
                                     key={calendar.id}
                                     to={`/ViewCalendar/${calendar.id}/${encodeURIComponent(calendar.calendarName)}`}>
-                                    <button className="mb-2 h-auto w-auto cursor-pointer rounded-[15px] border-[none] p-2 text-center font-times-new-roman text-2xl font-medium text-gray-800/60">
+                                    <button className="btn bg-green-800 text-white shadow-md text-lg font-sans sm:w-auto w-full sm:btn-ghost sm:text-gray-500 sm:text-xl">
                                         {calendar.calendarName}
                                     </button>
                                 </Link>
                             ))}
                         </div>
                     )}
-
+                    <div className="flex w-full justify-end sm:justify-start p-2 sm:p-0 sm:justify-center">
                     <NewCalendarModal
                         isOpen={isOpen}
                         setIsOpen={setIsOpen}
                         closeModalAndRefresh={closeModalAndRefresh}
                     />
-                    <Link to="/">
-                        <button className="btn mt-5 bg-red-400 text-white">
-                            Logout
-                        </button>
-                    </Link>
+                    </div>
                 </div>
             </div>
         </div>

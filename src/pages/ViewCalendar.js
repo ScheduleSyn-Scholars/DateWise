@@ -6,21 +6,23 @@ import { useUser } from '../resources/UserContext';
 import AvailabilityForm from '../components/Calendar/AvailabilityForm';
 import 'react-datepicker/dist/react-datepicker.css';
 import Header from '../components/Header';
-import { sendEventInvite } from '../resources/NotificationService';
+import { sendCalendarInvite, sendEventInvite } from '../resources/NotificationService';
 import CalendarEventModal from '../components/CalendarEvent';
 import firebase from 'firebase/compat/app';
+import CalendarSettingsModal from '../components/CalendarSettings';
 
 const ViewCalendar = () => {
-    const { calendarId, calendarName } = useParams();
-    const user = useUser();
-    const [users, setUsers] = useState([]); //list of users from the database
-    const [userAdded, setUserAdded] = useState(false); //functionality to add user to database
-    const [userId, setUserId] = useState(); //value to CRUD with database
-    const [searchInput, setSearchInput] = useState(''); //input based on input tag value
-    const [filteredUsers, setFilteredUsers] = useState([]);
-    const [exactMatchFound, setExactMatchFound] = useState(false);
-    const [error, setError] = useState(false);
-    const [description, setDescription] = useState(''); // Define description state variable
+  const { calendarId, calendarName } = useParams();
+  const user = useUser();
+  // const [users, setUsers] = useState([]);  //list of users from the database
+  // const [userAdded, setUserAdded] = useState(false); //functionality to add user to database
+  // const [userId, setUserId] = useState();      //value to CRUD with database 
+  // const [searchInput, setSearchInput] = useState(""); //input based on input tag value
+  // const [filteredUsers, setFilteredUsers] = useState([]);
+  // const [exactMatchFound, setExactMatchFound] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+  const [description, setDescription] = useState(''); // Define description state variable
     const [availability, setAvailability] = useState({
         selectedDays: [],
         times: {},
@@ -33,8 +35,11 @@ const ViewCalendar = () => {
     const [usersInfo, setUsersInfo] = useState([]);
     const [isOpen, setIsOpen] = useState(false);
     const [adminUids, setAdminUids] = useState([]);
-    const [addUsersPermission, setAddUsersPermission] = useState('admins');
-    const [createEventsPermission, setCreateEventsPermission] = useState('admins')
+    const [addUsersPermission, setAddUsersPermission] = useState('');
+    const [createEventsPermission, setCreateEventsPermission] = useState('');
+    const [manageAdminsPermission, setManageAdminsPermission] = useState('');
+    const [creatorUid, setCreatorUid] = useState('');
+    const [settingsOpen, setSettingsOpen] = useState(false);
 
     const navigate = useNavigate();
 
@@ -52,8 +57,10 @@ const ViewCalendar = () => {
                     setAddUsersPermission(calendarData.addUsersPermission);
                     setCreateEventsPermission(calendarData.createEventsPermission);
                 }
+
+                setCreatorUid(calendarData.creatorId);
+
                 await fetchUserAvailability(calendarId, user.uid);
-                await fetchUser2(calendarId);
                 const teamAvailabilityData =
                     await fetchTeamAvailability(calendarId);
                 await fetchUsersInfo(calendarId); // Await the fetchUsersInfo function here
@@ -100,73 +107,68 @@ const ViewCalendar = () => {
         }
     };
 
-    const fetchUser2 = async () => {
-        //fetch all users from the users collection
-        const usersDataArray = [];
-        try {
-            const userRef = firestore.collection('users');
-            const userSnapshot = await userRef.get();
-            userSnapshot.forEach((doc) => {
-                const id = doc.id;
-                const { email, firstName, imageURL, lastName } = doc.data();
-                const userObject = { id, email, firstName, imageURL, lastName };
-                usersDataArray.push(userObject);
-            });
-            setUsers(usersDataArray);
-        } catch (Exception) {
-            console.log('Error fetching use', Exception);
-        }
-    };
-    const filterSuggestion = (input) => {
-        let validatedInput = input.target.value.toLowerCase();
-        let match = 0;
-        if (input.target.value === '' || input.target.value.trim() === '') {
-            setFilteredUsers([]);
-            setSearchInput('');
-            setUserId('');
-            setExactMatchFound(false);
-            return;
-        } else {
-            setSearchInput(input.target.value);
-            const filtered = users.filter((user) => {
-                //
-                if (
-                    (user.firstName?.toLowerCase().includes(validatedInput) ||
-                        user.lastName
-                            ?.toLowerCase()
-                            .includes(validatedInput)) &&
-                    match < 10
-                ) {
-                    match++;
-                    return user;
-                }
-            });
-            //if match < 10, then put the filtered option
-            // Check if exact match is found
-            const exactMatch = users.find((user) => {
-                return (
-                    user.firstName?.toLowerCase() === validatedInput ||
-                    user.lastName?.toLowerCase() === validatedInput
-                );
-            });
+  // const fetchUser2 = async () => {
+  //   //fetch all users from the users collection
+  //   const usersDataArray = [];
+  //   try {
+  //     const userRef = firestore.collection("users");
+  //     const userSnapshot = await userRef.get();
+  //     userSnapshot.forEach((doc) => {
+  //       const id = doc.id;
+  //       const { email, firstName, imageURL, lastName } = doc.data();
+  //       const userObject = { id, email, firstName, imageURL, lastName };
+  //       usersDataArray.push(userObject);
+  //     });
+  //     setUsers(usersDataArray);
+  //   } catch (Exception) {
+  //     console.log("Error fetching use", Exception);
+  //   }
 
-            // If exact match found, set exactMatchFound to true and clear filtered list
-            if (exactMatch) {
-                setExactMatchFound(true);
-                setFilteredUsers([]);
-            } else {
-                setExactMatchFound(false);
-                setFilteredUsers(filtered);
-            }
-            //setFilteredUsers(filtered);
-        }
-    };
-    //Button that handles Adding User to Calendar
-    const handleNewUser = (user) => {
-        setSearchInput(`${user.firstName} ${user.lastName}`);
-        setExactMatchFound(true);
-        setUserId(user.id);
-    };
+  // }
+
+  //Autocomplete functionality (Handles filtration, finding exact match, returning dropdown list of matched results that amount to 10 values)
+  // const filterSuggestion = (input) => {
+  //   let validatedInput = input.target.value.toLowerCase();
+  //   let match = 0;
+  //   if (input.target.value === "" || input.target.value.trim() === '') {
+  //     setFilteredUsers([]);
+  //     setSearchInput("");
+  //     setUserId('');
+  //     setExactMatchFound(false);
+  //     return;
+  //   } else {
+  //     setSearchInput(input.target.value);
+  //     const filtered = users.filter(user =>{
+  //       //
+  //       if(((user.firstName)?.toLowerCase().includes(validatedInput)||(user.lastName)?.toLowerCase().includes(validatedInput)) && match <10){
+  //         match++;
+  //         return user;
+  //       }
+  //     });
+  //     //if match < 10, then put the filtered option
+  //     // Check if exact match is found
+  //     const exactMatch = users.find(user => {
+  //       return (user.firstName?.toLowerCase() === validatedInput || user.lastName?.toLowerCase() === validatedInput);
+  //     });
+
+  //     // If exact match found, set exactMatchFound to true and clear filtered list
+  //     if (exactMatch) {
+  //       setExactMatchFound(true);
+  //       setFilteredUsers([]);
+  //     } else {
+  //       setExactMatchFound(false);
+  //       setFilteredUsers(filtered);
+  //     }
+  //     //setFilteredUsers(filtered);
+  //   }
+
+  // }
+  //Button that handles Adding User to Calendar
+  // const handleNewUser= (user) => {
+  //   setSearchInput(`${user.firstName} ${user.lastName}`);
+  //   setExactMatchFound(true);
+  //   setUserId(user.id);
+  // }
 
     const fetchTeamAvailability = async (calendarId) => {
         try {
@@ -351,7 +353,7 @@ const ViewCalendar = () => {
                         return {
                             uid: userId,
                             email: userData.email,
-                            userName: userData.userName,
+                            userName: `${userData.firstName} ${userData.lastName}`,
                             imageURL: userData.imageURL,
                         };
                     } else {
@@ -544,39 +546,41 @@ const ViewCalendar = () => {
         }
     };
 
-    //code for adding user to a calendar
-    const addUser = async () => {
-        try {
-            if (userId === '') {
-                throw new Error('Please add a user');
-            }
-            const calRef = firestore.collection('calendars').doc(calendarId);
-            const calSnapshot = await calRef.get();
-            if (calSnapshot.exists) {
-                await calRef.update({
-                    users: FieldValue.arrayUnion(userId),
-                });
-            }
-            setUserAdded(true);
-            setSearchInput('');
-            setError(false);
-            setTimeout(() => {
-                setUserAdded(false);
-            }, 3000);
-        } catch (error) {
-            setError(true);
-            console.error('Error while trying to add user', error);
-            setTimeout(() => {
-                setError(false);
-            }, 3000);
-        }
-    };
-    // Sends each calendar member a notification for the event
-    const sendEventInvites = async (newEventId) => {
-        for (const userInfo of usersInfo) {
-            await sendEventInvite(user, userInfo.email, calendarId, newEventId);
-        }
-    };
+  //code for adding user to a calendar
+//   const addUser = async () => {
+//     try {
+//       if(userId === ''){
+//         throw new Error("Please add a user");
+//       }
+//       const calRef = firestore.collection('calendars').doc(calendarId);
+//       const calSnapshot = await calRef.get();
+//       if (calSnapshot.exists) {
+//         await calRef.update({
+//           users: FieldValue.arrayUnion(userId)
+//         })
+//       }
+//       setUserAdded(true);
+//       setSearchInput('');
+//       setError(false);
+//       setTimeout(() => {
+//         setUserAdded(false);
+//       }, 3000);
+
+//     } catch (error) {
+//       setError(true);
+//       console.error('Error while trying to add user',error);
+//       setTimeout(() => {
+//         setError(false);
+//       }, 3000);
+//     }
+   
+//   };
+  // Sends each calendar member a notification for the event
+  const sendEventInvites = async (newEventId) => {
+    for (const userInfo of usersInfo) {
+        await sendEventInvite(user, userInfo.email, calendarId, newEventId);
+    }
+};
 
     const convertTo12HourFormat = (time) => {
         const hour = parseInt(time, 10);
@@ -605,30 +609,37 @@ const ViewCalendar = () => {
                     calendars: updatedCalendars,
                 });
 
-                // Query the calendars collection to find documents containing the calendarId
-                const calendarsQuerySnapshot = await firestore
+                // Remove the user from the calendar's users array
+                const calRef = firestore
                     .collection('calendars')
-                    .where('users', 'array-contains', user.uid)
-                    .get();
-
-                // Delete the calendar from each document found
-                const deletePromises = [];
-                calendarsQuerySnapshot.forEach((doc) => {
-                    const calendarData = doc.data();
-                    const updatedUsers = calendarData.users.filter(
-                        (userId) => userId !== user.uid,
-                    );
-                    deletePromises.push(
-                        doc.ref.update({ users: updatedUsers }),
-                    );
+                    .doc(calendarId);
+                await calRef.update({
+                    users: firebase.firestore.FieldValue.arrayRemove(user.uid),
                 });
 
-                // Wait for all delete operations to complete
-                await Promise.all(deletePromises);
+                // Fetch the updated calendar document to check if any users are left
+                const updatedCalDoc = await calRef.get();
 
-                console.log(
-                    'Calendar removed successfully from both collections.',
-                );
+                if (updatedCalDoc.exists) {
+                    const updatedCalData = updatedCalDoc.data();
+
+                    // If the users array is empty after removal, delete the calendar document
+                    if (
+                        updatedCalData.users &&
+                        updatedCalData.users.length === 0
+                    ) {
+                        await calRef.delete();
+                        console.log(
+                            'Calendar deleted successfully due to no remaining users.',
+                        );
+                    } else {
+                        console.log(
+                            'User removed from the calendar successfully.',
+                        );
+                    }
+                } else {
+                    console.error('Failed to fetch updated calendar document.');
+                }
 
                 navigate('/HomePage');
                 window.location.reload();
@@ -638,7 +649,10 @@ const ViewCalendar = () => {
                 console.error('User document does not exist');
             }
         } catch (error) {
-            console.error('Error removing user from calendar:', error);
+            console.error(
+                'Error removing user from calendar or deleting calendar:',
+                error,
+            );
         }
     };
 
@@ -651,45 +665,58 @@ const ViewCalendar = () => {
         handleShowBestTime(); // Then call handleShowBestTime
     };
 
+ 
+
+    const addEmail = async () => {
+      const emailInput = document.getElementById('email');
+      const emailToAdd = emailInput.value;
+      emailInput.value = '';
+      const query = firestore.collection('users').where('email', '==', emailToAdd);
+      const querySnapshot = await query.get();
+      
+      if (querySnapshot.docs.length === 0) {
+          setSuccessMessage('');
+          setErrorMessage('No user with that email exists');
+      } else {
+          const userToAddDoc = querySnapshot.docs[0];
+          const userToAddData = userToAddDoc.data();
+          const name = userToAddData.firstName + ' ' + userToAddData.lastName;
+          sendCalendarInvite(user, emailToAdd, calendarId);
+          setErrorMessage('');
+          setSuccessMessage('User successfully added');
+      }
+  };
+
     const isAdmin = (uid) => {
         return adminUids.includes(uid);
-    };
-
-    // When toggled, removes admins from admin list and adds nonadmins to admin list.
-    const handleAdminToggle = async (uid) => {
-      const calRef = firestore.collection('calendars').doc(calendarId);
-      if (isAdmin(uid)) {
-
-        await calRef.update({
-          admins: firebase.firestore.FieldValue.arrayRemove(uid)
-        });
-        setAdminUids((prevAdminUids) => {
-          return prevAdminUids.filter((adminUid) => {
-            return adminUid !== uid
-          })
-        })
-      } else {
-        await calRef.update({
-          admins: firebase.firestore.FieldValue.arrayUnion([uid])
-        });
-        setAdminUids((prevAdminUids) => {
-          return [
-            ...prevAdminUids,
-            uid
-          ]
-        });
-      }
     };
 
     return (
         <div className="flex h-screen flex-col">
             <Header />
-            <div className="mt-10vh text-center text-5xl font-medium text-gray-600">
-                {calendarName}
+            <div className="mt-10vh flex items-center justify-center space-x-2 text-center text-5xl font-medium text-gray-600">
+                <p>{calendarName}</p>
+                {(user.uid === creatorUid ||
+                    (isAdmin(user.uid) &&
+                        manageAdminsPermission === 'admins')) && (
+                    <CalendarSettingsModal
+                        isOpen={settingsOpen}
+                        setOpen={setSettingsOpen}
+                        createEventsPermission={createEventsPermission}
+                        addUsersPermission={addUsersPermission}
+                        manageAdminsPermission={manageAdminsPermission}
+                        adminList={adminUids}
+                        usersInfo={usersInfo}
+                        creatorUid={creatorUid}
+                        calendarName={calendarName}
+                    />
+                )}
             </div>
     
             {/* Users Section */}
+
             <div className="mt-5 flex items-center justify-center overflow-x-auto">
+
                 {usersInfo.map((calendarUser) => (
                     <div
                         key={calendarUser.uid}
@@ -697,8 +724,10 @@ const ViewCalendar = () => {
                         <img
                             src={calendarUser.imageURL ?? '/default-profile.png'}
                             alt="User Profile Picture"
+
                             className="mb-2 h-20 w-20 rounded-full cursor-pointer"
                             onClick={() => handleDotClick(calendarUser.uid)}
+
                         />
                         <div className="flex items-center">
                             <p>{calendarUser.userName}</p>
@@ -738,12 +767,13 @@ const ViewCalendar = () => {
     </div>
 )}
 
+
                     </div>
                 ))}
             </div>
     
             {/* Rest of the content */}
-            <div className="mt-5 flex flex-col items-center justify-center sm:flex-row">
+            <div className="flex flex-col items-center justify-center sm:flex-row">
                 {/* Availability Form and Save Button */}
                 <div className="mb-5 flex flex-col items-center sm:mb-0 sm:mr-10">
                     <AvailabilityForm
@@ -759,12 +789,35 @@ const ViewCalendar = () => {
                             Save
                         </button>
                     </div>
+                   
+                   
+                    {showSavedPopup && (
+                        <div role="alert" className="alert alert-success">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        <span>Availability Saved!</span>
+                      </div>
+                    )}
+                    
+                </div>
+
+                <div className="flex flex-col items-center">
+
+                <div className={`${isAdmin(user.uid) || createEventsPermission === 'everyone' ? '' : 'hidden'}`}>
+                        <CalendarEventModal
+                            isOpen={isOpen}
+                            setIsOpen={setIsOpen}
+                            closeModal={closeModal}
+                        />
+                    </div>
+                    <button className='btn bg-green-800 text-white' onClick={handleShowBestTime}>Show Best Time</button>
+
                     {bestTime && (
-                        <div className="mt-5">
-                            <p>Best Time to Meet:</p>
-                            <p>Day: {bestTime.day}</p>
+                        <div className="mt-5 text-center">
+                            <p>Currently the best time</p>
+                            <p>to meet is:</p>
+                            <p>{bestTime.day}</p>
                             <p>
-                                Time:{' '}
+                                {' '}
                                 {bestTime.start !== undefined
                                     ? convertTo12HourFormat(bestTime.start)
                                     : ''}{' '}
@@ -797,15 +850,16 @@ const ViewCalendar = () => {
                             closeModal={closeModal}
                         />
                     </div>
+
                 </div>
     
                 {/* Calendar Events */}
-                <div className="ml-10 flex h-full flex-col items-center pr-5">
-                    Users:
+                <div className="ml-10 flex h-full flex-col items-center pr-5 justify-between">
                     <div className="mt-5vh flex flex-col items-center">
                         {/* Users Section */}
                     </div>
                     <div className="flex flex-col items-center justify-center space-y-4">
+
                         <input
                             className="input input-sm input-bordered w-full md:max-w-md"
                             onChange={filterSuggestion}
@@ -842,12 +896,13 @@ const ViewCalendar = () => {
                                     ? ''
                                     : 'hidden'
                             }`}
+
                             type="button"
                             onClick={addUser}
                         >
                             Add User
-                        </button>
-                        {userAdded && !error && (
+                        </button> */}
+                        {/* {userAdded && !error && (
                             <div
                                 role="alert"
                                 className="alert alert-success relative"
@@ -864,12 +919,13 @@ const ViewCalendar = () => {
                                     Error occurred while trying to add user!
                                 </span>
                             </div>
-                        )}
+                        )} */}
                     </div>
                     <button
                         onClick={handleLeaveGroup}
                         className="btn mt-5 bg-green-800 text-white"
                     >
+
                         Leave Group
                     </button>
                 </div>
@@ -882,6 +938,7 @@ const ViewCalendar = () => {
                 </Link>
             </div>
     
+
             {/* Modal for Selected User's Availability */}
             {selectedUserAvailability && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">

@@ -44,11 +44,19 @@ const BigCalendar = (props) => {
 
     const handleSelectEvent = (event, e) => {
         const eventRect = e.target.getBoundingClientRect();
+        const middleLine = window.innerHeight / 2;
+
+        let top;
+        if (eventRect.top < middleLine) {
+            top = eventRect.bottom - 75;
+        } else {
+            top = eventRect.top - 425;
+        }
+
         setPopupPosition({
-            top: eventRect.top - 425,
+            top: top,
             left: eventRect.left - eventRect.width / 2,
         });
-        console.log(JSON.stringify(event, null, 2));
         setSelectedEvent(event);
     };
 
@@ -56,12 +64,11 @@ const BigCalendar = (props) => {
         setSelectedEvent(null);
     };
 
-    const leaveEvent = async (event = selectedEvent) => {
+    const leaveEvent = async (event) => {
         const confirmedLeave = window.confirm(
             `Would you like to stop attending ${event.title}?`,
         );
         // Remove the current user from the event attendees
-        console.log(`selected event: ${JSON.stringify(event, null, 2)}`);
         if (confirmedLeave) {
             const eventDocRef = firestore
                 .collection('calendars')
@@ -74,7 +81,7 @@ const BigCalendar = (props) => {
         }
     };
 
-    const goToCalendar = (event = selectedEvent) => {
+    const goToCalendar = (event) => {
         navigate(
             `/ViewCalendar/${event.calendarId}/${encodeURIComponent(event.calendarName)}`,
         );
@@ -82,6 +89,7 @@ const BigCalendar = (props) => {
 
     return (
         <div>
+            {/** Desktop View */}
             <div className="hidden sm:flex">
                 <Calendar
                     localizer={localizer}
@@ -101,7 +109,7 @@ const BigCalendar = (props) => {
                             top: `${popupPosition.top}px`,
                             left: `${popupPosition.left}px`,
                         }}
-                        className="absolute z-[99999] flex w-64 flex-col items-center justify-center rounded-2xl border-2 border-primary bg-secondary p-3 shadow-2xl"
+                        className="absolute z-[99999] flex w-64 flex-col items-center justify-center rounded-2xl border-1 border-gray-800 bg-gray-200 p-3 shadow-2xl"
                         ref={popupRef}>
                         <div className="top-0 flex w-full items-center">
                             <div className="flex-grow text-center text-2xl font-bold">
@@ -138,21 +146,25 @@ const BigCalendar = (props) => {
                                         </td>
                                     </tr>
                                     <tr>
-    <th>Description</th>
-    <td>{selectedEvent.description}</td>
-</tr>
+                                        <th>Description</th>
+                                        <td>{selectedEvent.description}</td>
+                                    </tr>
                                     <tr>
                                         <td>
                                             <button
-                                                className="btn btn-primary"
-                                                onClick={goToCalendar}>
+                                                className="btn bg-green-800 text-white"
+                                                onClick={() => {
+                                                    goToCalendar(selectedEvent);
+                                                }}>
                                                 Go To Calendar
                                             </button>
                                         </td>
                                         <td>
                                             <button
-                                                className="btn btn-error"
-                                                onClick={leaveEvent}>
+                                                className="btn bg-red-500 text-white"
+                                                onClick={() => {
+                                                    leaveEvent(selectedEvent);
+                                                }}>
                                                 Leave Event
                                             </button>
                                         </td>
@@ -163,6 +175,7 @@ const BigCalendar = (props) => {
                     </div>
                 )}
             </div>
+            {/** Mobile View */}
             <div className="flex h-full w-screen flex-col space-y-2 p-2 sm:hidden">
     <div className="divider divider-start font-times-new-roman text-xl font-bold">
         Events
@@ -223,6 +236,7 @@ const BigCalendar = (props) => {
                         </table>
                     </div>
                 </div>
+
             </div>
         );
     })}

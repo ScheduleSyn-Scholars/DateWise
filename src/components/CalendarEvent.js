@@ -8,7 +8,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 
 const CalendarEventModal = ({ isOpen, setIsOpen }) => {
     const [selectedDateTime, setSelectedDateTime] = useState(new Date());
-    const [description, setDescription] = useState(""); // Declare description state
+    const [description, setDescription] = useState(''); // Declare description state
     const { calendarName, calendarId } = useParams();
     const user = useUser();
     const [usersInfo, setUsersInfo] = useState([]);
@@ -66,7 +66,7 @@ const CalendarEventModal = ({ isOpen, setIsOpen }) => {
                 dateTime: selectedDateTime,
                 creator: user.uid,
                 attendees: [user.uid],
-                description: description // Add description to eventData
+                description: description, // Add description to eventData
             };
             console.log('Event Data:', eventData);
             await createEvent(eventData);
@@ -102,7 +102,7 @@ const CalendarEventModal = ({ isOpen, setIsOpen }) => {
             <button
                 className="btn bg-green-800 text-white"
                 onClick={() => setIsOpen(true)}>
-                Create Meeting Time
+                Schedule Meeting
             </button>
             {isOpen && (
                 <div id="eventCal" className={`modal modal-open`}>
