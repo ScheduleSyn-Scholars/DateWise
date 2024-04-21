@@ -173,9 +173,9 @@ const NotificationBell = () => {
             </div>
             <ul
                 tabIndex={0}
-                className="dropdown-content w-96 space-y-1 rounded-xl bg-neutral p-2 text-black shadow">
+                className="dropdown-content sm:block sm:w-96 sm:space-y-1 border-1 border-gray-400 rounded-xl bg-gray-200 p-2 text-black shadow-2xl">
                 <p
-                    className={`text-center text-xl text-white ${isOpen ? '' : 'hidden'}`}>
+                    className={`text-center text-2xl font-bold ${isOpen ? '' : 'hidden'}`}>
                     Notifications
                 </p>
                 {notifications.map((notification, index) => {
@@ -184,7 +184,7 @@ const NotificationBell = () => {
                             return (
                                 <div
                                     key={index}
-                                    className={`collapse collapse-arrow bg-base-200 p-4 ${isOpen ? '' : 'hidden'}`}>
+                                    className={`collapse collapse-arrow bg-gray-200 shadow-xl p-2 ${isOpen ? '' : 'hidden'}`}>
                                     <input type="radio" name="my-accordion-2" />
                                     <div className="collapse-title text-xl font-medium">
                                         {notification.message}
@@ -192,7 +192,7 @@ const NotificationBell = () => {
                                     <div className="collapse-content">
                                         <div className="flex items-center justify-center">
                                             <button
-                                                className="btn btn-info"
+                                                className="btn bg-red-500 text-white"
                                                 onClick={() =>
                                                     declineNotification(
                                                         notification,
@@ -208,16 +208,16 @@ const NotificationBell = () => {
                             return (
                                 <div
                                     key={index}
-                                    className={`collapse collapse-arrow bg-base-200 p-4 ${isOpen ? '' : 'hidden'}`}>
+                                    className={`collapse collapse-arrow bg-gray-200 shadow-xl p-2 ${isOpen ? '' : 'hidden'}`}>
                                     <input type="radio" name="my-accordion-2" />
-                                    <div className="text-xk collapse-title font-medium">
+                                    <div className="text-xl collapse-title font-medium">
                                         {notification.fromName} has invited you
                                         to join {notification.calendarName}
                                     </div>
                                     <div className="collapse-content">
                                         <div className="flex justify-center space-x-6">
                                             <button
-                                                className="btn btn-primary"
+                                                className="btn bg-green-800 text-white"
                                                 onClick={() =>
                                                     acceptNotification(
                                                         notification,
@@ -226,7 +226,7 @@ const NotificationBell = () => {
                                                 Accept
                                             </button>
                                             <button
-                                                className="btn btn-error"
+                                                className="btn bg-red-500 text-white"
                                                 onClick={() =>
                                                     declineNotification(
                                                         notification,
@@ -242,7 +242,7 @@ const NotificationBell = () => {
                             return (
                                 <div
                                     key={index}
-                                    className={`collapse collapse-arrow bg-base-200 p-4 ${isOpen ? '' : 'hidden'}`}>
+                                    className={`collapse collapse-arrow shadow-xl bg-gray-200 p-2 ${isOpen ? '' : 'hidden'}`}>
                                     <input type="radio" name="my-accordion-2" />
                                     <div className="collapse-title text-xl font-medium">
                                         {notification.fromName} has invited you
@@ -250,19 +250,19 @@ const NotificationBell = () => {
                                     </div>
                                     <div className="collapse-content flex flex-col items-center justify-center">
                                         <p>
-                                            Calendar:{' '}
+                                            <b>Calendar</b>:
                                             {notification.calendarName}
                                         </p>
-                                        <p>Event: {notification.eventName}</p>
+                                        <p><b>Event</b>: {notification.eventName}</p>
                                         <p>
-                                            Time:{' '}
+                                            <b>Time:</b>
                                             {notification.dateTime
                                                 .toDate()
                                                 .toLocaleString()}
                                         </p>
                                         <div className="flex justify-center space-x-6">
                                             <button
-                                                className="btn btn-primary"
+                                                className="btn bg-green-800 text-white"
                                                 onClick={() =>
                                                     acceptNotification(
                                                         notification,
@@ -271,7 +271,7 @@ const NotificationBell = () => {
                                                 Accept
                                             </button>
                                             <button
-                                                className="btn btn-error"
+                                                className="btn bg-red-500 text-white"
                                                 onClick={() =>
                                                     declineNotification(
                                                         notification,
