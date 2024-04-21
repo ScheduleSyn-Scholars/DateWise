@@ -38,6 +38,15 @@ const ViewCalendar = () => {
 
     const navigate = useNavigate();
 
+    // Dropdown state and handler
+    const [showDropdown, setShowDropdown] = useState(false);
+    const [selectedUser, setSelectedUser] = useState(null);
+
+    const handleUserClick = (calendarUser) => {
+        setSelectedUser(calendarUser);
+        setShowDropdown(false);
+    };
+
     useEffect(() => {
         const fetchData = async () => {
             if (user) {
@@ -688,6 +697,46 @@ const ViewCalendar = () => {
                 {calendarName}
             </div>
     
+            {/* Mobile Users Dropdown */}
+            <div className="sm:hidden mt-5 flex justify-center">
+                <button
+                    className="btn bg-green-800 text-white"
+                    onClick={() => setShowDropdown(!showDropdown)}
+                >
+                    Users
+                </button>
+    
+                {showDropdown && (
+                    <div className="absolute top-12 right-0 z-50 bg-white shadow-lg">
+                        <ul className="divide-y divide-gray-200">
+                            {usersInfo.map((calendarUser) => (
+                                <li key={calendarUser.uid}>
+                                    <button
+                                        className="flex items-center w-full px-4 py-2"
+                                        onClick={() => handleUserClick(calendarUser)}
+                                    >
+                                        <img
+                                            src={calendarUser.imageURL ?? '/default-profile.png'}
+                                            alt="User Profile Picture"
+                                            className="mr-2 h-8 w-8 rounded-full"
+                                        />
+                                        {calendarUser.userName}
+                                        {userAvailabilityExists(calendarUser.uid) ? (
+                                    <span
+                                        className="ml-2 h-3 w-3 cursor-pointer rounded-full bg-green-500"
+                                        onClick={() => handleDotClick(calendarUser.uid)}
+                                    ></span>
+                                ) : (
+                                    <span className="ml-2 h-3 w-3 rounded-full bg-orange-500"></span>
+                                )}
+                                    </button>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
+            </div>
+    
             {/* Users Section */}
             <div className="mt-5 overflow-x-auto flex justify-center">
                 <div className="flex space-x-5">
@@ -695,7 +744,7 @@ const ViewCalendar = () => {
                         <div
                             key={calendarUser.uid}
                             className="flex flex-col items-center"
-                            style={{ minWidth: '100px' }}  // Fixed width for each user container
+                            style={{ minWidth: '100px' }}
                         >
                             <img
                                 src={calendarUser.imageURL ?? '/default-profile.png'}
@@ -722,9 +771,7 @@ const ViewCalendar = () => {
                                             type="checkbox"
                                             className="toggle"
                                             checked={isAdmin(calendarUser.uid)}
-                                            onChange={() =>
-                                                handleAdminToggle(calendarUser.uid)
-                                            }
+                                            onChange={() => handleAdminToggle(calendarUser.uid)}
                                         />
                                     </label>
                                 </div>
@@ -760,8 +807,7 @@ const ViewCalendar = () => {
                                 {bestTime.start !== undefined
                                     ? convertTo12HourFormat(bestTime.start)
                                     : ''}{' '}
-                                {bestTime.start !== undefined &&
-                                bestTime.end !== undefined
+                                {bestTime.start !== undefined && bestTime.end !== undefined
                                     ? '-'
                                     : ''}{' '}
                                 {bestTime.end !== undefined
@@ -777,8 +823,7 @@ const ViewCalendar = () => {
                     )}
                     <div
                         className={`${
-                            isAdmin(user.uid) ||
-                            createEventsPermission === 'everyone'
+                            isAdmin(user.uid) || createEventsPermission === 'everyone'
                                 ? ''
                                 : 'hidden'
                         }`}
@@ -814,11 +859,7 @@ const ViewCalendar = () => {
                                             key={user.id}
                                         >
                                             {' '}
-                                            <button
-                                                onClick={() =>
-                                                    handleNewUser(user)
-                                                }
-                                            >
+                                            <button onClick={() => handleNewUser(user)}>
                                                 {user.firstName} {user.lastName}
                                             </button>
                                         </li>
@@ -829,8 +870,7 @@ const ViewCalendar = () => {
     
                         <button
                             className={`btn bg-green-800 text-white ${
-                                isAdmin(user.uid) ||
-                                addUsersPermission === 'everyone'
+                                isAdmin(user.uid) || addUsersPermission === 'everyone'
                                     ? ''
                                     : 'hidden'
                             }`}
@@ -840,28 +880,17 @@ const ViewCalendar = () => {
                             Add User
                         </button>
                         {userAdded && !error && (
-                            <div
-                                role="alert"
-                                className="alert alert-success relative"
-                            >
+                            <div role="alert" className="alert alert-success relative">
                                 <span>User has been added to Calendar!</span>
                             </div>
                         )}
                         {error && (
-                            <div
-                                role="alert"
-                                className="alert-sm alert alert-error"
-                            >
-                                <span>
-                                    Error occurred while trying to add user!
-                                </span>
+                            <div role="alert" className="alert-sm alert alert-error">
+                                <span>Error occurred while trying to add user!</span>
                             </div>
                         )}
                     </div>
-                    <button
-                        onClick={handleLeaveGroup}
-                        className="btn mt-5 bg-green-800 text-white"
-                    >
+                    <button onClick={handleLeaveGroup} className="btn mt-5 bg-green-800 text-white">
                         Leave Group
                     </button>
                 </div>
@@ -878,36 +907,29 @@ const ViewCalendar = () => {
             {selectedUserAvailability && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
                     <div className="rounded-lg bg-white p-8">
-                        <h2 className="mb-4 text-lg font-bold">
-                            User Availability
-                        </h2>
+                        <h2 className="mb-4 text-lg font-bold">User Availability</h2>
                         {/* Display availability information */}
-                        {Object.entries(selectedUserAvailability).map(
-                            ([day, times]) => (
-                                <div key={day}>
-                                    {Array.isArray(times) &&
-                                        times.map((time) => (
-                                            <p key={time.start}>
-                                                {time.start} - {time.end}
-                                            </p>
-                                        ))}
-                                    {!Array.isArray(times) &&
-                                        Object.entries(times).map(
-                                            ([day, slots]) => (
-                                                <div key={day}>
-                                                    <p>{day}:</p>
-                                                    {slots.map((slot) => (
-                                                        <p key={slot.start}>
-                                                            {slot.start} -{' '}
-                                                            {slot.end}
-                                                        </p>
-                                                    ))}
-                                                </div>
-                                            )
-                                        )}
-                                </div>
-                            )
-                        )}
+                        {Object.entries(selectedUserAvailability).map(([day, times]) => (
+                            <div key={day}>
+                                {Array.isArray(times) &&
+                                    times.map((time) => (
+                                        <p key={time.start}>
+                                            {time.start} - {time.end}
+                                        </p>
+                                    ))}
+                                {!Array.isArray(times) &&
+                                    Object.entries(times).map(([day, slots]) => (
+                                        <div key={day}>
+                                            <p>{day}:</p>
+                                            {slots.map((slot) => (
+                                                <p key={slot.start}>
+                                                    {slot.start} - {slot.end}
+                                                </p>
+                                            ))}
+                                        </div>
+                                    ))}
+                            </div>
+                        ))}
                         <button
                             className="mx-auto mt-4 block rounded-md bg-red-500 px-4 py-2 text-white"
                             onClick={() => setSelectedUserAvailability(null)}
