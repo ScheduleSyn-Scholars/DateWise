@@ -689,7 +689,7 @@ const ViewCalendar = () => {
             </div>
     
             {/* Users Section */}
-            <div className="mt-5 overflow-x-auto">
+            <div className="mt-5 overflow-x-auto flex justify-center">
                 <div className="flex space-x-5">
                     {usersInfo.map((calendarUser) => (
                         <div
@@ -918,7 +918,7 @@ const ViewCalendar = () => {
                 </div>
             )}
         </div>
-   );
+    );
     
 };
     export default ViewCalendar;
