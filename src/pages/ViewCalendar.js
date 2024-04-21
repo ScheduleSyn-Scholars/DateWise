@@ -781,7 +781,7 @@ const ViewCalendar = () => {
                 </div>
             </div>
     
-            {/* Rest of the content */}
+            {/* Code for the rest of the page including availability form*/}
             <div className="mt-5 flex flex-col items-center justify-center sm:flex-row">
                 {/* Availability Form and Save Button */}
                 <div className="mb-5 flex flex-col items-center sm:mb-0 sm:mr-10">
