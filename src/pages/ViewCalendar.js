@@ -357,7 +357,9 @@ const ViewCalendar = () => {
                             imageURL: userData.imageURL,
                         };
                     } else {
-                        console.error(`User with ID ${userId} not found in the 'users' collection.`);
+                        console.error(
+                            `User with ID ${userId} not found in the 'users' collection.`,
+                        );
                         return null;
                     }
                 });
@@ -365,17 +367,9 @@ const ViewCalendar = () => {
                 setUsersInfo(usersInfoData.filter((user) => user !== null));
             } else {
                 console.error(`Calendar with ID ${calendarId} not found.`);
-                // If calendar is not found, clear the users info
-                setUsersInfo([]);
             }
         } catch (error) {
             console.error('Error fetching users info:', error);
-            // If an error does occur, clear the users info and retry after 15 seconds
-            setUsersInfo([]);
-            setTimeout(() => {
-                console.log('Retrying to fetch users info...');
-                fetchUsersInfo(calendarId);
-            }, 15000); // Retry after 15 seconds
         }
     };
 
@@ -712,66 +706,38 @@ const ViewCalendar = () => {
                     />
                 )}
             </div>
-    
+
             {/* Users Section */}
-
-            <div className="mt-5 flex items-center justify-center overflow-x-auto">
-
+            <div className="mt-0.5 flex items-center justify-center">
                 {usersInfo.map((calendarUser) => (
                     <div
                         key={calendarUser.uid}
                         className="mr-5 flex flex-col items-center">
                         <img
-                            src={calendarUser.imageURL ?? '/default-profile.png'}
+                            src={
+                                calendarUser.imageURL ?? '/default-profile.png'
+                            }
                             alt="User Profile Picture"
-
-                            className="mb-2 h-20 w-20 rounded-full cursor-pointer"
-                            onClick={() => handleDotClick(calendarUser.uid)}
-
+                            className="mb-2 h-20 w-20 cursor-pointer rounded-full"
+                            onClick={() => handleDotClick(calendarUser.uid)} // Add onClick handler to show availability modal
                         />
+                        {/* <p className="mb-1">{user.email}</p> //removed since we just wanna see userName */}
                         <div className="flex items-center">
                             <p>{calendarUser.userName}</p>
                             {userAvailabilityExists(calendarUser.uid) ? (
                                 <span
                                     className="ml-2 h-3 w-3 cursor-pointer rounded-full bg-green-500"
-                                    onClick={() => handleDotClick(calendarUser.uid)}
-                                ></span>
+                                    onClick={() =>
+                                        handleDotClick(calendarUser.uid)
+                                    }></span>
                             ) : (
                                 <span className="ml-2 h-3 w-3 rounded-full bg-orange-500"></span>
                             )}
                         </div>
-                        {isAdmin(user.uid) && calendarUser.uid !== user.uid && (
-                            <div className="form-control">
-                                <label className="label flex cursor-pointer flex-col">
-                                    <span className="label-text">Admin</span>
-                                    <input
-                                        type="checkbox"
-                                        className="toggle"
-                                        checked={isAdmin(calendarUser.uid)}
-                                        onChange={() =>
-                                            handleAdminToggle(calendarUser.uid)
-                                        }
-                                    />
-                                </label>
-                            </div>
-                        )}
-
-{error && (
-    <div
-        role="alert"
-        className="alert-sm alert alert-error"
-    >
-        <span>
-            Error occurred while fetching user data!
-        </span>
-    </div>
-)}
-
-
                     </div>
                 ))}
             </div>
-    
+
             {/* Rest of the content */}
             <div className="flex flex-col items-center justify-center sm:flex-row">
                 {/* Availability Form and Save Button */}
@@ -784,8 +750,7 @@ const ViewCalendar = () => {
                         <button
                             className="btn bg-green-800 text-white"
                             type="button"
-                            onClick={handleSaveAndUpdate}
-                        >
+                            onClick={handleSaveAndUpdate}>
                             Save
                         </button>
                     </div>
@@ -830,91 +795,44 @@ const ViewCalendar = () => {
                                     : ''}
                             </p>
                         </div>
-                    )}
-                    {showSavedPopup && (
-                        <div className="mt-5">
-                            <p>Availability saved!</p>
-                        </div>
-                    )}
-                    <div
-                        className={`${
-                            isAdmin(user.uid) ||
-                            createEventsPermission === 'everyone'
-                                ? ''
-                                : 'hidden'
-                        }`}
-                    >
-                        <CalendarEventModal
-                            isOpen={isOpen}
-                            setIsOpen={setIsOpen}
-                            closeModal={closeModal}
-                        />
-                    </div>
-
+                         )}
                 </div>
-    
+
                 {/* Calendar Events */}
                 <div className="ml-10 flex h-full flex-col items-center pr-5 justify-between">
                     <div className="mt-5vh flex flex-col items-center">
                         {/* Users Section */}
                     </div>
                     <div className="flex flex-col items-center justify-center space-y-4">
-
-                        <input
-                            className="input input-sm input-bordered w-full md:max-w-md"
-                            onChange={filterSuggestion}
-                            type="text"
-                            placeholder="Type here"
-                            value={searchInput}
-                        ></input>
-                        {filteredUsers.length > 0 && !exactMatchFound && (
-                            <div className="dropdown-content top-14 max-h-96 w-full flex-col overflow-auto rounded-md bg-base-200 md:max-w-md">
-                                <ul className="menu-compact menu">
-                                    {filteredUsers.map((user) => (
-                                        <li
-                                            className="w-full border-b border-b-base-content/10"
-                                            key={user.id}
-                                        >
-                                            {' '}
-                                            <button
-                                                onClick={() =>
-                                                    handleNewUser(user)
-                                                }
-                                            >
-                                                {user.firstName} {user.lastName}
-                                            </button>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                        )}
-    
-                        <button
-                            className={`btn bg-green-800 text-white ${
-                                isAdmin(user.uid) ||
-                                addUsersPermission === 'everyone'
-                                    ? ''
-                                    : 'hidden'
-                            }`}
-
+                    <div className="flex space-x-2">
+              <input
+                id="email"
+                type="text"
+                placeholder="Enter email to invite"
+                className="input input-bordered w-full md:max-w-md input-sm"
+                onKeyDown={(e) => e.key === 'Enter' && addEmail()}
+              />
+              <button className={`btn bg-green-800 text-white ${isAdmin(user.uid) || addUsersPermission === 'everyone' ? '' : 'hidden'}`} onClick={addEmail}>Add</button>
+              {errorMessage && <div className="text-red-500">{errorMessage}</div>}
+              {successMessage && <div className="text-green-500">{successMessage}</div>}
+            </div>
+                        {/* <button
+                            className={`btn bg-green-800 text-white ${isAdmin(user.uid) || addUsersPermission === 'everyone' ? '' : 'hidden'}`}
                             type="button"
-                            onClick={addUser}
-                        >
+                            onClick={addUser}>
                             Add User
                         </button> */}
                         {/* {userAdded && !error && (
                             <div
                                 role="alert"
-                                className="alert alert-success relative"
-                            >
+                                className="alert alert-success relative">
                                 <span>User has been added to Calendar!</span>
                             </div>
                         )}
                         {error && (
                             <div
                                 role="alert"
-                                className="alert-sm alert alert-error"
-                            >
+                                className="alert-sm alert alert-error">
                                 <span>
                                     Error occurred while trying to add user!
                                 </span>
@@ -923,21 +841,11 @@ const ViewCalendar = () => {
                     </div>
                     <button
                         onClick={handleLeaveGroup}
-                        className="btn mt-5 bg-green-800 text-white"
-                    >
-
+                        className="btn mt-5 bg-red-400 text-white">
                         Leave Group
                     </button>
                 </div>
             </div>
-    
-            {/* Home Button */}
-            <div className="flex">
-                <Link to="/HomePage" className="ml-5">
-                    <button className="btn bg-green-800 text-white">Home</button>
-                </Link>
-            </div>
-    
 
             {/* Modal for Selected User's Availability */}
             {selectedUserAvailability && (
@@ -968,15 +876,14 @@ const ViewCalendar = () => {
                                                         </p>
                                                     ))}
                                                 </div>
-                                            )
+                                            ),
                                         )}
                                 </div>
-                            )
+                            ),
                         )}
                         <button
                             className="mx-auto mt-4 block rounded-md bg-red-500 px-4 py-2 text-white"
-                            onClick={() => setSelectedUserAvailability(null)}
-                        >
+                            onClick={() => setSelectedUserAvailability(null)}>
                             Close
                         </button>
                     </div>
@@ -984,7 +891,6 @@ const ViewCalendar = () => {
             )}
         </div>
     );
-    
 };
 
 export default ViewCalendar;
