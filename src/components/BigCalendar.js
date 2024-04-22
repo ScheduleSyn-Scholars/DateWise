@@ -186,7 +186,7 @@ const BigCalendar = (props) => {
                             key={index}
                             className="collapse collapse-arrow rounded-2xl border-1 border-gray-800 bg-gray-200 p-3 shadow-2xl">
                             <input type="radio" name="my-accordion-1" />
-                            <div className="collapse-title text-xl font-medium">
+                            <div className="collapse-title text-xl font-medium flex justify-center items-center">
                                 {event.name} -{' '}
                                 {new Date(event.start).toLocaleDateString()}
                             </div>
@@ -210,6 +210,10 @@ const BigCalendar = (props) => {
                                                     ).toLocaleTimeString()}
                                                 </td>
                                             </tr>
+                                            <tr>
+                                    <th>Description</th>
+                                    <td>{event.description}</td>
+                                </tr>
                                             <tr>
                                                 <td>
                                                     <button
