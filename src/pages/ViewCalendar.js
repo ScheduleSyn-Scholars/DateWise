@@ -851,7 +851,7 @@ const ViewCalendar = () => {
                         {/* Users Section */}
                     </div>
                     <div className="flex flex-col items-center justify-center space-y-4">
-                    <div className="flex space-x-2">
+                    <div className="flex space-x-2 mt-5">
               <input
                 id="email"
                 type="text"
