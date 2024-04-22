@@ -13,7 +13,7 @@ const HomePage = () => {
     const [loading, setLoading] = useState(true);
     const [events, setEvents] = useState([]);
     const [isOpen, setIsOpen] = useState(false);
-    let eventStyle;
+   
     
 
     useEffect(() => {
@@ -70,24 +70,14 @@ const HomePage = () => {
                 }
 
                 //Enable only current dated events
-                const currentDate = new Date();
-                const currentEvents = allEvents.filter(event => {
-                    // Checks if the event's end date is after today's date
-                    return new Date(event.end) >= currentDate;
-                });
-                eventStyle = (allEvents, start, end, isSelected) => {
-                    const today = new Date();
-                    const isAfterToday = allEvents.start > today;
-                    return {
-                      style: {
-                        backgroundColor: isAfterToday ? 'green' : 'yellow',
-                        color: 'white',
-                      },
-                    };
-                }
+                // const currentDate = new Date();
+                // const currentEvents = allEvents.filter(event => {
+                //     // Checks if the event's end date is after today's date
+                //     return new Date(event.end) >= currentDate;
+                // });
+               
                 
                 setEvents(allEvents);
-                // const eventStyle = '';
             } catch (error) {
                 console.error('Error loading user calendars:', error);
             }
@@ -111,7 +101,7 @@ const HomePage = () => {
 
             <div className="flex h-full w-full flex-col sm:h-fit sm:flex-row">
                 <div className="relative flex h-full w-full justify-center sm:h-fit sm:items-center sm:border-r sm:border-gray-500">
-                    <BigCalendar events={events} eventStyle={eventStyle} />
+                    <BigCalendar events={events} />
                 </div>
 
                 <div className="sm:w-1/4 w-full flex-col items-center justify-between sm:flex p-2 sm:p-0">

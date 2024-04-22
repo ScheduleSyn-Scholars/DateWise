@@ -15,7 +15,6 @@ const BigCalendar = (props) => {
     const [selectedEvent, setSelectedEvent] = useState(null);
     const [popupPosition, setPopupPosition] = useState({ top: 0, left: 0 });
     const popupRef = useRef(null);
-    const [eventStyle, setEventStyle] = useState([]);
 
     const user = useUser();
     const navigate = useNavigate();
@@ -36,8 +35,6 @@ const BigCalendar = (props) => {
         });
 
         setEvents(props.events);
-        setEventStyle(props.eventStyle);
-
         document.addEventListener('mousedown', handleClickOutside);
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
@@ -104,7 +101,6 @@ const BigCalendar = (props) => {
                     components={{
                         event: CustomEventComponent,
                     }}
-                    eventPropGetter={eventStyle}
                 />
                 {selectedEvent && (
                     <div
