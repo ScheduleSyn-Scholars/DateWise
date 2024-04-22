@@ -11,6 +11,7 @@ import CalendarEventModal from '../components/CalendarEvent';
 import firebase from 'firebase/compat/app';
 import CalendarSettingsModal from '../components/CalendarSettings';
 
+
 const ViewCalendar = () => {
   const { calendarId, calendarName } = useParams();
   const user = useUser();
@@ -87,6 +88,15 @@ const ViewCalendar = () => {
     // Function to check if user's availability exists
     const userAvailabilityExists = (userId) => {
         return teamAvailability.some((member) => member.uid === userId);
+    };
+
+    // Dropdown handler for mobile user list
+    const [showDropdown, setShowDropdown] = useState(false);
+    const [selectedUser, setSelectedUser] = useState(null);
+
+    const handleUserClick = (calendarUser) => {
+        setSelectedUser(calendarUser);
+        setShowDropdown(false);
     };
 
     const fetchUserAvailability = async (calendarId, uid) => {
@@ -353,7 +363,7 @@ const ViewCalendar = () => {
                         return {
                             uid: userId,
                             email: userData.email,
-                            userName: `${userData.firstName} ${userData.lastName}`,
+                            userName: `${userData.userName}`,
                             imageURL: userData.imageURL,
                         };
                     } else {
@@ -707,36 +717,73 @@ const ViewCalendar = () => {
                 )}
             </div>
 
-            {/* Users Section */}
-            <div className="mt-0.5 flex items-center justify-center">
+{/* Dropdown for mobile mode */}
+<div className="sm:hidden mt-5 flex justify-center relative">
+    <button
+        className="btn bg-green-800 text-white"
+        onClick={() => setShowDropdown(!showDropdown)}
+    >
+        Users
+    </button>
+
+    {showDropdown && (
+        <div className="absolute top-full transform -translate-x-1/2 left-1/2 z-50 bg-white shadow-lg mt-1 max-h-40 overflow-y-auto">
+            <ul className="divide-y divide-gray-200">
                 {usersInfo.map((calendarUser) => (
-                    <div
-                        key={calendarUser.uid}
-                        className="mr-5 flex flex-col items-center">
+                    <li key={calendarUser.uid} className="flex items-center px-4 py-2">
                         <img
-                            src={
-                                calendarUser.imageURL ?? '/default-profile.png'
-                            }
+                            src={calendarUser.imageURL ?? '/default-profile.png'}
                             alt="User Profile Picture"
-                            className="mb-2 h-20 w-20 cursor-pointer rounded-full"
-                            onClick={() => handleDotClick(calendarUser.uid)} // Add onClick handler to show availability modal
+                            className="mr-2 h-8 w-8 rounded-full cursor-pointer"
+                            onClick={() => handleUserClick(calendarUser)}
                         />
-                        {/* <p className="mb-1">{user.email}</p> //removed since we just wanna see userName */}
-                        <div className="flex items-center">
-                            <p>{calendarUser.userName}</p>
+                        <div className="flex flex-grow items-center justify-center">
+                            <p className="text-center">{calendarUser.userName}</p>
                             {userAvailabilityExists(calendarUser.uid) ? (
                                 <span
                                     className="ml-2 h-3 w-3 cursor-pointer rounded-full bg-green-500"
-                                    onClick={() =>
-                                        handleDotClick(calendarUser.uid)
-                                    }></span>
+                                    onClick={() => handleDotClick(calendarUser.uid)}
+                                ></span>
                             ) : (
                                 <span className="ml-2 h-3 w-3 rounded-full bg-orange-500"></span>
                             )}
                         </div>
-                    </div>
+                    </li>
                 ))}
+            </ul>
+        </div>
+    )}
+</div>
+
+
+            {/* Users Section */}
+<div className="mt-0.5 overflow-x-auto flex justify-center">
+    {usersInfo.map((calendarUser) => (
+        <div
+            key={calendarUser.uid}
+            className="mr-5 flex flex-col items-center"
+            style={{ minWidth: '100px' }}  // Fixed width for each user container
+        >
+            <img
+                src={calendarUser.imageURL ?? '/default-profile.png'}
+                alt="User Profile Picture"
+                className="mb-2 h-20 w-20 cursor-pointer rounded-full"
+                onClick={() => handleDotClick(calendarUser.uid)} // Add onClick handler to show availability modal
+            />
+            <div className="flex items-center">
+                <p>{calendarUser.userName}</p>
+                {userAvailabilityExists(calendarUser.uid) ? (
+                    <span
+                        className="ml-2 h-3 w-3 cursor-pointer rounded-full bg-green-500"
+                        onClick={() => handleDotClick(calendarUser.uid)}
+                    ></span>
+                ) : (
+                    <span className="ml-2 h-3 w-3 rounded-full bg-orange-500"></span>
+                )}
             </div>
+        </div>
+    ))}
+</div>
 
             {/* Rest of the content */}
             <div className="flex flex-col items-center justify-center sm:flex-row">
