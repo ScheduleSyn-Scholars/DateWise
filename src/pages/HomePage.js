@@ -13,6 +13,8 @@ const HomePage = () => {
     const [loading, setLoading] = useState(true);
     const [events, setEvents] = useState([]);
     const [isOpen, setIsOpen] = useState(false);
+   
+    
 
     useEffect(() => {
         const loadUserData = async () => {
@@ -68,12 +70,14 @@ const HomePage = () => {
                 }
 
                 //Enable only current dated events
-                const currentDate = new Date();
-                const currentEvents = allEvents.filter(event => {
-                    // Checks if the event's end date is after today's date
-                    return new Date(event.end) >= currentDate;
-                });
-                setEvents(currentEvents);
+                // const currentDate = new Date();
+                // const currentEvents = allEvents.filter(event => {
+                //     // Checks if the event's end date is after today's date
+                //     return new Date(event.end) >= currentDate;
+                // });
+               
+                
+                setEvents(allEvents);
             } catch (error) {
                 console.error('Error loading user calendars:', error);
             }
@@ -83,6 +87,8 @@ const HomePage = () => {
         loadUserData().then(() => setLoading(false));
         //setLoading(false);
     }, [user]);
+
+    
 
     const closeModalAndRefresh = () => {
         setIsOpen(false);
