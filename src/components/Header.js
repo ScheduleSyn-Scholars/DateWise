@@ -7,7 +7,7 @@ const Header = () => {
     const [isProfileOpen, setIsProfileOpen] = useState(false);
 
     return (
-        <header className="flex w-full items-center bg-green-800 px-2 py-2 text-white border-b shaddow">
+        <header className="shaddow flex w-full items-center border-b bg-green-800 px-2 py-2 text-white">
             <Link className="flex items-center" to="/HomePage">
                 <img
                     src="/BearLogo.png"

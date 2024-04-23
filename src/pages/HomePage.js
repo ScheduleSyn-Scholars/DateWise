@@ -13,7 +13,7 @@ const HomePage = () => {
     const [loading, setLoading] = useState(true);
     const [events, setEvents] = useState([]);
     const [isOpen, setIsOpen] = useState(false);
-    
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -75,8 +75,7 @@ const HomePage = () => {
                 //     // Checks if the event's end date is after today's date
                 //     return new Date(event.end) >= currentDate;
                 // });
-               
-                
+
                 setEvents(allEvents);
             } catch (error) {
                 console.error('Error loading user calendars:', error);
@@ -87,8 +86,6 @@ const HomePage = () => {
         loadUserData().then(() => setLoading(false));
         //setLoading(false);
     }, [user]);
-
-    
 
     const closeModalAndRefresh = () => {
         setIsOpen(false);
@@ -109,34 +106,34 @@ const HomePage = () => {
                     <BigCalendar events={events} />
                 </div>
 
-                <div className="sm:w-1/4 w-full flex-col items-center justify-between sm:flex p-2 sm:p-0">
-                    <div className="mt-10 text-2xl font-bold text-gray-700 hidden sm:block">
+                <div className="w-full flex-col items-center justify-between p-2 sm:flex sm:w-1/4 sm:p-0">
+                    <div className="mt-10 hidden text-2xl font-bold text-gray-700 sm:block">
                         Shared Calendars
                     </div>
-                    <div className='sm:hidden divider divider-start font-times-new-roman text-xl font-bold'>
+                    <div className="divider divider-start font-times-new-roman text-xl font-bold sm:hidden">
                         Calendars
                     </div>
                     {loading ? (
                         <p>Loading Calendars... </p>
                     ) : (
-                        <div className="flex sm:h-4/5 sm:w-auto flex-col overflow-y-auto space-y-2 p-2 sm:items-center">
+                        <div className="flex flex-col space-y-2 overflow-y-auto p-2 sm:h-4/5 sm:w-auto sm:items-center">
                             {calendars.map((calendar) => (
                                 <Link
                                     key={calendar.id}
                                     to={`/ViewCalendar/${calendar.id}/${encodeURIComponent(calendar.calendarName)}`}>
-                                    <button className="btn bg-green-800 text-white shadow-md text-lg font-sans sm:w-auto w-full sm:btn-ghost sm:text-gray-500 sm:text-xl">
+                                    <button className="btn w-full bg-green-800 font-sans text-lg text-white shadow-md sm:btn-ghost sm:w-auto sm:text-xl sm:text-gray-500">
                                         {calendar.calendarName}
                                     </button>
                                 </Link>
                             ))}
                         </div>
                     )}
-                    <div className="flex w-full justify-end sm:justify-start p-2 sm:p-0 sm:justify-center">
-                    <NewCalendarModal
-                        isOpen={isOpen}
-                        setIsOpen={setIsOpen}
-                        closeModalAndRefresh={closeModalAndRefresh}
-                    />
+                    <div className="flex w-full justify-end p-2 sm:justify-start sm:justify-center sm:p-0">
+                        <NewCalendarModal
+                            isOpen={isOpen}
+                            setIsOpen={setIsOpen}
+                            closeModalAndRefresh={closeModalAndRefresh}
+                        />
                     </div>
                 </div>
             </div>

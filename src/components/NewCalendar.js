@@ -158,9 +158,9 @@ const NewCalendarModal = ({ isOpen, setIsOpen, closeModalAndRefresh }) => {
     return (
         <>
             <button
-                className="btn bg-emerald-900 font-sans text-lg text-white self-end"
+                className="btn self-end bg-emerald-900 font-sans text-lg text-white"
                 onClick={() => setIsOpen(true)}>
-                 New Calendar
+                New Calendar
             </button>
             {isOpen && (
                 <div className="modal modal-open">

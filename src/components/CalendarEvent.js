@@ -113,28 +113,30 @@ const CalendarEventModal = ({ isOpen, setIsOpen }) => {
                             ✕
                         </button>
 
-                      
-
                         <div className="mt-5 flex flex-col items-center justify-center ">
-                            <div className="flex mt-5 w-96 items center justify-center">
-                            <DatePicker
-                                selected={selectedDateTime}
-                                onChange={(date) => setSelectedDateTime(date)}
-                                inline
-                                showTimeSelect
-                                dateFormat="Pp"
-                            />
-                        </div>
+                            <div className="items center mt-5 flex w-96 justify-center">
+                                <DatePicker
+                                    selected={selectedDateTime}
+                                    onChange={(date) =>
+                                        setSelectedDateTime(date)
+                                    }
+                                    inline
+                                    showTimeSelect
+                                    dateFormat="Pp"
+                                />
+                            </div>
 
                             <div className="flex flex-col items-center ">
-                            <textarea
-                                type="text"
-                                placeholder="Enter event description"
-                                value={description}
-                                onChange={(e) => setDescription(e.target.value)}
-                                className="w-80 h-20 p-2 mt-2 border border-gray-300 rounded-md"
-                            />
-                        </div>
+                                <textarea
+                                    type="text"
+                                    placeholder="Enter event description"
+                                    value={description}
+                                    onChange={(e) =>
+                                        setDescription(e.target.value)
+                                    }
+                                    className="mt-2 h-20 w-80 rounded-md border border-gray-300 p-2"
+                                />
+                            </div>
                             <button
                                 className="items center mt-5 h-10 w-32 rounded-full border-none bg-green-800 text-white"
                                 type="button"

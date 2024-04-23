@@ -6,24 +6,26 @@ import { useUser } from '../resources/UserContext';
 import AvailabilityForm from '../components/Calendar/AvailabilityForm';
 import 'react-datepicker/dist/react-datepicker.css';
 import Header from '../components/Header';
-import { sendCalendarInvite, sendEventInvite } from '../resources/NotificationService';
+import {
+    sendCalendarInvite,
+    sendEventInvite,
+} from '../resources/NotificationService';
 import CalendarEventModal from '../components/CalendarEvent';
 import firebase from 'firebase/compat/app';
 import CalendarSettingsModal from '../components/CalendarSettings';
 
-
 const ViewCalendar = () => {
-  const { calendarId, calendarName } = useParams();
-  const user = useUser();
-  // const [users, setUsers] = useState([]);  //list of users from the database
-  // const [userAdded, setUserAdded] = useState(false); //functionality to add user to database
-  // const [userId, setUserId] = useState();      //value to CRUD with database 
-  // const [searchInput, setSearchInput] = useState(""); //input based on input tag value
-  // const [filteredUsers, setFilteredUsers] = useState([]);
-  // const [exactMatchFound, setExactMatchFound] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
-  const [successMessage, setSuccessMessage] = useState('');
-  const [description, setDescription] = useState(''); // Define description state variable
+    const { calendarId, calendarName } = useParams();
+    const user = useUser();
+    // const [users, setUsers] = useState([]);  //list of users from the database
+    // const [userAdded, setUserAdded] = useState(false); //functionality to add user to database
+    // const [userId, setUserId] = useState();      //value to CRUD with database
+    // const [searchInput, setSearchInput] = useState(""); //input based on input tag value
+    // const [filteredUsers, setFilteredUsers] = useState([]);
+    // const [exactMatchFound, setExactMatchFound] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
+    const [description, setDescription] = useState(''); // Define description state variable
     const [availability, setAvailability] = useState({
         selectedDays: [],
         times: {},
@@ -43,7 +45,6 @@ const ViewCalendar = () => {
     const [settingsOpen, setSettingsOpen] = useState(false);
 
     const navigate = useNavigate();
-    
 
     useEffect(() => {
         const fetchData = async () => {
@@ -57,7 +58,9 @@ const ViewCalendar = () => {
                 if (calendarData.admins) {
                     setAdminUids(calendarData.admins);
                     setAddUsersPermission(calendarData.addUsersPermission);
-                    setCreateEventsPermission(calendarData.createEventsPermission);
+                    setCreateEventsPermission(
+                        calendarData.createEventsPermission,
+                    );
                 }
 
                 setCreatorUid(calendarData.creatorId);
@@ -118,68 +121,68 @@ const ViewCalendar = () => {
         }
     };
 
-  // const fetchUser2 = async () => {
-  //   //fetch all users from the users collection
-  //   const usersDataArray = [];
-  //   try {
-  //     const userRef = firestore.collection("users");
-  //     const userSnapshot = await userRef.get();
-  //     userSnapshot.forEach((doc) => {
-  //       const id = doc.id;
-  //       const { email, firstName, imageURL, lastName } = doc.data();
-  //       const userObject = { id, email, firstName, imageURL, lastName };
-  //       usersDataArray.push(userObject);
-  //     });
-  //     setUsers(usersDataArray);
-  //   } catch (Exception) {
-  //     console.log("Error fetching use", Exception);
-  //   }
+    // const fetchUser2 = async () => {
+    //   //fetch all users from the users collection
+    //   const usersDataArray = [];
+    //   try {
+    //     const userRef = firestore.collection("users");
+    //     const userSnapshot = await userRef.get();
+    //     userSnapshot.forEach((doc) => {
+    //       const id = doc.id;
+    //       const { email, firstName, imageURL, lastName } = doc.data();
+    //       const userObject = { id, email, firstName, imageURL, lastName };
+    //       usersDataArray.push(userObject);
+    //     });
+    //     setUsers(usersDataArray);
+    //   } catch (Exception) {
+    //     console.log("Error fetching use", Exception);
+    //   }
 
-  // }
+    // }
 
-  //Autocomplete functionality (Handles filtration, finding exact match, returning dropdown list of matched results that amount to 10 values)
-  // const filterSuggestion = (input) => {
-  //   let validatedInput = input.target.value.toLowerCase();
-  //   let match = 0;
-  //   if (input.target.value === "" || input.target.value.trim() === '') {
-  //     setFilteredUsers([]);
-  //     setSearchInput("");
-  //     setUserId('');
-  //     setExactMatchFound(false);
-  //     return;
-  //   } else {
-  //     setSearchInput(input.target.value);
-  //     const filtered = users.filter(user =>{
-  //       //
-  //       if(((user.firstName)?.toLowerCase().includes(validatedInput)||(user.lastName)?.toLowerCase().includes(validatedInput)) && match <10){
-  //         match++;
-  //         return user;
-  //       }
-  //     });
-  //     //if match < 10, then put the filtered option
-  //     // Check if exact match is found
-  //     const exactMatch = users.find(user => {
-  //       return (user.firstName?.toLowerCase() === validatedInput || user.lastName?.toLowerCase() === validatedInput);
-  //     });
+    //Autocomplete functionality (Handles filtration, finding exact match, returning dropdown list of matched results that amount to 10 values)
+    // const filterSuggestion = (input) => {
+    //   let validatedInput = input.target.value.toLowerCase();
+    //   let match = 0;
+    //   if (input.target.value === "" || input.target.value.trim() === '') {
+    //     setFilteredUsers([]);
+    //     setSearchInput("");
+    //     setUserId('');
+    //     setExactMatchFound(false);
+    //     return;
+    //   } else {
+    //     setSearchInput(input.target.value);
+    //     const filtered = users.filter(user =>{
+    //       //
+    //       if(((user.firstName)?.toLowerCase().includes(validatedInput)||(user.lastName)?.toLowerCase().includes(validatedInput)) && match <10){
+    //         match++;
+    //         return user;
+    //       }
+    //     });
+    //     //if match < 10, then put the filtered option
+    //     // Check if exact match is found
+    //     const exactMatch = users.find(user => {
+    //       return (user.firstName?.toLowerCase() === validatedInput || user.lastName?.toLowerCase() === validatedInput);
+    //     });
 
-  //     // If exact match found, set exactMatchFound to true and clear filtered list
-  //     if (exactMatch) {
-  //       setExactMatchFound(true);
-  //       setFilteredUsers([]);
-  //     } else {
-  //       setExactMatchFound(false);
-  //       setFilteredUsers(filtered);
-  //     }
-  //     //setFilteredUsers(filtered);
-  //   }
+    //     // If exact match found, set exactMatchFound to true and clear filtered list
+    //     if (exactMatch) {
+    //       setExactMatchFound(true);
+    //       setFilteredUsers([]);
+    //     } else {
+    //       setExactMatchFound(false);
+    //       setFilteredUsers(filtered);
+    //     }
+    //     //setFilteredUsers(filtered);
+    //   }
 
-  // }
-  //Button that handles Adding User to Calendar
-  // const handleNewUser= (user) => {
-  //   setSearchInput(`${user.firstName} ${user.lastName}`);
-  //   setExactMatchFound(true);
-  //   setUserId(user.id);
-  // }
+    // }
+    //Button that handles Adding User to Calendar
+    // const handleNewUser= (user) => {
+    //   setSearchInput(`${user.firstName} ${user.lastName}`);
+    //   setExactMatchFound(true);
+    //   setUserId(user.id);
+    // }
 
     const fetchTeamAvailability = async (calendarId) => {
         try {
@@ -500,8 +503,7 @@ const ViewCalendar = () => {
 
     //Retrieve user available times by clicking on the dot that turns green once they fill it out
     const handleDotClick = async (userUid) => {
-       
-        setShowDropdown(false);//For mobile view on user availability
+        setShowDropdown(false); //For mobile view on user availability
 
         try {
             console.log('User UID:', userUid);
@@ -554,41 +556,41 @@ const ViewCalendar = () => {
         }
     };
 
-  //code for adding user to a calendar
-//   const addUser = async () => {
-//     try {
-//       if(userId === ''){
-//         throw new Error("Please add a user");
-//       }
-//       const calRef = firestore.collection('calendars').doc(calendarId);
-//       const calSnapshot = await calRef.get();
-//       if (calSnapshot.exists) {
-//         await calRef.update({
-//           users: FieldValue.arrayUnion(userId)
-//         })
-//       }
-//       setUserAdded(true);
-//       setSearchInput('');
-//       setError(false);
-//       setTimeout(() => {
-//         setUserAdded(false);
-//       }, 3000);
+    //code for adding user to a calendar
+    //   const addUser = async () => {
+    //     try {
+    //       if(userId === ''){
+    //         throw new Error("Please add a user");
+    //       }
+    //       const calRef = firestore.collection('calendars').doc(calendarId);
+    //       const calSnapshot = await calRef.get();
+    //       if (calSnapshot.exists) {
+    //         await calRef.update({
+    //           users: FieldValue.arrayUnion(userId)
+    //         })
+    //       }
+    //       setUserAdded(true);
+    //       setSearchInput('');
+    //       setError(false);
+    //       setTimeout(() => {
+    //         setUserAdded(false);
+    //       }, 3000);
 
-//     } catch (error) {
-//       setError(true);
-//       console.error('Error while trying to add user',error);
-//       setTimeout(() => {
-//         setError(false);
-//       }, 3000);
-//     }
-   
-//   };
-  // Sends each calendar member a notification for the event
-  const sendEventInvites = async (newEventId) => {
-    for (const userInfo of usersInfo) {
-        await sendEventInvite(user, userInfo.email, calendarId, newEventId);
-    }
-};
+    //     } catch (error) {
+    //       setError(true);
+    //       console.error('Error while trying to add user',error);
+    //       setTimeout(() => {
+    //         setError(false);
+    //       }, 3000);
+    //     }
+
+    //   };
+    // Sends each calendar member a notification for the event
+    const sendEventInvites = async (newEventId) => {
+        for (const userInfo of usersInfo) {
+            await sendEventInvite(user, userInfo.email, calendarId, newEventId);
+        }
+    };
 
     const convertTo12HourFormat = (time) => {
         const hour = parseInt(time, 10);
@@ -673,27 +675,27 @@ const ViewCalendar = () => {
         handleShowBestTime(); // Then call handleShowBestTime
     };
 
- 
-
     const addEmail = async () => {
-      const emailInput = document.getElementById('email');
-      const emailToAdd = emailInput.value;
-      emailInput.value = '';
-      const query = firestore.collection('users').where('email', '==', emailToAdd);
-      const querySnapshot = await query.get();
-      
-      if (querySnapshot.docs.length === 0) {
-          setSuccessMessage('');
-          setErrorMessage('No user with that email exists');
-      } else {
-          const userToAddDoc = querySnapshot.docs[0];
-          const userToAddData = userToAddDoc.data();
-          const name = userToAddData.firstName + ' ' + userToAddData.lastName;
-          sendCalendarInvite(user, emailToAdd, calendarId);
-          setErrorMessage('');
-          setSuccessMessage('User successfully added');
-      }
-  };
+        const emailInput = document.getElementById('email');
+        const emailToAdd = emailInput.value;
+        emailInput.value = '';
+        const query = firestore
+            .collection('users')
+            .where('email', '==', emailToAdd);
+        const querySnapshot = await query.get();
+
+        if (querySnapshot.docs.length === 0) {
+            setSuccessMessage('');
+            setErrorMessage('No user with that email exists');
+        } else {
+            const userToAddDoc = querySnapshot.docs[0];
+            const userToAddData = userToAddDoc.data();
+            const name = userToAddData.firstName + ' ' + userToAddData.lastName;
+            sendCalendarInvite(user, emailToAdd, calendarId);
+            setErrorMessage('');
+            setSuccessMessage('User successfully added');
+        }
+    };
 
     const isAdmin = (uid) => {
         return adminUids.includes(uid);
@@ -727,79 +729,90 @@ const ViewCalendar = () => {
                 )}
             </div>
 
-{/* Dropdown for mobile mode */}
-<div className="sm:hidden mt-5 flex justify-center relative">
-    <button
-        className="btn bg-green-800 text-white"
-        onClick={() => setShowDropdown(!showDropdown)}
-    >
-        Users
-    </button>
+            {/* Dropdown for mobile mode */}
+            <div className="relative mt-5 flex justify-center sm:hidden">
+                <button
+                    className="btn bg-green-800 text-white"
+                    onClick={() => setShowDropdown(!showDropdown)}>
+                    Users
+                </button>
 
-    {showDropdown && (
-        <div className="absolute top-full transform -translate-x-1/2 left-1/2 z-50 bg-white shadow-lg mt-1 max-h-40 overflow-y-auto">
-            <ul className="divide-y divide-gray-200">
+                {showDropdown && (
+                    <div className="absolute left-1/2 top-full z-50 mt-1 max-h-40 -translate-x-1/2 transform overflow-y-auto bg-white shadow-lg">
+                        <ul className="divide-y divide-gray-200">
+                            {usersInfo.map((calendarUser) => (
+                                <li
+                                    key={calendarUser.uid}
+                                    className="flex items-center px-4 py-2">
+                                    <img
+                                        src={
+                                            calendarUser.imageURL ??
+                                            '/default-profile.png'
+                                        }
+                                        alt="User Profile Picture"
+                                        className="mr-2 h-8 w-8 cursor-pointer rounded-full"
+                                        onClick={() => {
+                                            handleDotClick(calendarUser.uid); // Show availability modal
+                                            setShowDropdown(false); // Close the dropdown
+                                        }}
+                                    />
+                                    <div className="flex flex-grow items-center justify-center">
+                                        <p className="text-center">
+                                            {calendarUser.userName}
+                                        </p>
+                                        {userAvailabilityExists(
+                                            calendarUser.uid,
+                                        ) ? (
+                                            <span
+                                                className="ml-2 h-3 w-3 cursor-pointer rounded-full bg-green-500"
+                                                onClick={() => {
+                                                    handleDotClick(
+                                                        calendarUser.uid,
+                                                    );
+                                                    setShowDropdown(false); // Close the dropdown
+                                                }}></span>
+                                        ) : (
+                                            <span className="ml-2 h-3 w-3 rounded-full bg-orange-500"></span>
+                                        )}
+                                    </div>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
+            </div>
+
+            {/* Users Section */}
+            <div className="mt-0.5 flex justify-center overflow-x-auto">
                 {usersInfo.map((calendarUser) => (
-                    <li key={calendarUser.uid} className="flex items-center px-4 py-2">
+                    <div
+                        key={calendarUser.uid}
+                        className="mr-5 flex flex-col items-center"
+                        style={{ minWidth: '100px' }} // Fixed width for each user container
+                    >
                         <img
-                            src={calendarUser.imageURL ?? '/default-profile.png'}
+                            src={
+                                calendarUser.imageURL ?? '/default-profile.png'
+                            }
                             alt="User Profile Picture"
-                            className="mr-2 h-8 w-8 rounded-full cursor-pointer"
-                            onClick={() => {
-                                handleDotClick(calendarUser.uid); // Show availability modal
-                                setShowDropdown(false); // Close the dropdown
-                            }}
+                            className={`${userAvailabilityExists(calendarUser.uid) ? 'cursor-pointer' : ''} mb-2 h-20 w-20 rounded-full`}
+                            onClick={() => handleDotClick(calendarUser.uid)} // Add onClick handler to show availability modal
                         />
-                        <div className="flex flex-grow items-center justify-center">
-                            <p className="text-center">{calendarUser.userName}</p>
+                        <div className="flex items-center">
+                            <p>{calendarUser.userName}</p>
                             {userAvailabilityExists(calendarUser.uid) ? (
                                 <span
                                     className="ml-2 h-3 w-3 cursor-pointer rounded-full bg-green-500"
-                                    onClick={() => {
-                                        handleDotClick(calendarUser.uid);
-                                        setShowDropdown(false); // Close the dropdown
-                                    }}
-                                ></span>
+                                    onClick={() =>
+                                        handleDotClick(calendarUser.uid)
+                                    }></span>
                             ) : (
                                 <span className="ml-2 h-3 w-3 rounded-full bg-orange-500"></span>
                             )}
                         </div>
-                    </li>
+                    </div>
                 ))}
-            </ul>
-        </div>
-    )}
-</div>
-
-
-            {/* Users Section */}
-<div className="mt-0.5 overflow-x-auto flex justify-center">
-    {usersInfo.map((calendarUser) => (
-        <div
-            key={calendarUser.uid}
-            className="mr-5 flex flex-col items-center"
-            style={{ minWidth: '100px' }}  // Fixed width for each user container
-        >
-            <img
-                src={calendarUser.imageURL ?? '/default-profile.png'}
-                alt="User Profile Picture"
-                className={`${userAvailabilityExists(calendarUser.uid) ? 'cursor-pointer' : ''} mb-2 h-20 w-20 rounded-full`}
-                onClick={() => handleDotClick(calendarUser.uid)} // Add onClick handler to show availability modal
-            />
-            <div className="flex items-center">
-                <p>{calendarUser.userName}</p>
-                {userAvailabilityExists(calendarUser.uid) ? (
-                    <span
-                        className="ml-2 h-3 w-3 cursor-pointer rounded-full bg-green-500"
-                        onClick={() => handleDotClick(calendarUser.uid)}
-                    ></span>
-                ) : (
-                    <span className="ml-2 h-3 w-3 rounded-full bg-orange-500"></span>
-                )}
             </div>
-        </div>
-    ))}
-</div>
 
             {/* Rest of the content */}
             <div className="flex flex-col items-center justify-center sm:flex-row">
@@ -817,27 +830,42 @@ const ViewCalendar = () => {
                             Save
                         </button>
                     </div>
-                   
-                   
+
                     {showSavedPopup && (
-                        <div role="alert" className="alert bg-green-800 text-white alert-success">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                        <span>Availability Saved!</span>
-                      </div>
+                        <div
+                            role="alert"
+                            className="alert alert-success bg-green-800 text-white">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="h-6 w-6 shrink-0 stroke-current"
+                                fill="none"
+                                viewBox="0 0 24 24">
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth="2"
+                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                                />
+                            </svg>
+                            <span>Availability Saved!</span>
+                        </div>
                     )}
-                    
                 </div>
 
                 <div className="flex flex-col items-center">
-
-                <div className={`${isAdmin(user.uid) || createEventsPermission === 'everyone' ? '' : 'hidden'}`}>
+                    <div
+                        className={`${isAdmin(user.uid) || createEventsPermission === 'everyone' ? '' : 'hidden'}`}>
                         <CalendarEventModal
                             isOpen={isOpen}
                             setIsOpen={setIsOpen}
                             closeModal={closeModal}
                         />
                     </div>
-                    <button className='btn bg-green-800 text-white' onClick={handleShowBestTime}>Show Best Time</button>
+                    <button
+                        className="btn bg-green-800 text-white"
+                        onClick={handleShowBestTime}>
+                        Show Best Time
+                    </button>
 
                     {bestTime && (
                         <div className="mt-5 text-center">
@@ -858,27 +886,41 @@ const ViewCalendar = () => {
                                     : ''}
                             </p>
                         </div>
-                         )}
+                    )}
                 </div>
 
                 {/* Calendar Events */}
-                <div className="ml-10 flex h-full flex-col items-center pr-5 justify-between">
+                <div className="ml-10 flex h-full flex-col items-center justify-between pr-5">
                     <div className="mt-5vh flex flex-col items-center">
                         {/* Users Section */}
                     </div>
                     <div className="flex flex-col items-center justify-center space-y-4">
-                    <div className="flex space-x-2 mt-5">
-              <input
-                id="email"
-                type="text"
-                placeholder="Enter email to invite"
-                className="input input-bordered w-full md:max-w-md input-sm"
-                onKeyDown={(e) => e.key === 'Enter' && addEmail()}
-              />
-              <button className={`btn bg-green-800 text-white ${isAdmin(user.uid) || addUsersPermission === 'everyone' ? '' : 'hidden'}`} onClick={addEmail}>Add</button>
-              {errorMessage && <div className="text-red-500">{errorMessage}</div>}
-              {successMessage && <div className="text-green-500">{successMessage}</div>}
-            </div>
+                        <div className="mt-5 flex space-x-2">
+                            <input
+                                id="email"
+                                type="text"
+                                placeholder="Enter email to invite"
+                                className="input input-sm input-bordered w-full md:max-w-md"
+                                onKeyDown={(e) =>
+                                    e.key === 'Enter' && addEmail()
+                                }
+                            />
+                            <button
+                                className={`btn bg-green-800 text-white ${isAdmin(user.uid) || addUsersPermission === 'everyone' ? '' : 'hidden'}`}
+                                onClick={addEmail}>
+                                Add
+                            </button>
+                            {errorMessage && (
+                                <div className="text-red-500">
+                                    {errorMessage}
+                                </div>
+                            )}
+                            {successMessage && (
+                                <div className="text-green-500">
+                                    {successMessage}
+                                </div>
+                            )}
+                        </div>
                         {/* <button
                             className={`btn bg-green-800 text-white ${isAdmin(user.uid) || addUsersPermission === 'everyone' ? '' : 'hidden'}`}
                             type="button"

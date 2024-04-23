@@ -122,10 +122,10 @@ function UserProfileModal({ isOpen, setIsOpen }) {
                                 </button>
                             </div>
                             <Link to="/">
-                        <button className="btn mt-5 bg-red-400 text-white">
-                            Logout
-                        </button>
-                    </Link>
+                                <button className="btn mt-5 bg-red-400 text-white">
+                                    Logout
+                                </button>
+                            </Link>
                         </div>
                     </div>
                 </div>

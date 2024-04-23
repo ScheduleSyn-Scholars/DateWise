@@ -173,7 +173,7 @@ const NotificationBell = () => {
             </div>
             <ul
                 tabIndex={0}
-                className="dropdown-content sm:block sm:w-96 sm:space-y-1 border-1 border-gray-400 rounded-xl bg-gray-200 p-2 text-black shadow-2xl">
+                className="border-1 dropdown-content rounded-xl border-gray-400 bg-gray-200 p-2 text-black shadow-2xl sm:block sm:w-96 sm:space-y-1">
                 <p
                     className={`text-center text-2xl font-bold ${isOpen ? '' : 'hidden'}`}>
                     Notifications
@@ -184,7 +184,7 @@ const NotificationBell = () => {
                             return (
                                 <div
                                     key={index}
-                                    className={`collapse collapse-arrow bg-gray-200 shadow-xl p-2 ${isOpen ? '' : 'hidden'}`}>
+                                    className={`collapse collapse-arrow bg-gray-200 p-2 shadow-xl ${isOpen ? '' : 'hidden'}`}>
                                     <input type="radio" name="my-accordion-2" />
                                     <div className="collapse-title text-xl font-medium">
                                         {notification.message}
@@ -208,9 +208,9 @@ const NotificationBell = () => {
                             return (
                                 <div
                                     key={index}
-                                    className={`collapse collapse-arrow bg-gray-200 shadow-xl p-2 ${isOpen ? '' : 'hidden'}`}>
+                                    className={`collapse collapse-arrow bg-gray-200 p-2 shadow-xl ${isOpen ? '' : 'hidden'}`}>
                                     <input type="radio" name="my-accordion-2" />
-                                    <div className="text-xl collapse-title font-medium">
+                                    <div className="collapse-title text-xl font-medium">
                                         {notification.fromName} has invited you
                                         to join {notification.calendarName}
                                     </div>
@@ -242,7 +242,7 @@ const NotificationBell = () => {
                             return (
                                 <div
                                     key={index}
-                                    className={`collapse collapse-arrow shadow-xl bg-gray-200 p-2 ${isOpen ? '' : 'hidden'}`}>
+                                    className={`collapse collapse-arrow bg-gray-200 p-2 shadow-xl ${isOpen ? '' : 'hidden'}`}>
                                     <input type="radio" name="my-accordion-2" />
                                     <div className="collapse-title text-xl font-medium">
                                         {notification.fromName} has invited you
@@ -253,7 +253,10 @@ const NotificationBell = () => {
                                             <b>Calendar</b>:
                                             {notification.calendarName}
                                         </p>
-                                        <p><b>Event</b>: {notification.eventName}</p>
+                                        <p>
+                                            <b>Event</b>:{' '}
+                                            {notification.eventName}
+                                        </p>
                                         <p>
                                             <b>Time:</b>
                                             {notification.dateTime

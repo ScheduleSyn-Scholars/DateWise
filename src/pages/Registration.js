@@ -115,7 +115,7 @@ const Form = () => {
                 </div>
             </div>
             <div
-                className="bg-left-center flex-1 bg-cover hidden md:block"
+                className="bg-left-center hidden flex-1 bg-cover md:block"
                 style={{ backgroundImage: `url('/GGCLibrary.jpg')` }}></div>
         </div>
     );
