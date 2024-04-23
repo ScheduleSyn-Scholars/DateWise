@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { firestore } from '../resources/firebase.js';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import 'firebase/compat/firestore';
 import { useUser } from '../resources/UserContext.js';
 import Header from '../components/Header.js';
@@ -13,8 +13,8 @@ const HomePage = () => {
     const [loading, setLoading] = useState(true);
     const [events, setEvents] = useState([]);
     const [isOpen, setIsOpen] = useState(false);
-   
     
+    const navigate = useNavigate();
 
     useEffect(() => {
         const loadUserData = async () => {
@@ -94,6 +94,11 @@ const HomePage = () => {
         setIsOpen(false);
         window.location.reload(); // Refresh the page
     };
+
+    if (!user) {
+        navigate('/');
+        return null;
+    }
 
     return (
         <div className="flex h-screen flex-col">

@@ -43,6 +43,7 @@ const ViewCalendar = () => {
     const [settingsOpen, setSettingsOpen] = useState(false);
 
     const navigate = useNavigate();
+    
 
     useEffect(() => {
         const fetchData = async () => {
@@ -697,6 +698,12 @@ const ViewCalendar = () => {
     const isAdmin = (uid) => {
         return adminUids.includes(uid);
     };
+
+    // Redirect to login if not logged in
+    if (!user) {
+        navigate('/');
+        return null;
+    }
 
     return (
         <div className="flex h-screen flex-col">
