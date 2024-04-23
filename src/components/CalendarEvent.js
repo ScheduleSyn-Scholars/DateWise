@@ -106,23 +106,17 @@ const CalendarEventModal = ({ isOpen, setIsOpen }) => {
             </button>
             {isOpen && (
                 <div id="eventCal" className={`modal modal-open`}>
-                    <div className="modal-box">
+                    <div className="modal-box p-2 -ml-5">
                         <button
                             className="btn btn-circle btn-ghost btn-sm absolute right-2 top-2"
                             onClick={() => setIsOpen(false)}>
                             ✕
                         </button>
 
-                        <div className="mb-5 flex flex-col items-center sm:mb-0 sm:mr-10">
-                            <input
-                                type="text"
-                                placeholder="Enter event description"
-                                value={description}
-                                onChange={(e) => setDescription(e.target.value)}
-                            />
-                        </div>
+                      
 
-                        <div className="mt-5 flex flex-col items-center pl-5 sm:mt-0">
+                        <div className="mt-5 flex flex-col items-center justify-center ">
+                            <div className="flex mt-5 w-96 items center justify-center">
                             <DatePicker
                                 selected={selectedDateTime}
                                 onChange={(date) => setSelectedDateTime(date)}
@@ -130,8 +124,19 @@ const CalendarEventModal = ({ isOpen, setIsOpen }) => {
                                 showTimeSelect
                                 dateFormat="Pp"
                             />
+                        </div>
+
+                            <div className="flex flex-col items-center ">
+                            <textarea
+                                type="text"
+                                placeholder="Enter event description"
+                                value={description}
+                                onChange={(e) => setDescription(e.target.value)}
+                                className="w-80 h-20 p-2 mt-2 border border-gray-300 rounded-md"
+                            />
+                        </div>
                             <button
-                                className="items center h-10 w-32 rounded-full border-none bg-green-800 text-white"
+                                className="items center mt-5 h-10 w-32 rounded-full border-none bg-green-800 text-white"
                                 type="button"
                                 onClick={handleCreateEvent}>
                                 Submit Event
