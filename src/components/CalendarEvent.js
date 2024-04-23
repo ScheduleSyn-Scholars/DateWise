@@ -106,7 +106,7 @@ const CalendarEventModal = ({ isOpen, setIsOpen }) => {
             </button>
             {isOpen && (
                 <div id="eventCal" className={`modal modal-open`}>
-                    <div className="modal-box p-2 -ml-5">
+                    <div className="modal-box p-2">
                         <button
                             className="btn btn-circle btn-ghost btn-sm absolute right-2 top-2"
                             onClick={() => setIsOpen(false)}>
