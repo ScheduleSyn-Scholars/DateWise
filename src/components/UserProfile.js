@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { firestore, storage } from '../resources/firebase';
 import { useUser } from '../resources/UserContext';
+import { Link } from 'react-router-dom';
 
 function UserProfileModal({ isOpen, setIsOpen }) {
     const [image, setImage] = useState('');
@@ -24,7 +25,10 @@ function UserProfileModal({ isOpen, setIsOpen }) {
     const handleSaveName = async () => {
         if (!user || !user.uid) return; // Check if user is defined
         try {
-            await firestore.collection('users').doc(user.uid).update({ userName: newProfileName });
+            await firestore
+                .collection('users')
+                .doc(user.uid)
+                .update({ userName: newProfileName });
             console.log('Document successfully updated!');
             setIsOpen(false); // Close modal after save
         } catch (error) {
@@ -48,7 +52,10 @@ function UserProfileModal({ isOpen, setIsOpen }) {
                 });
                 setImage(url); // Update local state
             } catch (error) {
-                console.error('Error uploading image or updating Firestore:', error);
+                console.error(
+                    'Error uploading image or updating Firestore:',
+                    error,
+                );
             }
         }
     };
@@ -64,15 +71,22 @@ function UserProfileModal({ isOpen, setIsOpen }) {
             </button>
             {isOpen && (
                 <div className="modal modal-open" style={{ marginLeft: '0px' }}>
-                    <div className="modal-box flex justify-center items-center relative">
-                        <button className="btn btn-sm btn-circle absolute right-2 top-2" onClick={() => setIsOpen(false)}>✕</button>
+                    <div className="modal-box relative flex items-center justify-center">
+                        <button
+                            className="btn btn-circle btn-sm absolute right-2 top-2"
+                            onClick={() => setIsOpen(false)}>
+                            ✕
+                        </button>
                         <div className="text-center">
-                            <div onClick={handleImageClick} style={{ cursor: 'pointer' }} className="flex justify-center items-center h-full">
+                            <div
+                                onClick={handleImageClick}
+                                style={{ cursor: 'pointer' }}
+                                className="flex h-full items-center justify-center">
                                 <img
                                     id="preview-image"
                                     src={image}
                                     alt="User update"
-                                    className="h-[200px] rounded-[100%] mb-4 align-middle margin-auto object-cover w-[200px]"
+                                    className="margin-auto mb-4 h-[200px] w-[200px] rounded-[100%] object-cover align-middle"
                                 />
                                 <input
                                     id="image-upload-input"
@@ -82,23 +96,36 @@ function UserProfileModal({ isOpen, setIsOpen }) {
                                     style={{ display: 'none' }}
                                 />
                             </div>
-                            <button className="btn bg-green-700 text-white" onClick={handleImageClick}>
+                            <button
+                                className="btn bg-green-700 text-white"
+                                onClick={handleImageClick}>
                                 Change Image
                             </button>
-                            <div className="text-black mt-4">Email: {user.email}</div>
-                            <div className="text-black mt-4">
+                            <div className="mt-4 text-black">
+                                Email: {user.email}
+                            </div>
+                            <div className="mt-4 text-black">
                                 Profile Name:
-                                <input defaultValue={newProfileName} type="text" onChange={handleProfileNameChange} className="input input-bordered mt-2" />
+                                <input
+                                    defaultValue={newProfileName}
+                                    type="text"
+                                    onChange={handleProfileNameChange}
+                                    className="input input-bordered mt-2"
+                                />
                             </div>
                             <div className="mt-4">
                                 <button
                                     className="btn bg-green-700 text-white"
                                     type="button"
-                                    onClick={handleSaveName}
-                                >
+                                    onClick={handleSaveName}>
                                     Save
                                 </button>
                             </div>
+                            <Link to="/">
+                        <button className="btn mt-5 bg-red-400 text-white">
+                            Logout
+                        </button>
+                    </Link>
                         </div>
                     </div>
                 </div>

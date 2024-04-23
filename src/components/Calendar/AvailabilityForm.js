@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const add30Minutes = (time) => {
     const [hours, minutes] = time.split(':');
@@ -13,7 +13,7 @@ const add30Minutes = (time) => {
     return `${String(newHours).padStart(2, '0')}:${String(newMinutes).padStart(2, '0')}`;
 };
 
-const AvailabilityForm = ({ onAvailabilityChange }) => {
+const AvailabilityForm = ({ availability, onAvailabilityChange }) => {
     const [selectedDays, setSelectedDays] = useState([]);
     const [times, setTimes] = useState({});
 
@@ -76,8 +76,13 @@ const AvailabilityForm = ({ onAvailabilityChange }) => {
         onAvailabilityChange({ selectedDays, times });
     };
 
+    useEffect(() => {
+        setSelectedDays(availability.selectedDays || []);
+        setTimes(availability.times || {});
+    }, [availability]);
+
     return (
-        <div className="m-5 flex w-[90%] max-w-[500px] flex-col items-start rounded-[10px] border-2 border-solid border-[#228b22] bg-[#f8f8f8] p-5 shadow-[0_0_10px_rgba(0,0,0,0.1)]">
+        <div className="m-5 flex w-dvw max-w-[450px] flex-col items-start rounded-[10px] bg-[#f8f8f8] p-5 shadow-[0_0_10px_rgba(0,0,0,0.1)]">
             <h2 className="mb-5 text-2xl text-[#228b22]">
                 Select Your Availability
             </h2>
@@ -93,12 +98,10 @@ const AvailabilityForm = ({ onAvailabilityChange }) => {
                         {day}
                     </label>
                     {selectedDays.includes(day) && (
-                        <div className="flex items-baseline">
+                        <div className="flex flex-col items-baseline">
                             {times[day]?.map((timeSlot, index) => (
-                                <div
-                                    key={index}
-                                    className="mb-2.5 flex items-center">
-                                    <label className="mb-2.5 flex w-[125px] items-center font-[bold] text-base">
+                                <div key={index} className="flex items-center">
+                                    <label className="w-fill mb-2.5 flex items-center font-[bold] text-base">
                                         <input
                                             type="time"
                                             value={timeSlot.start}
@@ -114,7 +117,7 @@ const AvailabilityForm = ({ onAvailabilityChange }) => {
                                             className="mx-[1vw] h-10 w-[150%]"
                                         />
                                     </label>
-                                    <label className="mb-2.5 flex w-[125px] items-center font-[bold] text-base">
+                                    <label className="w-fill mb-2.5 flex items-center font-[bold] text-base">
                                         -
                                         <input
                                             type="time"

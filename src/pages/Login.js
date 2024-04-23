@@ -22,14 +22,14 @@ const Login = () => {
 
     return (
         <div className="flex h-screen">
-            <div className="flex-1 flex items-center justify-center">
-                <div className="w-72 flex flex-col items-center">
+            <div className="flex flex-1 items-center justify-center">
+                <div className="flex w-72 flex-col items-center">
                     <img
                         className="mb-6 h-72 w-72"
                         src="/BearLogo.png"
                         alt="Bear Logo"
                     />
-                    <form className="w-full flex flex-col items-center">
+                    <form className="flex w-full flex-col items-center">
                         <label className="mb-2" htmlFor="email">
                             Email:
                         </label>
@@ -66,17 +66,16 @@ const Login = () => {
                                 Login
                             </button>
                         </div>
-                        <p className='mt-5'>Don't have an account?</p>
+                        <p className="mt-5">Don't have an account?</p>
                         <Link to="/sign-up">
-                                <p className='text-blue-800'>Register</p>
-                            </Link>
+                            <p className="text-blue-800">Register</p>
+                        </Link>
                     </form>
                 </div>
             </div>
-            <div className="flex-1 bg-left-center bg-cover" style={{ backgroundImage: `url('/GGCLibrary.jpg')` }}></div>
+            <div className="flex-1 bg-left-center bg-cover hidden md:block" style={{ backgroundImage: `url('/GGCLibrary.jpg')` }}></div>
         </div>
     );
 };
 
 export default Login;
-
