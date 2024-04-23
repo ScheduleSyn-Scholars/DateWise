@@ -499,6 +499,9 @@ const ViewCalendar = () => {
 
     //Retrieve user available times by clicking on the dot that turns green once they fill it out
     const handleDotClick = async (userUid) => {
+       
+        setShowDropdown(false);//For mobile view on user availability
+
         try {
             console.log('User UID:', userUid);
 
@@ -735,14 +738,20 @@ const ViewCalendar = () => {
                             src={calendarUser.imageURL ?? '/default-profile.png'}
                             alt="User Profile Picture"
                             className="mr-2 h-8 w-8 rounded-full cursor-pointer"
-                            onClick={() => handleUserClick(calendarUser)}
+                            onClick={() => {
+                                handleDotClick(calendarUser.uid); // Show availability modal
+                                setShowDropdown(false); // Close the dropdown
+                            }}
                         />
                         <div className="flex flex-grow items-center justify-center">
                             <p className="text-center">{calendarUser.userName}</p>
                             {userAvailabilityExists(calendarUser.uid) ? (
                                 <span
                                     className="ml-2 h-3 w-3 cursor-pointer rounded-full bg-green-500"
-                                    onClick={() => handleDotClick(calendarUser.uid)}
+                                    onClick={() => {
+                                        handleDotClick(calendarUser.uid);
+                                        setShowDropdown(false); // Close the dropdown
+                                    }}
                                 ></span>
                             ) : (
                                 <span className="ml-2 h-3 w-3 rounded-full bg-orange-500"></span>
@@ -767,7 +776,7 @@ const ViewCalendar = () => {
             <img
                 src={calendarUser.imageURL ?? '/default-profile.png'}
                 alt="User Profile Picture"
-                className="mb-2 h-20 w-20 cursor-pointer rounded-full"
+                className={`${userAvailabilityExists(calendarUser.uid) ? 'cursor-pointer' : ''} mb-2 h-20 w-20 rounded-full`}
                 onClick={() => handleDotClick(calendarUser.uid)} // Add onClick handler to show availability modal
             />
             <div className="flex items-center">
