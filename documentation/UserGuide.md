@@ -14,6 +14,7 @@
 ## Header
 1. The logo in the top left will take you to the home page. 
 2. The notification bell will show you if you have any notifications and play a sound when one comes in.
+    - User's receive a notification when they are invited to an event an event is created in one of the user's calendars.
 3. Click the profile picture to edit your profile details. Users may change their profile picture and log out from here.
 
 ## Home
